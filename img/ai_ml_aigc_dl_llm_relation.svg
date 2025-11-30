@@ -1,0 +1,87 @@
+<svg width="300" height="300" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0088ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="mlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00aa55;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffaa00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6600;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="llmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00aaff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066aa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="aigcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff00ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#aa00aa;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="400" height="400" fill="#0a0e27"/>
+  
+  <!-- AI 层 (最外层，包含所有) -->
+  <ellipse cx="200" cy="200" rx="180" ry="160" fill="none" stroke="#00ffff" stroke-width="3" stroke-dasharray="5,5" opacity="0.4"/>
+  <text x="200" y="50" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#00ffff" text-anchor="middle">AI (人工智能)</text>
+  
+  <!-- ML 层 (AI的子集) -->
+  <ellipse cx="200" cy="200" rx="140" ry="120" fill="none" stroke="#00ff88" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+  
+  <!-- DL 层 (ML的子集) -->
+  <ellipse cx="200" cy="200" rx="100" ry="85" fill="none" stroke="#ffaa00" stroke-width="2" stroke-dasharray="3,3" opacity="0.6"/>
+  
+  <!-- 层次连接线 -->
+  <line x1="200" y1="80" x2="200" y2="120" stroke="#00ffff" stroke-width="2" opacity="0.5"/>
+  <line x1="200" y1="120" x2="200" y2="150" stroke="#00ff88" stroke-width="2" opacity="0.5"/>
+  <line x1="200" y1="150" x2="200" y2="180" stroke="#ffaa00" stroke-width="2" opacity="0.5"/>
+  <line x1="200" y1="180" x2="200" y2="240" stroke="#00aaff" stroke-width="2" opacity="0.5"/>
+  
+  <!-- AI 节点 (顶层) -->
+  <circle cx="200" cy="100" r="28" fill="url(#aiGrad)" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <text x="200" y="108" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">AI</text>
+  
+  <!-- ML 节点 (第二层) -->
+  <circle cx="200" cy="140" r="24" fill="url(#mlGrad)" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <text x="200" y="148" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">ML</text>
+  
+  <!-- DL 节点 (第三层) -->
+  <circle cx="200" cy="170" r="22" fill="url(#dlGrad)" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <text x="200" y="178" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">DL</text>
+  
+  <!-- LLM 节点 (DL的应用，第四层) -->
+  <circle cx="200" cy="220" r="20" fill="url(#llmGrad)" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <text x="200" y="228" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">LLM</text>
+  
+  <!-- AIGC 节点 (AI的应用，右侧) -->
+  <circle cx="320" cy="200" r="24" fill="url(#aigcGrad)" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <text x="320" y="208" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">AIGC</text>
+  
+  <!-- AIGC 到 AI 的连接线 (表示AIGC是AI的应用) -->
+  <line x1="296" y1="200" x2="250" y2="200" stroke="#ff00ff" stroke-width="2" opacity="0.6" marker-end="url(#arrowhead)"/>
+  
+  <!-- AIGC 到 LLM 的连接线 (表示AIGC使用LLM技术) -->
+  <path d="M 296 200 Q 260 210 220 220" stroke="#ff00ff" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="3,3"/>
+  
+  <!-- 箭头标记 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#ff00ff" opacity="0.6"/>
+    </marker>
+  </defs>
+  
+  <!-- 标签说明 -->
+  <text x="200" y="260" font-family="Arial, sans-serif" font-size="10" fill="#888888" text-anchor="middle">包含关系</text>
+  <text x="320" y="240" font-family="Arial, sans-serif" font-size="10" fill="#888888" text-anchor="middle">应用</text>
+</svg>
