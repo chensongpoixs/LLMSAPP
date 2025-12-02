@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="320" viewBox="0 0 980 320">
+  <style>
+    .title { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:18px; font-weight:700; fill:#0b2a4a }
+    .label { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:13px; fill:#0b2a4a }
+    .box { fill:#f6fbff; stroke:#2b6cb0; stroke-width:1.6; rx:8; ry:8 }
+    .point { fill:#1f77b4 }
+    .curve { fill:none; stroke:#d9480f; stroke-width:2.4 }
+    .curve_good { fill:none; stroke:#16a34a; stroke-width:2.6 }
+    .curve_over { fill:none; stroke:#8b5cf6; stroke-width:2 }
+    .axis { stroke:#94a3b8; stroke-width:1 }
+    .arrow { stroke:#0b69c1; stroke-width:1.6; marker-end:url(#a) }
+    .smalltext { font-size:12px; fill:#334155 }
+  </style>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#0b69c1" />
+    </marker>
+  </defs>
+
+  <text x="18" y="28" class="title">过拟合（Overfitting） 与 欠拟合（Underfitting） 说明图</text>
+
+  <!-- Panels container -->
+  <!-- Underfit panel -->
+  <g transform="translate(20,48)">
+    <rect class="box" x="0" y="0" width="300" height="200"/>
+    <text x="150" y="20" text-anchor="middle" class="label">欠拟合（High Bias）</text>
+
+    <!-- axes -->
+    <line x1="30" y1="170" x2="270" y2="170" class="axis"/>
+    <line x1="30" y1="170" x2="30" y2="30" class="axis"/>
+
+    <!-- data points (roughly linear but noisy) -->
+    <circle cx="60" cy="140" r="4" class="point"/>
+    <circle cx="90" cy="120" r="4" class="point"/>
+    <circle cx="120" cy="100" r="4" class="point"/>
+    <circle cx="150" cy="96" r="4" class="point"/>
+    <circle cx="180" cy="88" r="4" class="point"/>
+    <circle cx="210" cy="80" r="4" class="point"/>
+    <circle cx="240" cy="72" r="4" class="point"/>
+
+    <!-- model curve (too simple, almost flat) -->
+    <path d="M40 140 L270 120" class="curve" stroke-opacity="0.9"/>
+
+    <text x="40" y="190" class="smalltext">模型过于简单，无法捕捉数据趋势，训练/验证误差都高</text>
+  </g>
+
+  <!-- Good fit panel -->
+  <g transform="translate(340,48)">
+    <rect class="box" x="0" y="0" width="300" height="200"/>
+    <text x="150" y="20" text-anchor="middle" class="label">良好拟合（Good Fit）</text>
+
+    <!-- axes -->
+    <line x1="30" y1="170" x2="270" y2="170" class="axis"/>
+    <line x1="30" y1="170" x2="30" y2="30" class="axis"/>
+
+    <!-- data points -->
+    <circle cx="60" cy="140" r="4" class="point"/>
+    <circle cx="90" cy="120" r="4" class="point"/>
+    <circle cx="120" cy="100" r="4" class="point"/>
+    <circle cx="150" cy="96" r="4" class="point"/>
+    <circle cx="180" cy="88" r="4" class="point"/>
+    <circle cx="210" cy="80" r="4" class="point"/>
+    <circle cx="240" cy="72" r="4" class="point"/>
+
+    <!-- model curve (smooth, follows trend) -->
+    <path d="M40 150 C80 120, 130 100, 270 70" class="curve_good"/>
+
+    <text x="40" y="190" class="smalltext">模型容量合适，训练与验证误差都较低</text>
+  </g>
+
+  <!-- Overfit panel -->
+  <g transform="translate(660,48)">
+    <rect class="box" x="0" y="0" width="300" height="200"/>
+    <text x="150" y="20" text-anchor="middle" class="label">过拟合（High Variance）</text>
+
+    <!-- axes -->
+    <line x1="30" y1="170" x2="270" y2="170" class="axis"/>
+    <line x1="30" y1="170" x2="30" y2="30" class="axis"/>
+
+    <!-- data points -->
+    <circle cx="60" cy="140" r="4" class="point"/>
+    <circle cx="90" cy="120" r="4" class="point"/>
+    <circle cx="120" cy="100" r="4" class="point"/>
+    <circle cx="150" cy="96" r="4" class="point"/>
+    <circle cx="180" cy="88" r="4" class="point"/>
+    <circle cx="210" cy="80" r="4" class="point"/>
+    <circle cx="240" cy="72" r="4" class="point"/>
+
+    <!-- overfit curve (wiggly, passes through points) -->
+    <path d="M40 150 C70 100, 90 170, 120 90 C150 40, 160 130, 200 80 C230 50, 260 80, 270 68" class="curve_over"/>
+
+    <text x="40" y="190" class="smalltext">模型过于复杂，训练误差低但验证误差高</text>
+  </g>
+
+  <!-- Bottom: training vs validation error small plot -->
+  <g transform="translate(200,260)">
+    <rect x="0" y="0" width="580" height="40" fill="none"/>
+    <text x="0" y="14" class="smalltext">训练/验证误差示意（随模型复杂度）：</text>
+
+    <!-- small plot axes -->
+    <line x1="220" y1="18" x2="640" y2="18" class="axis"/>
+    <line x1="220" y1="18" x2="220" y2="6" class="axis"/>
+    <text x="220" y="-2" class="smalltext">欠拟合</text>
+    <text x="420" y="-2" class="smalltext">合适</text>
+    <text x="620" y="-2" class="smalltext">过拟合</text>
+
+    <!-- training error curve (decreases) -->
+    <path d="M220 18 C270 10, 340 8, 640 6" stroke="#16a34a" stroke-width="2.4" fill="none"/>
+    <text x="640" y="12" class="smalltext" fill="#16a34a">训练误差</text>
+
+    <!-- validation error curve (U-shaped) -->
+    <path d="M220 6 C300 12, 420 2, 520 14 C600 24, 640 30, 640 30" stroke="#d9480f" stroke-width="2.4" fill="none"/>
+    <text x="640" y="26" class="smalltext" fill="#d9480f">验证误差</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(20,270)">
+    <rect x="470" y="0" width="460" height="40" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="480" y="14" class="smalltext">提示：</text>
+    <text x="540" y="14" class="smalltext">• 欠拟合：模型复杂度不足，表现差（高偏差）。</text>
+    <text x="540" y="28" class="smalltext">• 过拟合：模型学到噪声，泛化差（高方差）。通过正则化、更多数据、早停等缓解。</text>
+  </g>
+
+</svg>

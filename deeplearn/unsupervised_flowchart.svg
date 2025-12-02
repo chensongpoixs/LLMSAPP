@@ -1,0 +1,72 @@
+<!-- filepath: d:\Work\cartificial_intelligence\LLMSAPP\deeplearn\unsupervised_flowchart.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520">
+  <style>
+    .box { fill:#f6f9ff; stroke:#2b6cb0; stroke-width:2; rx:8; ry:8; }
+    .decision { fill:#fff7ed; stroke:#d69e2e; stroke-width:2; }
+    .text { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:16px; fill:#0f172a; }
+    .title { font-size:18px; font-weight:600; }
+    .arrow { stroke:#2b6cb0; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2b6cb0"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="50" y="30" class="text title">无监督学习 流程图</text>
+
+  <!-- Boxes -->
+  <g>
+    <rect x="50" y="60" width="200" height="60" class="box"/>
+    <text x="150" y="95" text-anchor="middle" class="text">数据收集</text>
+
+    <rect x="300" y="60" width="220" height="60" class="box"/>
+    <text x="410" y="95" text-anchor="middle" class="text">数据清洗与预处理</text>
+
+    <rect x="610" y="60" width="260" height="60" class="box"/>
+    <text x="740" y="95" text-anchor="middle" class="text">特征工程（标准化、降维）</text>
+
+    <rect x="200" y="170" width="220" height="60" class="box"/>
+    <text x="310" y="205" text-anchor="middle" class="text">选择模型与方法</text>
+    <text x="310" y="225" text-anchor="middle" class="text">（聚类 / 降维 / 异常检测）</text>
+
+    <rect x="520" y="170" width="260" height="60" class="box"/>
+    <text x="650" y="205" text-anchor="middle" class="text">训练/拟合模型</text>
+
+    <rect x="350" y="280" width="300" height="60" class="box"/>
+    <text x="500" y="315" text-anchor="middle" class="text">评估与可视化</text>
+
+    <rect x="350" y="380" width="300" height="60" class="box"/>
+    <text x="500" y="415" text-anchor="middle" class="text">部署/应用与迭代</text>
+  </g>
+
+  <!-- Arrows -->
+  <path d="M250 90 L300 90" class="arrow"/>
+  <path d="M520 90 L610 90" class="arrow"/>
+  <path d="M720 120 L720 170" class="arrow"/>
+  <path d="M410 120 L410 170" class="arrow"/>
+  <path d="M420 200 L520 200" class="arrow"/>
+  <path d="M640 230 L640 280" class="arrow"/>
+  <path d="M500 340 L500 380" class="arrow"/>
+
+  <!-- Decision branch for 方法选择 -->
+  <g transform="translate(120,170)">
+    <rect x="50" y="-10" width="120" height="40" class="decision" rx="6" ry="6"/>
+    <text x="110" y="15" text-anchor="middle" class="text">方法选择</text>
+
+    <text x="110" y="-30" class="text" font-size="14" text-anchor="middle">是否需要降维？</text>
+  </g>
+
+  <!-- Branch arrows -->
+  <path d="M310 120 L310 170" class="arrow"/>
+  <path d="M260 200 L200 200" class="arrow"/>
+  <path d="M200 200 L200 160" class="arrow" stroke-dasharray="6 4"/>
+  <text x="180" y="190" class="text" font-size="13">是</text>
+  <path d="M360 200 L430 200" class="arrow"/>
+  <text x="445" y="190" class="text" font-size="13">否</text>
+
+  <!-- Notes -->
+  <text x="50" y="480" class="text" font-size="13">注：可在“选择模型”时并行尝试多种算法、并通过可视化与指标（轮廓系数、重构误差等）评估。</text>
+</svg>

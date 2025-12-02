@@ -1,0 +1,64 @@
+<!-- filepath: d:\Work\cartificial_intelligence\LLMSAPP\deeplearn\loss_cost_flowchart.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360">
+  <style>
+    .box { fill:#f0f8ff; stroke:#1e6fd8; stroke-width:2; rx:8; ry:8; }
+    .small { fill:#fff7ed; stroke:#d97706; stroke-width:2; rx:6; ry:6; }
+    .text { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:14px; fill:#0b2a4a; }
+    .title { font-size:16px; font-weight:700; }
+    .arrow { stroke:#1e6fd8; stroke-width:2; fill:none; marker-end:url(#a); }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1e6fd8"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="28" class="text title">损失函数（Loss）与代价/成本函数（Cost / Cost Function）理解图</text>
+
+  <!-- Left: 单样本损失 -->
+  <g transform="translate(40,60)">
+    <rect class="box" x="0" y="0" width="220" height="80"/>
+    <text x="110" y="30" text-anchor="middle" class="text">单样本损失 Loss L(y, ŷ)</text>
+    <text x="110" y="54" text-anchor="middle" class="text">例：MSE = (1/2)(y-ŷ)^2</text>
+    <text x="110" y="72" text-anchor="middle" class="text">或 CE = -y log ŷ - (1-y) log(1-ŷ)</text>
+  </g>
+
+  <!-- Middle: 批次/平均 -->
+  <g transform="translate(300,60)">
+    <rect class="small" x="0" y="0" width="260" height="80"/>
+    <text x="130" y="30" text-anchor="middle" class="text">批次/数据集上的平均损失</text>
+    <text x="130" y="54" text-anchor="middle" class="text">J(θ) = (1/m) Σ_{i=1..m} L(y^{(i)}, ŷ^{(i)}; θ)</text>
+    <text x="130" y="72" text-anchor="middle" class="text">若含正则项： J(θ) = (1/m) Σ L + λ R(θ)</text>
+  </g>
+
+  <!-- Right: 优化目标 -->
+  <g transform="translate(640,60)">
+    <rect class="box" x="0" y="0" width="220" height="80"/>
+    <text x="110" y="34" text-anchor="middle" class="text">优化目标</text>
+    <text x="110" y="58" text-anchor="middle" class="text">最小化 J(θ) → 更新参数 θ（如 SGD）</text>
+  </g>
+
+  <!-- Arrows top -->
+  <path d="M260 100 L300 100" class="arrow"/>
+  <path d="M560 100 L640 100" class="arrow"/>
+
+  <!-- Bottom: 说明与示意 -->
+  <g transform="translate(40,170)">
+    <rect class="box" x="0" y="0" width="820" height="120"/>
+    <text x="410" y="28" text-anchor="middle" class="text">要点说明</text>
+    <text x="20" y="56" class="text">1. Loss 是对单个样本预测误差的度量（样本级）。</text>
+    <text x="20" y="78" class="text">2. Cost / Cost Function（或 Objective）通常为在整个训练集或批次上对 Loss 的平均或总和，可能包含正则化项来避免过拟合。</text>
+    <text x="20" y="100" class="text">3. 训练中通过最小化 Cost（求梯度并更新 θ）来让模型在整体上拟合数据，而非仅降低某一个样本的 Loss。</text>
+    <text x="20" y="122" class="text">4. 举例：MSE 的样本损失与其对应的代价为样本损失的平均；交叉熵类似。</text>
+  </g>
+
+  <!-- small diagram: sample -> loss -> average -->
+  <g transform="translate(160,305)">
+    <text class="text" x="0" y="0">示意：</text>
+    <rect x="80" y="-18" width="120" height="36" class="box"/><text x="140" y="6" class="text" text-anchor="middle">样本1</text>
+    <rect x="220" y="-18" width="120" height="36" class="box"/><text x="280" y="6" class="text" text-anchor="middle">样本2</text>
+    <rect x="360" y="-18" width="120" height="36" class="box"/><text x="420" y="6" class="text" text-anchor="middle">样本m</text>
+    <path d="M140 0 L140 22 L420 22" class="arrow"/>
+    <rect x="460" y="-18" width="180" height="36" class="small"/><text x="550" y="6" class="text" text-anchor="middle">平均 / Cost J(θ)</text>
+  </g>
+</svg>

@@ -1,0 +1,64 @@
+<!-- filepath: d:\Work\cartificial_intelligence\LLMSAPP\deeplearn\reconstruction_flowchart.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="260" viewBox="0 0 920 260">
+  <style>
+    .box { fill:#f4f8ff; stroke:#1f6feb; stroke-width:2; rx:8; ry:8; }
+    .proc { fill:#fff7ed; stroke:#d97706; stroke-width:2; rx:8; ry:8; }
+    .text { font-family:"Microsoft YaHei", Arial, sans-serif; font-size:14px; fill:#0b2545; }
+    .title { font-size:16px; font-weight:600; }
+    .arrow { stroke:#1f6feb; stroke-width:2; fill:none; marker-end:url(#a); }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1f6feb"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="28" class="text title">无监督 — 编码→解码→重构误差 比较 流程图</text>
+
+  <!-- Left: Original Data -->
+  <g transform="translate(40,50)">
+    <rect class="box" x="0" y="0" width="170" height="56"/>
+    <text x="85" y="34" text-anchor="middle" class="text">原始数据（未编码）</text>
+
+    <!-- Encode -->
+    <rect class="proc" x="220" y="0" width="140" height="56"/>
+    <text x="290" y="28" text-anchor="middle" class="text">编码（Encoder）</text>
+
+    <!-- Encoded -->
+    <rect class="box" x="400" y="0" width="150" height="56"/>
+    <text x="475" y="34" text-anchor="middle" class="text">编码表示（低维/特征）</text>
+
+    <!-- Decode -->
+    <rect class="proc" x="580" y="0" width="140" height="56"/>
+    <text x="650" y="28" text-anchor="middle" class="text">解码（Decoder）</text>
+
+    <!-- Reconstructed Data -->
+    <rect class="box" x="740" y="0" width="170" height="56"/>
+    <text x="855" y="34" text-anchor="middle" class="text">重构数据（解码后）</text>
+
+    <!-- arrows top row -->
+    <path d="M170 28 L220 28" class="arrow"/>
+    <path d="M360 28 L400 28" class="arrow"/>
+    <path d="M550 28 L580 28" class="arrow"/>
+    <path d="M720 28 L740 28" class="arrow"/>
+
+    <!-- Comparison and metrics below -->
+    <rect class="box" x="300" y="120" width="320" height="64"/>
+    <text x="460" y="145" text-anchor="middle" class="text">计算重构误差（如MSE、MAE、重构比）</text>
+    <text x="460" y="165" text-anchor="middle" class="text">与原始数据比较，得到评价指标</text>
+
+    <!-- arrows down to comparison -->
+    <path d="M480 56 L480 120" class="arrow"/>
+    <path d="M855 56 L620 120" class="arrow"/>
+
+    <!-- Decision / 应用 -->
+    <rect class="proc" x="630" y="200" width="210" height="44"/>
+    <text x="735" y="228" text-anchor="middle" class="text">阈值/评估 → 应用或迭代优化</text>
+
+    <!-- arrow from metrics to decision -->
+    <path d="M460 184 L735 200" class="arrow"/>
+  </g>
+
+  <!-- notes -->
+  <text x="40" y="242" class="text" font-size="12">注：编码方式可为自动编码器、PCA、VAE、特征提取器等。误差用于评估重构质量、异常检测或继续迭代优化模型。</text>
+</svg>
