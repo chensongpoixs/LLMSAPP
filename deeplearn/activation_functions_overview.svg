@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1200" viewBox="0 0 1000 1200">
+  <style>
+    .title { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:20px; font-weight:700; fill:#0b2545 }
+    .section { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:14px; font-weight:600; fill:#0b2545 }
+    .text { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:13px; fill:#0b2545 }
+    .card { fill:#fbfeff; stroke:#e6eefb; rx:8 }
+    .formula { font-family: "Consolas", "Courier New", monospace; font-size:13px; fill:#0b2545 }
+    .note { font-size:12px; fill:#374151 }
+    .box { stroke:#e6eefb; fill:#ffffff; rx:6 }
+  </style>
+
+  <text x="24" y="36" class="title">激活函数综述 — 公式、性质、优缺点与典型应用场景</text>
+
+  <!-- Sigmoid -->
+  <g transform="translate(24,64)">
+    <rect x="0" y="0" width="952" height="120" class="card" />
+    <text x="16" y="24" class="section">Sigmoid</text>
+    <text x="16" y="48" class="formula">σ(x) = 1 / (1 + e^{-x})</text>
+    <text x="16" y="72" class="text">范围: (0,1) · 单调 · 导数: σ'(x)=σ(x)(1−σ(x))</text>
+    <text x="16" y="96" class="note">优点: 概率输出，常用于逻辑回归；缺点: 饱和导致梯度消失，非零均值。</text>
+    <text x="540" y="96" class="note">应用: 输出层二分类概率；小型网络作为输出激活。</text>
+  </g>
+
+  <!-- Tanh -->
+  <g transform="translate(24,200)">
+    <rect x="0" y="0" width="952" height="120" class="card" />
+    <text x="16" y="24" class="section">Tanh</text>
+    <text x="16" y="48" class="formula">tanh(x) = (e^{x}-e^{-x})/(e^{x}+e^{-x})</text>
+    <text x="16" y="72" class="text">范围: (−1,1) · 零中心化 · 导数: 1−tanh^2(x)</text>
+    <text x="16" y="96" class="note">优点: 零中心有利于收敛；缺点: 仍饱和导致梯度消失。</text>
+    <text x="540" y="96" class="note">应用: RNN 早期常用；浅层网络隐藏层可用。</text>
+  </g>
+
+  <!-- ReLU -->
+  <g transform="translate(24,336)">
+    <rect x="0" y="0" width="952" height="120" class="card" />
+    <text x="16" y="24" class="section">ReLU (Rectified Linear Unit)</text>
+    <text x="16" y="48" class="formula">ReLU(x) = max(0, x)</text>
+    <text x="16" y="72" class="text">范围: [0,∞) · 非饱和正侧 · 导数: 1 (x>0), 0 (x≤0)</text>
+    <text x="16" y="96" class="note">优点: 计算简单、稀疏激活、缓解梯度消失；缺点: 死亡 ReLU (神经元恒为0)。</text>
+    <text x="540" y="96" class="note">应用: 隐藏层首选，大多数 CNN/MLP。</text>
+  </g>
+
+  <!-- Leaky ReLU / Parametric ReLU -->
+  <g transform="translate(24,472)">
+    <rect x="0" y="0" width="952" height="120" class="card" />
+    <text x="16" y="24" class="section">Leaky ReLU / PReLU</text>
+    <text x="16" y="48" class="formula">LeakyReLU(x)=max(αx,x) (α small, e.g. 0.01)</text>
+    <text x="16" y="72" class="text">减少死亡 ReLU，通过小斜率保留负区的信息；PReLU 可学习 α。</text>
+    <text x="16" y="96" class="note">应用: 替代 ReLU，尤其对训练不稳定的网络有帮助。</text>
+  </g>
+
+  <!-- ELU / SELU -->
+  <g transform="translate(24,608)">
+    <rect x="0" y="0" width="952" height="120" class="card" />
+    <text x="16" y="24" class="section">ELU / SELU</text>
+    <text x="16" y="48" class="formula">ELU(x)=x (x>0); α(e^{x}-1) (x≤0)</text>
+    <text x="16" y="72" class="text">SELU 设计用于自归一化网络 (Self-Normalizing NN)</text>
+    <text x="16" y="96" class="note">优点: 负值让均值接近零，有利于训练稳定；缺点: 计算稍贵。</text>
+    <text x="540" y="96" class="note">应用: 深层网络、需要更稳定收敛时。</text>
+  </g>
+
+  <!-- GELU / Swish -->
+  <g transform="translate(24,744)">
+    <rect x="0" y="0" width="952" height="140" class="card" />
+    <text x="16" y="24" class="section">GELU / Swish</text>
+    <text x="16" y="48" class="formula">GELU(x) ≈ x·Φ(x) ; Swish(x)=x·σ(x)</text>
+    <text x="16" y="72" class="text">GELU 为高斯门控线性单元，Swish 为自门控函数</text>
+    <text x="16" y="96" class="note">优点: 在 Transformer、BERT 等模型中表现优异；缺点: 计算较 ReLU 贵。</text>
+    <text x="540" y="96" class="note">应用: Transformer、现代 NLP/视觉模型。</text>
+  </g>
+
+  <!-- Softmax -->
+  <g transform="translate(24,900)">
+    <rect x="0" y="0" width="952" height="120" class="card" />
+    <text x="16" y="24" class="section">Softmax (多分类输出)</text>
+    <text x="16" y="48" class="formula">softmax(z)_i = exp(z_i)/Σ_j exp(z_j)</text>
+    <text x="16" y="72" class="text">把向量映射为概率分布；常与交叉熵联合使用。</text>
+    <text x="16" y="96" class="note">应用: 多分类输出层（最后一层）。</text>
+  </g>
+
+  <!-- Footer notes -->
+  <text x="24" y="1060" class="note">快速建议：</text>
+  <text x="24" y="1080" class="note">• 隐藏层优先使用 ReLU/LeakyReLU/SELU（根据网络特性）。</text>
+  <text x="24" y="1098" class="note">• Transformer / BERT: 推荐 GELU 或 Swish 类函数。</text>
+  <text x="24" y="1116" class="note">• 输出层：二分类用 Sigmoid + BCE， 多分类用 Softmax + Categorical CE。</text>
+  <text x="24" y="1136" class="note">• 若遇到训练不稳定：尝试更换激活、调整初始化、批标准化或使用自适应优化器。</text>
+
+</svg>

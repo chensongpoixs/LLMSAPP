@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420">
+  <style>
+    .title { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:18px; font-weight:700; fill:#0b2545 }
+    .label { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:13px; fill:#0b2545 }
+    .contour { fill:none; stroke:#9ca3af; stroke-width:1.2 }
+    .minima { fill:#ef4444; stroke:#7f1d1d; stroke-width:0.8 }
+    .start { fill:#2563eb; stroke:#1e40af }
+    .path { fill:none; stroke-width:2; stroke-linecap:round; marker-end:url(#arrow) }
+    .path1 { stroke:#0ea5a4 }
+    .path2 { stroke:#f59e0b }
+    .path3 { stroke:#8b5cf6 }
+    .axis { stroke:#cbd5e1; stroke-width:1 }
+    .smalltext { font-size:12px; fill:#334155 }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1f2937" />
+    </marker>
+    <radialGradient id="g1" cx="30%" cy="30%">
+      <stop offset="0%" stop-color="#fef3c7" />
+      <stop offset="100%" stop-color="#fff" />
+    </radialGradient>
+  </defs>
+
+  <text x="20" y="28" class="title">梯度下降示意：不同起点收敛到不同局部最小值</text>
+  <text x="20" y="46" class="smalltext">左：等高线与若干起点、迭代路径；右下：损失-迭代曲线示意</text>
+
+  <!-- Contour panel -->
+  <g transform="translate(20,60)">
+    <rect x="0" y="0" width="640" height="320" fill="#fbfdff" stroke="#e6eefb" rx="8"/>
+
+    <!-- contour rings for two basins (one left shallow, one right deep) -->
+    <!-- left basin (local) -->
+    <ellipse cx="220" cy="180" rx="90" ry="60" class="contour"/>
+    <ellipse cx="220" cy="180" rx="70" ry="45" class="contour"/>
+    <ellipse cx="220" cy="180" rx="50" ry="32" class="contour"/>
+    <ellipse cx="220" cy="180" rx="30" ry="18" class="contour"/>
+
+    <!-- right basin (global) -->
+    <ellipse cx="420" cy="140" rx="120" ry="80" class="contour"/>
+    <ellipse cx="420" cy="140" rx="95" ry="60" class="contour"/>
+    <ellipse cx="420" cy="140" rx="70" ry="40" class="contour"/>
+    <ellipse cx="420" cy="140" rx="40" ry="22" class="contour"/>
+
+    <!-- minima points -->
+    <circle cx="220" cy="180" r="6" class="minima"/>
+    <text x="238" y="180" class="label">局部最小值</text>
+    <circle cx="420" cy="140" r="6" class="minima"/>
+    <text x="438" y="140" class="label">全局最小值</text>
+
+    <!-- starting points -->
+    <circle cx="90" cy="80" r="5" class="start"/>
+    <text x="100" y="76" class="smalltext">起点 A</text>
+
+    <circle cx="140" cy="40" r="5" class="start"/>
+    <text x="150" y="36" class="smalltext">起点 B</text>
+
+    <circle cx="560" cy="40" r="5" class="start"/>
+    <text x="570" y="36" class="smalltext">起点 C</text>
+
+    <circle cx="520" cy="220" r="5" class="start"/>
+    <text x="530" y="216" class="smalltext">起点 D</text>
+
+    <!-- paths: smooth curved arrows to minima -->
+    <path d="M90 80 C130 110, 170 150, 210 170" class="path path1" marker-end="url(#arrow)"/>
+    <path d="M140 40 C170 70, 200 120, 220 170" class="path path2" marker-end="url(#arrow)"/>
+
+    <path d="M560 40 C520 80, 490 110, 440 140" class="path path3" marker-end="url(#arrow)"/>
+    <path d="M520 220 C480 200, 460 180, 430 150" class="path path1" marker-end="url(#arrow)"/>
+
+    <!-- small legend -->
+    <rect x="10" y="10" width="200" height="60" fill="#ffffff" stroke="#e2e8f0" rx="6" />
+    <text x="20" y="28" class="smalltext">示意说明：</text>
+    <text x="20" y="44" class="smalltext">• 起点沿梯度方向迭代 → 收敛到对应的最小值</text>
+    <text x="20" y="60" class="smalltext">• 起点 A/B 收敛到局部最小；C/D 收敛到全局最小</text>
+  </g>
+
+  <!-- Loss vs Iterations panel (right) -->
+  <g transform="translate(690,60)">
+    <rect x="0" y="0" width="280" height="200" fill="#fbfdff" stroke="#e6eefb" rx="8" />
+    <text x="140" y="20" text-anchor="middle" class="label">损失随迭代的变化</text>
+
+    <!-- axes -->
+    <line x1="30" y1="160" x2="240" y2="160" class="axis"/>
+    <line x1="30" y1="160" x2="30" y2="40" class="axis"/>
+    <text x="140" y="178" text-anchor="middle" class="smalltext">迭代次数</text>
+    <text x="12" y="60" class="smalltext">损失</text>
+
+    <!-- curves (simulated) -->
+    <path d="M30 150 C60 120, 90 100, 120 85 C150 78, 180 72, 240 68" stroke="#0ea5a4" stroke-width="2.4" fill="none"/>
+    <text x="242" y="74" class="smalltext" fill="#0ea5a4">起点 A (局部)</text>
+
+    <path d="M30 148 C60 130, 90 110, 120 92 C150 84, 180 76, 240 70" stroke="#f59e0b" stroke-width="2.4" fill="none"/>
+    <text x="242" y="90" class="smalltext" fill="#f59e0b">起点 B (局部)</text>
+
+    <path d="M30 155 C60 110, 90 82, 120 64 C150 58, 180 54, 240 48" stroke="#8b5cf6" stroke-width="2.4" fill="none"/>
+    <text x="242" y="52" class="smalltext" fill="#8b5cf6">起点 C/D (全局)</text>
+
+    <!-- note -->
+    <text x="30" y="190" class="smalltext">曲线为示意：不同起点可能收敛到不同损失水平</text>
+  </g>
+
+  <!-- bottom note -->
+  <text x="20" y="400" class="smalltext">提示：真实梯度下降路径取决于学习率、动量、曲率和噪声。为避免不良局部极小值可使用随机初始化、动量、学习率调度或多次重启。</text>
+
+</svg>

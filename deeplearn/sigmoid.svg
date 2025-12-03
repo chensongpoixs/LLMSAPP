@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="420" viewBox="0 0 920 420">
+  <style>
+    .title { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:18px; font-weight:700; fill:#0b2545 }
+    .label { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:13px; fill:#0b2545 }
+    .axis { stroke:#cbd5e1; stroke-width:1 }
+    .sigmoid { stroke:#1f77b4; stroke-width:3; fill:none }
+    .deriv { stroke:#ff7f0e; stroke-width:2.6; fill:none }
+    .note { font-size:12px; fill:#334155 }
+    .box { fill:#fbfeff; stroke:#e6eefb; rx:8 }
+    .bullet { font-size:13px; }
+  </style>
+
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#f8fafc" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+
+  <text x="20" y="34" class="title">Sigmoid 函数原理说明</text>
+
+  <!-- Left: plot -->
+  <g transform="translate(20,60)">
+    <rect x="0" y="0" width="520" height="300" class="box"/>
+    <text x="260" y="24" text-anchor="middle" class="label">Sigmoid 与其导数</text>
+
+    <!-- axes -->
+    <line x1="60" y1="240" x2="460" y2="240" class="axis"/>
+    <line x1="60" y1="40" x2="60" y2="240" class="axis"/>
+    <text x="60" y="256" class="note">-6</text>
+    <text x="140" y="256" class="note">-3</text>
+    <text x="220" y="256" class="note">0</text>
+    <text x="300" y="256" class="note">3</text>
+    <text x="380" y="256" class="note">6</text>
+
+    <!-- sigmoid curve (approx) -->
+    <path d="M60 220 C110 200, 145 160, 180 140 C220 120, 260 104, 300 100 C340 96, 380 92, 460 80" class="sigmoid"/>
+    <!-- derivative curve (approx) -->
+    <path d="M60 120 C110 130, 145 135, 180 136 C220 134, 260 125, 300 110 C340 95, 380 86, 460 80" class="deriv"/>
+
+    <text x="470" y="115" class="note" fill="#1f77b4">σ(x)</text>
+    <text x="470" y="135" class="note" fill="#ff7f0e">σ'(x)</text>
+
+    <!-- vertical guide at x=0 -->
+    <line x1="220" y1="40" x2="220" y2="240" stroke="#e2e8f0" stroke-dasharray="4 3"/>
+    <text x="224" y="34" class="note">x = 0</text>
+  </g>
+
+  <!-- Right: explanation bullets -->
+  <g transform="translate(560,72)">
+    <rect x="0" y="0" width="340" height="288" class="box"/>
+    <text x="170" y="28" text-anchor="middle" class="label">要点速览</text>
+
+    <text x="20" y="64" class="bullet">• 定义：σ(x) = 1 / (1 + e^{-x})，输出范围 (0,1)。</text>
+    <text x="20" y="96" class="bullet">• 概率解释：常用作二分类输出概率 P(y=1|x)=σ(z)。</text>
+    <text x="20" y="128" class="bullet">• 导数：σ'(x)=σ(x)(1-σ(x))，可用 σ(x) 计算梯度。</text>
+    <text x="20" y="160" class="bullet">• 优点：输出为概率、导数解析，适合逻辑回归。</text>
+    <text x="20" y="192" class="bullet">• 缺点：在 |x| 很大时梯度接近 0（饱和），会导致梯度消失。</text>
+    <text x="20" y="224" class="bullet">• 建议：隐藏层优先 ReLU；如用 Sigmoid，配合良好初始化与归一化。</text>
+
+    <text x="20" y="264" class="note">示例：对数几率变换 logit(p)=ln(p/(1-p))，满足 σ(logit(p))=p。</text>
+  </g>
+
+  <!-- bottom note -->
+  <text x="20" y="388" class="note">可选操作：我可以把该 SVG 嵌入到 `6.逻辑回归之激活函数(Sigmoid).md`，或生成 PNG 供页面使用。</text>
+
+</svg>

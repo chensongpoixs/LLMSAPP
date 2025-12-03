@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360">
+  <style>
+    .title { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:18px; font-weight:700; fill:#0b2545 }
+    .label { font-family: "Microsoft YaHei", Arial, sans-serif; font-size:13px; fill:#0b2545 }
+    .box { fill:#f8fbff; stroke:#cfe8ff; stroke-width:1.2; rx:8 }
+    .panel-title { font-size:14px; font-weight:600; fill:#0b2545 }
+    .axis { stroke:#d1d5db; stroke-width:1 }
+    .point { fill:#0b69c1 }
+    .stepline { fill:none; stroke:#0b69c1; stroke-width:2; stroke-linecap:round }
+    .oscillate { fill:none; stroke:#ef4444; stroke-width:2; stroke-linecap:round }
+    .arrow { stroke:#0b69c1; stroke-width:1.4; marker-end:url(#a) }
+    .small { font-size:12px; fill:#374151 }
+  </style>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#0b69c1" />
+    </marker>
+  </defs>
+
+  <text x="20" y="32" class="title">学习率对梯度下降的影响：过小 vs 过大</text>
+
+  <!-- Left panel: LR too small -->
+  <g transform="translate(20,60)">
+    <rect class="box" x="0" y="0" width="440" height="240"/>
+    <text x="220" y="26" text-anchor="middle" class="panel-title">学习率过小（步长很小）</text>
+
+    <!-- contour-like background -->
+    <ellipse cx="120" cy="140" rx="90" ry="48" fill="none" stroke="#e6edf6"/>
+    <ellipse cx="220" cy="120" rx="70" ry="36" fill="none" stroke="#e6edf6"/>
+    <ellipse cx="330" cy="100" rx="40" ry="22" fill="none" stroke="#e6edf6"/>
+
+    <!-- data: path of small steps slowly approaching minimum -->
+    <circle cx="50" cy="200" r="4" class="point"/>
+    <circle cx="75" cy="190" r="4" class="point"/>
+    <circle cx="100" cy="180" r="4" class="point"/>
+    <circle cx="125" cy="172" r="4" class="point"/>
+    <circle cx="150" cy="166" r="4" class="point"/>
+    <circle cx="175" cy="162" r="4" class="point"/>
+    <circle cx="200" cy="160" r="4" class="point"/>
+    <circle cx="225" cy="159" r="4" class="point"/>
+    <circle cx="250" cy="158.5" r="4" class="point"/>
+    <path d="M50 200 L75 190 L100 180 L125 172 L150 166 L175 162 L200 160 L225 159 L250 158.5" class="stepline"/>
+
+    <text x="20" y="230" class="small">说明：步长很小，迭代次数多，收敛速度慢但稳定；可能需要很长时间才能接近最优。</text>
+
+    <text x="20" y="252" class="small">建议：使用学习率调度、增加步长、或使用自适应优化器（Adam、RMSprop）。</text>
+  </g>
+
+  <!-- Right panel: LR too large -->
+  <g transform="translate(490,60)">
+    <rect class="box" x="0" y="0" width="440" height="240"/>
+    <text x="220" y="26" text-anchor="middle" class="panel-title">学习率过大（步长太大）</text>
+
+    <!-- contour-like background -->
+    <ellipse cx="120" cy="140" rx="90" ry="48" fill="none" stroke="#fff1f2"/>
+    <ellipse cx="220" cy="120" rx="70" ry="36" fill="none" stroke="#fff1f2"/>
+    <ellipse cx="330" cy="100" rx="40" ry="22" fill="none" stroke="#fff1f2"/>
+
+    <!-- oscillating / diverging path -->
+    <circle cx="60" cy="200" r="4" fill="#b91c1c"/>
+    <path d="M60 200 C110 140, 80 220, 140 150 C200 80, 160 230, 220 120 C280 10, 260 240, 340 80" class="oscillate"/>
+    <path d="M60 200 C110 140, 80 220, 140 150 C200 80, 160 230, 220 120 C280 10, 260 240, 340 80" stroke="#ef4444" stroke-dasharray="6 4" fill="none"/>
+
+    <text x="20" y="230" class="small">说明：步长太大，更新穿越极小值、震荡或发散，验证集误差可能上升，训练变差。</text>
+
+    <text x="20" y="252" class="small">建议：减小学习率、使用小型 warmup、或使用动量与自适应优化器来稳定训练。</text>
+  </g>
+
+  <!-- Center comparison arrows and summary -->
+  <g transform="translate(0,310)">
+    <line x1="360" y1="10" x2="620" y2="10" class="axis"/>
+    <text x="180" y="30" class="small">比较：</text>
+    <text x="400" y="30" class="small">• 学习率过小：稳定但慢；可能陷入局部最小或训练成本高。</text>
+    <text x="400" y="46" class="small">• 学习率过大：不稳定、震荡或发散；训练/验证误差可能上升。</text>
+  </g>
+
+  <!-- bottom tips -->
+  <text x="20" y="340" class="small">缓解方法（常用）：学习率调度（Decay / Warmup）, 自适应优化器（Adam, RMSprop）, 动量（Momentum）, 多次随机重启与交叉验证。</text>
+
+</svg>
