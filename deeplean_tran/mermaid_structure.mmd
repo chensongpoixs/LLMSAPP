@@ -1,0 +1,8 @@
+graph LR
+  subgraph Neuron[单个神经元（向量化）]
+    X[输入向量 X\n(形状: n × m)] --> DOT[线性组合 z = W^T X + b]
+    W[权重 W\n(形状: n × 1)] --> DOT
+    b[偏置 b\n(标量或 1 × m 广播)] --> DOT
+    DOT --> SIG[激活 a = sigmoid(z)]
+    SIG --> Yhat[预测 ŷ (1 × m)]
+  end

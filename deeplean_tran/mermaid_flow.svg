@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="700" height="620" viewBox="0 0 700 620" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill:#ffffff; stroke:#1f2937; stroke-width:1.6; rx:6; }
+    .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#111; }
+    .small { font-size:12px; fill:#333; }
+    .arrow { stroke:#1f2937; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1f2937" />
+    </marker>
+  </defs>
+
+  <!-- Steps vertically -->
+  <rect x="80" y="20" width="540" height="70" class="box"/>
+  <text x="350" y="50" class="text" text-anchor="middle">输入: X (n,m), Y (1,m), W (n,1), b</text>
+
+  <rect x="80" y="120" width="540" height="70" class="box"/>
+  <text x="350" y="150" class="text" text-anchor="middle">前向: z = W^T X + b  → A = sigmoid(z)</text>
+  <text x="350" y="168" class="small" text-anchor="middle">(形状: 1 × m)</text>
+
+  <rect x="80" y="240" width="540" height="70" class="box"/>
+  <text x="350" y="270" class="text" text-anchor="middle">计算损失: J = -1/m * sum(Y log A + (1-Y) log(1-A))</text>
+
+  <rect x="80" y="360" width="540" height="70" class="box"/>
+  <text x="350" y="390" class="text" text-anchor="middle">反向: dZ = A - Y</text>
+
+  <rect x="80" y="480" width="540" height="70" class="box"/>
+  <text x="350" y="510" class="text" text-anchor="middle">梯度: dW = 1/m * X · dZ^T   |   db = 1/m * sum(dZ)</text>
+
+  <rect x="80" y="560" width="540" height="40" class="box"/>
+  <text x="350" y="585" class="text" text-anchor="middle">参数更新: W := W - lr * dW;  b := b - lr * db</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M350 90 L350 120" />
+  <path class="arrow" d="M350 190 L350 240" />
+  <path class="arrow" d="M350 310 L350 360" />
+  <path class="arrow" d="M350 430 L350 480" />
+  <path class="arrow" d="M350 540 L350 560" />
+
+</svg>

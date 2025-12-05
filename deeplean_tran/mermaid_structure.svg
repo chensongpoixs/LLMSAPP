@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="240" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill:#f8f9fa; stroke:#2b2b2b; stroke-width:1.5; rx:6; }
+    .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#111; }
+    .small { font-size:12px; fill:#333; }
+    .arrow { stroke:#2b2b2b; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2b2b2b" />
+    </marker>
+  </defs>
+
+  <!-- Inputs -->
+  <rect x="20" y="30" width="160" height="60" class="box"/>
+  <text x="100" y="55" class="text" text-anchor="middle">X (n × m)</text>
+  <text x="100" y="72" class="small" text-anchor="middle">输入向量</text>
+
+  <rect x="20" y="130" width="140" height="60" class="box"/>
+  <text x="90" y="155" class="text" text-anchor="middle">W (n × 1)</text>
+  <text x="90" y="172" class="small" text-anchor="middle">权重</text>
+
+  <rect x="200" y="130" width="120" height="60" class="box"/>
+  <text x="260" y="155" class="text" text-anchor="middle">b</text>
+  <text x="260" y="172" class="small" text-anchor="middle">偏置</text>
+
+  <!-- z -->
+  <rect x="380" y="70" width="160" height="60" class="box"/>
+  <text x="460" y="95" class="text" text-anchor="middle">z = W^T X + b</text>
+  <text x="460" y="112" class="small" text-anchor="middle">(1 × m)</text>
+
+  <!-- sigmoid -->
+  <rect x="580" y="70" width="160" height="60" class="box"/>
+  <text x="660" y="95" class="text" text-anchor="middle">a = sigmoid(z)</text>
+  <text x="660" y="112" class="small" text-anchor="middle">ŷ (1 × m)</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M180 60 L360 100" />
+  <path class="arrow" d="M200 160 L380 100" />
+  <path class="arrow" d="M320 160 L380 120" />
+  <path class="arrow" d="M540 100 L580 100" />
+  <path class="arrow" d="M540 100 L600 100" />
+  <path class="arrow" d="M540 100 L660 100" />
+
+  <!-- Labels near arrows -->
+  <text x="270" y="82" class="small" text-anchor="middle">线性组合</text>
+
+</svg>

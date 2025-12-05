@@ -1,0 +1,8 @@
+flowchart TD
+  A[输入: X (n,m), Y (1,m), W (n,1), b] --> B[前向：z = W^T X + b  (1,m)]
+  B --> C[激活：A = sigmoid(z)  (1,m)]
+  C --> D[计算损失：L = -1/m * sum(Y*log(A) + (1-Y)*log(1-A))]
+  D --> E[反向：dZ = A - Y  (1,m)]
+  E --> F[梯度：dW = 1/m * X · dZ^T  (n,1) \n db = 1/m * sum(dZ)]
+  F --> G[参数更新：W := W - lr * dW; b := b - lr * db]
+  G --> H[重复直到收敛]
