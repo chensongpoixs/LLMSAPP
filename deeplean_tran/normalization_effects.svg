@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="1000" height="480">
+  <style>
+    .title{font-size:20px;font-weight:700;fill:#222}
+    .label{font-size:13px;fill:#333}
+    .small{font-size:11px;fill:#555}
+    .box{fill:none;stroke:#e6e7eb}
+    .dist_orig{fill:#fca5a5}
+    .dist_norm{fill:#86efac}
+    .curve_raw{stroke:#ef4444;stroke-width:2;fill:none}
+    .curve_norm{stroke:#2563eb;stroke-width:2;fill:none}
+  </style>
+
+  <text x="500" y="28" class="title" text-anchor="middle">归一化对分布与训练收敛的影响</text>
+
+  <!-- Left: distribution before/after -->
+  <g transform="translate(40,60)">
+    <rect x="0" y="0" width="420" height="380" class="box"/>
+    <text x="210" y="22" text-anchor="middle" class="label">特征分布：归一化 前 / 后</text>
+
+    <!-- before (skewed) -->
+    <text x="100" y="50" class="small" text-anchor="middle">归一化前</text>
+    <rect x="40" y="80" width="120" height="240" fill="#fee2e2" stroke="#fca5a5"/>
+    <path d="M50 300 C70 240, 80 200, 110 160" stroke="#ef4444" fill="none" stroke-width="2"/>
+    <text x="100" y="340" class="small" text-anchor="middle">偏斜分布、有异常值</text>
+
+    <!-- after (normalized) -->
+    <text x="310" y="50" class="small" text-anchor="middle">归一化后</text>
+    <rect x="260" y="140" width="120" height="120" fill="#ecfdf5" stroke="#86efac"/>
+    <path d="M280 250 C320 160, 360 160, 380 250" stroke="#059669" fill="none" stroke-width="2"/>
+    <text x="310" y="340" class="small" text-anchor="middle">中心化、尺度一致，异常值影响下降</text>
+  </g>
+
+  <!-- Right: training loss curves -->
+  <g transform="translate(500,60)">
+    <rect x="0" y="0" width="420" height="380" class="box"/>
+    <text x="210" y="22" text-anchor="middle" class="label">训练收敛对比（Loss vs Epoch）</text>
+
+    <!-- axes -->
+    <line x1="40" y1="320" x2="360" y2="320" stroke="#999"/>
+    <line x1="40" y1="320" x2="40" y2="80" stroke="#999"/>
+    <text x="200" y="345" class="small" text-anchor="middle">Epoch</text>
+    <text x="10" y="200" class="small" transform="rotate(-90 10,200)">Loss</text>
+
+    <!-- raw (no normalization) curve: slower, noisy -->
+    <path d="M40 300 C80 260, 120 250, 160 240 C200 235, 240 232, 280 230 C320 229, 360 228, 360 228" class="curve_raw"/>
+    <text x="365" y="230" class="small" fill="#ef4444">无归一化</text>
+
+    <!-- normalized curve: faster convergence -->
+    <path d="M40 300 C80 220, 120 180, 160 150 C200 130, 240 120, 280 118 C320 116, 360 115, 360 115" class="curve_norm"/>
+    <text x="365" y="115" class="small" fill="#2563eb">归一化后</text>
+
+    <!-- legend -->
+    <rect x="60" y="40" width="280" height="36" fill="#fff" stroke="#e6e7eb"/>
+    <line x1="80" y1="56" x2="110" y2="56" stroke="#ef4444" stroke-width="3"/>
+    <text x="125" y="60" class="small">无归一化（震荡、收敛慢）</text>
+    <line x1="300" y1="56" x2="330" y2="56" stroke="#2563eb" stroke-width="3"/>
+    <text x="335" y="60" class="small">归一化（收敛更快、稳定）</text>
+  </g>
+
+  <text x="500" y="460" class="small" text-anchor="middle">建议：训练深度网络时对输入特征进行标准化或归一化，帮助优化器稳定、加速收敛。</text>
+</svg>

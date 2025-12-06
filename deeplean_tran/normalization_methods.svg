@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" width="1000" height="420">
+  <style>
+    .title{font-size:20px;font-weight:700;fill:#222}
+    .sub{font-size:14px;fill:#333}
+    .axis{stroke:#999;stroke-width:1}
+    .hist_orig{fill:#93c5fd;opacity:0.9}
+    .hist_minmax{fill:#60a5fa;opacity:0.9}
+    .hist_z{fill:#7dd3fc;opacity:0.9}
+    .box{fill:none;stroke:#e5e7eb}
+    .label{font-size:12px;fill:#374151}
+  </style>
+
+  <text x="500" y="28" class="title" text-anchor="middle">数据归一化：方法示意</text>
+
+  <!-- Original distribution -->
+  <g transform="translate(20,60)">
+    <rect x="0" y="0" width="300" height="320" class="box"/>
+    <text x="150" y="18" text-anchor="middle" class="sub">原始特征分布（Raw）</text>
+    <!-- axis -->
+    <line x1="20" y1="280" x2="280" y2="280" class="axis"/>
+    <text x="150" y="300" class="label" text-anchor="middle">值</text>
+    <!-- simple histogram bars -->
+    <rect x="40" y="220" width="30" height="60" class="hist_orig"/>
+    <rect x="80" y="180" width="30" height="100" class="hist_orig"/>
+    <rect x="120" y="120" width="30" height="160" class="hist_orig"/>
+    <rect x="160" y="150" width="30" height="130" class="hist_orig"/>
+    <rect x="200" y="200" width="30" height="80" class="hist_orig"/>
+  </g>
+
+  <!-- Min-Max scaled -->
+  <g transform="translate(350,60)">
+    <rect x="0" y="0" width="300" height="320" class="box"/>
+    <text x="150" y="18" text-anchor="middle" class="sub">Min-Max 归一化</text>
+    <line x1="20" y1="280" x2="280" y2="280" class="axis"/>
+    <text x="150" y="300" class="label" text-anchor="middle">[0,1]</text>
+    <!-- scaled bars (all inside 0..1 visually) -->
+    <rect x="40" y="210" width="30" height="70" class="hist_minmax"/>
+    <rect x="80" y="170" width="30" height="110" class="hist_minmax"/>
+    <rect x="120" y="130" width="30" height="150" class="hist_minmax"/>
+    <rect x="160" y="150" width="30" height="130" class="hist_minmax"/>
+    <rect x="200" y="200" width="30" height="80" class="hist_minmax"/>
+    <text x="150" y="40" class="label" text-anchor="middle">公式: (x - min)/(max - min)</text>
+  </g>
+
+  <!-- Z-score (Standardization) -->
+  <g transform="translate(680,60)">
+    <rect x="0" y="0" width="300" height="320" class="box"/>
+    <text x="150" y="18" text-anchor="middle" class="sub">Z-score 标准化</text>
+    <line x1="20" y1="280" x2="280" y2="280" class="axis"/>
+    <text x="150" y="300" class="label" text-anchor="middle">均值=0, 方差=1</text>
+    <!-- normal-like curve bars centered -->
+    <rect x="100" y="100" width="30" height="180" class="hist_z"/>
+    <rect x="140" y="140" width="30" height="140" class="hist_z"/>
+    <rect x="60" y="160" width="30" height="120" class="hist_z"/>
+    <rect x="180" y="180" width="30" height="100" class="hist_z"/>
+    <text x="150" y="40" class="label" text-anchor="middle">公式: (x - μ)/σ</text>
+  </g>
+
+  <!-- footnote -->
+  <text x="500" y="370" class="label" text-anchor="middle">注：不同方法适用于不同场景。Min-Max 保留原始区间但对异常值敏感；Z-score 更稳健于尺度变化。</text>
+</svg>

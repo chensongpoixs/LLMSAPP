@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 520" width="1100" height="520">
+  <style>
+    .title{font-size:22px;font-weight:700;fill:#b91c1c}
+    .subtitle{font-size:14px;fill:#333}
+    .axis{stroke:#4b5563;stroke-width:2}
+    .contour_raw{stroke:#f97316;fill:none;stroke-width:2}
+    .contour_raw_light{stroke:#fb923c;fill:none;stroke-width:1}
+    .contour_norm{stroke:#2563eb;fill:none;stroke-width:2}
+    .contour_norm_light{stroke:#60a5fa;fill:none;stroke-width:1}
+    .surface_raw{fill:url(#gradRaw);stroke:#ef4444;stroke-width:0.5;opacity:0.95}
+    .surface_norm{fill:url(#gradNorm);stroke:#2563eb;stroke-width:0.5;opacity:0.95}
+    .label{font-size:13px;fill:#111;font-weight:600}
+    .small{font-size:12px;fill:#374151}
+  </style>
+
+  <defs>
+    <linearGradient id="gradRaw" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fee2e2"/>
+      <stop offset="100%" stop-color="#fecaca"/>
+    </linearGradient>
+    <linearGradient id="gradNorm" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#bfdbfe"/>
+      <stop offset="100%" stop-color="#93c5fd"/>
+    </linearGradient>
+  </defs>
+
+  <text x="550" y="36" class="title" text-anchor="middle">为什么归一化会起到作用</text>
+
+  <!-- LEFT: Raw (ill-conditioned) -->
+  <g transform="translate(40,60)">
+    <rect x="0" y="0" width="500" height="420" fill="none" stroke="#e6e7eb"/>
+    <text x="250" y="22" class="subtitle" text-anchor="middle">归一化前（条件数高 / 非对称 Loss 面）</text>
+
+    <!-- 3D surface simplified as an oval top (illustrative) -->
+    <g transform="translate(120,120) scale(1)">
+      <!-- top bowl (flattened ellipse) -->
+      <ellipse cx="210" cy="40" rx="120" ry="40" class="surface_raw"/>
+      <ellipse cx="210" cy="70" rx="160" ry="60" class="surface_raw"/>
+      <ellipse cx="210" cy="100" rx="200" ry="80" class="surface_raw"/>
+      <!-- small highlight for rim -->
+      <ellipse cx="210" cy="40" rx="120" ry="40" stroke="#b91c1c" fill="none" stroke-width="1"/>
+    </g>
+
+    <!-- contours (top view) -->
+    <g transform="translate(40,240)">
+      <text x="0" y="-8" class="small">等高线（Top-down）</text>
+      <!-- elongated ellipses at angle -->
+      <g transform="translate(220,110) rotate(-25)">
+        <ellipse cx="0" cy="0" rx="160" ry="40" class="contour_raw_light"/>
+        <ellipse cx="0" cy="0" rx="120" ry="30" class="contour_raw_light"/>
+        <ellipse cx="0" cy="0" rx="80" ry="20" class="contour_raw"/>
+        <ellipse cx="0" cy="0" rx="45" ry="12" class="contour_raw_light"/>
+      </g>
+
+      <!-- axes -->
+      <line x1="20" y1="200" x2="420" y2="200" class="axis" />
+      <line x1="220" y1="80" x2="220" y2="260" class="axis" />
+      <text x="430" y="200" class="small">w</text>
+      <text x="220" y="70" class="small">b</text>
+      <text x="220" y="40" class="small">J ↑</text>
+    </g>
+
+  </g>
+
+  <!-- RIGHT: Normalized (well-conditioned) -->
+  <g transform="translate(560,60)">
+    <rect x="0" y="0" width="500" height="420" fill="none" stroke="#e6e7eb"/>
+    <text x="250" y="22" class="subtitle" text-anchor="middle">归一化后（条件数低 / 对称 Loss 面）</text>
+
+    <!-- 3D surface simplified as symmetric bowl -->
+    <g transform="translate(120,120)">
+      <ellipse cx="210" cy="60" rx="90" ry="90" class="surface_norm"/>
+      <ellipse cx="210" cy="100" rx="140" ry="140" class="surface_norm"/>
+      <ellipse cx="210" cy="140" rx="190" ry="190" class="surface_norm"/>
+      <ellipse cx="210" cy="60" rx="90" ry="90" stroke="#1e40af" fill="none" stroke-width="1"/>
+    </g>
+
+    <!-- contours (top view) -->
+    <g transform="translate(40,240)">
+      <text x="0" y="-8" class="small">等高线（Top-down）</text>
+      <!-- concentric circles -->
+      <g transform="translate(220,110)">
+        <circle cx="0" cy="0" r="160" class="contour_norm_light"/>
+        <circle cx="0" cy="0" r="120" class="contour_norm_light"/>
+        <circle cx="0" cy="0" r="80" class="contour_norm"/>
+        <circle cx="0" cy="0" r="45" class="contour_norm_light"/>
+      </g>
+
+      <!-- axes -->
+      <line x1="20" y1="200" x2="420" y2="200" class="axis" />
+      <line x1="220" y1="80" x2="220" y2="260" class="axis" />
+      <text x="430" y="200" class="small">w</text>
+      <text x="220" y="70" class="small">b</text>
+      <text x="220" y="40" class="small">J ↑</text>
+    </g>
+
+  </g>
+
+  <!-- caption -->
+  <text x="550" y="500" class="small" text-anchor="middle">左：未归一化时损失面扁长、等高线呈椭圆，导致梯度在某些方向速率快而在另一些方向慢（收敛慢/震荡）。右：归一化后损失面更接近圆形，梯度方向一致，收敛更快更稳定。</text>
+</svg>

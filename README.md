@@ -47,3 +47,23 @@
 [8、深度学习中激活函数](/deeplearn/8.深度学习中激活函数.md)
 
 [9、深度学习神经网络的反向传播与计算图](/deeplearn/9.深度学习神经网络的反向传播与计算图.md)
+
+
+## 四、深度神经网络训练参数优化篇
+
+[1、向量化与矩阵化.md](/deeplean_tran/1、向量化与矩阵化.md)
+
+[2、深度神经网络之L2正则化.md](/deeplean_tran/2、深度神经网络之L2正则化.md)
+
+[3、深度神经网络之Dropout.md](/deeplean_tran/3、深度神经网络之Dropout.md)
+
+[4、深度神经网络之数据归一化处理.md](/deeplean_tran/4、深度神经网络之数据归一化处理.md)
+
+[5、深度神经网络之初始化权重参数.md](/deeplean_tran/5、深度神经网络之初始化权重参数.md)
+
+[6、深度神经网络之全批量梯度下降、随机梯度下降和小批量梯度下降(mini-batch size)](/deeplean_tran/6、深度神经网络之全批量梯度下降、随机梯度下降和小批量梯度下降.md)
+
+[7、深度神经网络之梯度参数调优](/deeplean_tran/7、深度神经网络之梯度参数调优.md)
+
+
+[8、深度神经网络之参数优化(BatchNormaliztion)](/deeplean_tran/8、深度神经网络之参数优化(BatchNormaliztion).md)

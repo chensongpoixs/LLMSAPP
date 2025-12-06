@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 680" width="1120" height="680">
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #333; }
+      .subtitle { font-size: 16px; font-weight: bold; fill: #555; }
+      .label { font-size: 14px; fill: #666; font-weight: bold; }
+      .small { font-size: 12px; fill: #777; }
+      .prob_label { font-size: 13px; fill: #ef4444; font-weight: bold; }
+      .node { fill: #ffffff; stroke: #4b5cc4; stroke-width: 2; }
+      .node_drop { fill: #ffcccc; stroke: #ef4444; stroke-width: 2; }
+      .node_output { fill: #60a5fa; stroke: #1e40af; stroke-width: 2; }
+      .box { fill: none; stroke: #ddd; stroke-width: 2; rx: 4; }
+      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .line { stroke: #4b5cc4; stroke-width: 1.5; }
+      .line_drop { stroke: #ef4444; stroke-width: 1.5; opacity: 0.3; }
+      .description { font-size: 11px; fill: #555; }
+      .explain_box { fill: #f9fafb; stroke: #e5e7eb; stroke-width: 1; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666" />
+    </marker>
+  </defs>
+
+  <title>经典 Dropout 示例 — 训练 vs 推理（两层隐藏层）</title>
+
+  <!-- Main title -->
+  <text x="560" y="35" class="title" text-anchor="middle">经典 Dropout 示例：训练 vs 推理（两层隐藏层）</text>
+
+  <!-- ========== LEFT PANEL: TRAINING WITH DROPOUT ========== -->
+  <g id="training_panel">
+    <!-- Panel background -->
+    <rect x="20" y="55" width="520" height="600" class="box"/>
+    
+    <!-- Panel title -->
+    <text x="280" y="85" class="subtitle" text-anchor="middle">训练阶段（Training with Dropout）</text>
+    <text x="280" y="105" class="small" text-anchor="middle">随机关闭部分神经元(p=0.5)</text>
+
+    <!-- INPUT LAYER -->
+    <text x="50" y="150" class="label">输入层</text>
+    <text x="50" y="167" class="small">(Input Layer)</text>
+    <g id="train_input">
+      <circle cx="80" cy="200" r="10" class="node"/>
+      <circle cx="80" cy="260" r="10" class="node"/>
+      <circle cx="80" cy="320" r="10" class="node"/>
+      <circle cx="80" cy="380" r="10" class="node"/>
+      <text x="50" y="445" class="small" text-anchor="middle">4 neurons</text>
+    </g>
+
+    <!-- HIDDEN LAYER 1 -->
+    <text x="200" y="150" class="label">隐藏层1</text>
+    <text x="200" y="167" class="small" text-anchor="middle">(Hidden Layer 1)</text>
+    <text x="200" y="183" class="prob_label" text-anchor="middle">p=0.5</text>
+    <g id="train_hidden1">
+      <!-- Active neurons (white) -->
+      <circle cx="220" cy="200" r="10" class="node"/>
+      <circle cx="220" cy="260" r="10" class="node"/>
+      <circle cx="220" cy="320" r="10" class="node"/>
+      <!-- Dropped neuron (red) -->
+      <circle cx="220" cy="380" r="10" class="node_drop"/>
+      <text x="200" y="445" class="small" text-anchor="middle">3/4 active</text>
+    </g>
+
+    <!-- HIDDEN LAYER 2 -->
+    <text x="350" y="150" class="label">隐藏层2</text>
+    <text x="350" y="167" class="small" text-anchor="middle">(Hidden Layer 2)</text>
+    <text x="350" y="183" class="prob_label" text-anchor="middle">p=0.5</text>
+    <g id="train_hidden2">
+      <!-- Active neurons (white) -->
+      <circle cx="370" cy="230" r="10" class="node"/>
+      <circle cx="370" cy="290" r="10" class="node"/>
+      <!-- Dropped neurons (red) -->
+      <circle cx="370" cy="350" r="10" class="node_drop"/>
+      <circle cx="370" cy="410" r="10" class="node_drop"/>
+      <text x="350" y="475" class="small" text-anchor="middle">2/4 active</text>
+    </g>
+
+    <!-- OUTPUT LAYER -->
+    <text x="470" y="150" class="label">输出层</text>
+    <text x="470" y="167" class="small">(Output Layer)</text>
+    <g id="train_output">
+      <circle cx="490" cy="270" r="10" class="node_output"/>
+      <circle cx="490" cy="330" r="10" class="node_output"/>
+      <text x="470" y="400" class="small" text-anchor="middle">2 neurons</text>
+    </g>
+
+    <!-- CONNECTIONS: Input to Hidden1 -->
+    <line x1="90" y1="200" x2="210" y2="200" class="line"/>
+    <line x1="90" y1="260" x2="210" y2="260" class="line"/>
+    <line x1="90" y1="320" x2="210" y2="320" class="line"/>
+    <line x1="90" y1="380" x2="210" y2="380" class="line_drop"/>
+
+    <!-- CONNECTIONS: Hidden1 to Hidden2 -->
+    <line x1="230" y1="200" x2="360" y2="230" class="line"/>
+    <line x1="230" y1="260" x2="360" y2="290" class="line"/>
+    <line x1="230" y1="320" x2="360" y2="350" class="line_drop"/>
+    <line x1="230" y1="380" x2="360" y2="410" class="line_drop"/>
+
+    <!-- CONNECTIONS: Hidden2 to Output -->
+    <line x1="380" y1="230" x2="480" y2="270" class="line"/>
+    <line x1="380" y1="290" x2="480" y2="330" class="line"/>
+    <line x1="380" y1="350" x2="480" y2="270" class="line_drop"/>
+    <line x1="380" y1="410" x2="480" y2="330" class="line_drop"/>
+
+    <!-- EXPLANATION BOX -->
+    <rect x="30" y="490" width="500" height="140" class="explain_box"/>
+    <text x="50" y="510" class="label">训练机制：</text>
+    <text x="50" y="535" class="description">• 对每层应用Dropout，以概率 p=0.5 随机关闭神经元</text>
+    <text x="50" y="555" class="description">• 关闭的神经元不参与前向传播，其输出置为零</text>
+    <text x="50" y="575" class="description">• 反向传播时，只对活跃的神经元计算梯度</text>
+    <text x="50" y="595" class="description">• 强制网络学习冗余表示，避免特征共适应</text>
+    <text x="50" y="615" class="description">• 有效降低过拟合，提高泛化能力</text>
+  </g>
+
+  <!-- ========== RIGHT PANEL: INFERENCE WITHOUT DROPOUT ========== -->
+  <g id="inference_panel">
+    <!-- Panel background -->
+    <rect x="580" y="55" width="520" height="600" class="box"/>
+    
+    <!-- Panel title -->
+    <text x="840" y="85" class="subtitle" text-anchor="middle">推理阶段（Inference without Dropout）</text>
+    <text x="840" y="105" class="small" text-anchor="middle">所有神经元都参与计算</text>
+
+    <!-- INPUT LAYER -->
+    <text x="610" y="150" class="label">输入层</text>
+    <text x="610" y="167" class="small">(Input Layer)</text>
+    <g id="infer_input">
+      <circle cx="640" cy="200" r="10" class="node"/>
+      <circle cx="640" cy="260" r="10" class="node"/>
+      <circle cx="640" cy="320" r="10" class="node"/>
+      <circle cx="640" cy="380" r="10" class="node"/>
+      <text x="610" y="445" class="small" text-anchor="middle">4 neurons</text>
+    </g>
+
+    <!-- HIDDEN LAYER 1 -->
+    <text x="760" y="150" class="label">隐藏层1</text>
+    <text x="760" y="167" class="small" text-anchor="middle">(Hidden Layer 1)</text>
+    <text x="760" y="183" class="description" text-anchor="middle">缩放权重×(1-p)</text>
+    <g id="infer_hidden1">
+      <!-- All active (white) -->
+      <circle cx="780" cy="200" r="10" class="node"/>
+      <circle cx="780" cy="260" r="10" class="node"/>
+      <circle cx="780" cy="320" r="10" class="node"/>
+      <circle cx="780" cy="380" r="10" class="node"/>
+      <text x="760" y="445" class="small" text-anchor="middle">4/4 active</text>
+    </g>
+
+    <!-- HIDDEN LAYER 2 -->
+    <text x="910" y="150" class="label">隐藏层2</text>
+    <text x="910" y="167" class="small" text-anchor="middle">(Hidden Layer 2)</text>
+    <text x="910" y="183" class="description" text-anchor="middle">缩放权重×(1-p)</text>
+    <g id="infer_hidden2">
+      <!-- All active (white) -->
+      <circle cx="930" cy="230" r="10" class="node"/>
+      <circle cx="930" cy="290" r="10" class="node"/>
+      <circle cx="930" cy="350" r="10" class="node"/>
+      <circle cx="930" cy="410" r="10" class="node"/>
+      <text x="910" y="475" class="small" text-anchor="middle">4/4 active</text>
+    </g>
+
+    <!-- OUTPUT LAYER -->
+    <text x="1030" y="150" class="label">输出层</text>
+    <text x="1030" y="167" class="small">(Output Layer)</text>
+    <g id="infer_output">
+      <circle cx="1050" cy="270" r="10" class="node_output"/>
+      <circle cx="1050" cy="330" r="10" class="node_output"/>
+      <text x="1030" y="400" class="small" text-anchor="middle">2 neurons</text>
+    </g>
+
+    <!-- CONNECTIONS: Input to Hidden1 -->
+    <line x1="650" y1="200" x2="770" y2="200" class="line"/>
+    <line x1="650" y1="260" x2="770" y2="260" class="line"/>
+    <line x1="650" y1="320" x2="770" y2="320" class="line"/>
+    <line x1="650" y1="380" x2="770" y2="380" class="line"/>
+
+    <!-- CONNECTIONS: Hidden1 to Hidden2 -->
+    <line x1="790" y1="200" x2="920" y2="230" class="line"/>
+    <line x1="790" y1="260" x2="920" y2="290" class="line"/>
+    <line x1="790" y1="320" x2="920" y2="350" class="line"/>
+    <line x1="790" y1="380" x2="920" y2="410" class="line"/>
+
+    <!-- CONNECTIONS: Hidden2 to Output -->
+    <line x1="940" y1="230" x2="1040" y2="270" class="line"/>
+    <line x1="940" y1="290" x2="1040" y2="330" class="line"/>
+    <line x1="940" y1="350" x2="1040" y2="270" class="line"/>
+    <line x1="940" y1="410" x2="1040" y2="330" class="line"/>
+
+    <!-- EXPLANATION BOX -->
+    <rect x="590" y="490" width="500" height="140" class="explain_box"/>
+    <text x="610" y="510" class="label">推理机制：</text>
+    <text x="610" y="535" class="description">• 关闭Dropout，使用训练好的完整网络</text>
+    <text x="610" y="555" class="description">• 所有神经元都参与前向传播计算</text>
+    <text x="610" y="575" class="description">• 权重需按 (1-p) 缩放，或训练时已缩放权重</text>
+    <text x="610" y="595" class="description">• 保证期望输出的一致性（Inverted Dropout）</text>
+    <text x="610" y="615" class="description">• 获得更稳定、准确的预测结果</text>
+  </g>
+
+</svg>
