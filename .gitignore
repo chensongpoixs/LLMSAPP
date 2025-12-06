@@ -23,3 +23,5 @@ TestResults.xml
 
 /test
 /test_with.log
+/01_mnist/data
+/01_mnist/model_weights.pth
