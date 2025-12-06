@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="340" viewBox="0 0 900 340">
+  <style>
+    .box{fill:#fff0d9;stroke:#c48b00;stroke-width:2}
+    .title{font-family:"Microsoft YaHei",Arial;font-size:18px;font-weight:700;fill:#0b2340}
+    .text{font-family:"Microsoft YaHei",Arial;font-size:15px;fill:#0b2340}
+    .arrow{stroke:#0b2340;stroke-width:2;fill:none;marker-end:url(#a)}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#0b2340"/>
+    </marker>
+  </defs>
+  <text x="450" y="28" text-anchor="middle" class="title">微调与应用（清晰版）</text>
+
+  <g>
+    <rect x="60" y="80" width="320" height="96" class="box" rx="6"/>
+    <text x="220" y="120" class="text" text-anchor="middle"><tspan class="num">7)</tspan> 微调 — 下游任务（分类、QA）</text>
+    <text x="220" y="140" class="text" text-anchor="middle">（少量标注数据，任务适配）</text>
+  </g>
+
+  <g>
+    <rect x="520" y="80" width="320" height="96" class="box" rx="6"/>
+    <text x="680" y="120" class="text" text-anchor="middle"><tspan class="num">8)</tspan> 微调 — 个性化/助手</text>
+    <text x="680" y="140" class="text" text-anchor="middle">（指令调优 / 人工反馈）</text>
+  </g>
+
+  <path d="M380 128 L520 128" class="arrow"/>
+  <text x="450" y="108" class="text" text-anchor="middle">基础模型 → 微调</text>
+
+  <rect x="300" y="220" width="300" height="64" class="box" rx="6"/>
+  <text x="450" y="255" class="text" text-anchor="middle">部署与监控（安全、偏差、性能）</text>
+  <path d="M650 176 L650 220" class="arrow"/>
+</svg>

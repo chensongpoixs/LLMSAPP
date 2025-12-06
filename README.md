@@ -67,3 +67,36 @@
 
 
 [8、深度神经网络之参数优化(BatchNormaliztion)](/deeplean_tran/8、深度神经网络之参数优化(BatchNormaliztion).md)
+
+
+## 五、训练大语言模型的不同阶段
+
+
+分为三大步
+
+
+
+
+
+### 1. 准备阶段
+
+
+
+
+![1. 准备阶段](/LLM/training_stage_prep.svg)
+
+
+### 2. 预训练阶段
+
+![2. 预训练阶段](/LLM/training_stage_pretrain.svg)
+
+
+### 3. 微调与应用
+
+![3. 微调与应用](/LLM/training_stage_finetune.svg)
+
+
+
+![](/LLM/5146781b-dba2-4d33-9a88-119768ac1eb9.png)
+
+

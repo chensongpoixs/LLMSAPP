@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760">
+  <style>
+    .box { fill:#d6e9ff; stroke:#2b6ea3; stroke-width:2.5; rx:12; ry:12; }
+    .step { fill:#e8f9e8; stroke:#2b8a3a; stroke-width:2.5; rx:10; ry:10; }
+    .text { font-family: "Microsoft YaHei", Arial, sans-serif; fill:#0b2340; font-size:16px; }
+    .title { font-size:24px; font-weight:700; }
+    .num { font-weight:700; }
+    .hint { font-size:13px; fill:#1f2b3a; }
+    .arrow { stroke:#0b2340; stroke-width:2.5; fill:none; marker-end: url(#arrowhead); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0b2340" />
+    </marker>
+  </defs>
+
+  <text x="800" y="44" text-anchor="middle" class="text title">训练大语言模型的不同阶段（流程图）</text>
+
+  <!-- 三列布局：左列（准备） 中间列（预训练/基础模型） 右列（微调/应用） -->
+
+  <!-- 左列：准备与构建 -->
+  <rect x="60" y="100" width="300" height="64" class="step" />
+  <text x="210" y="140" text-anchor="middle" class="text"><tspan class="num">1)</tspan> 准备训练数据</text>
+
+  <rect x="60" y="180" width="300" height="64" class="step" />
+  <text x="210" y="220" text-anchor="middle" class="text"><tspan class="num">2)</tspan> 架构与Tokenizer设计</text>
+
+  <rect x="60" y="260" width="300" height="84" class="box" />
+  <text x="210" y="300" text-anchor="middle" class="text">构建大语言模型</text>
+  <text x="210" y="322" text-anchor="middle" class="hint">（模型结构、词表、初始化）</text>
+
+  <!-- 中间列：预训练与基础模型 -->
+  <rect x="560" y="80" width="480" height="160" class="box" />
+  <text x="800" y="120" text-anchor="middle" class="text">预训练 / 基础模型</text>
+  <text x="800" y="142" text-anchor="middle" class="hint">（海量语料 + 自监督 / 自回归）</text>
+
+  <!-- 从构建到预训练的箭头（直且不交叉） -->
+  <path d="M 360 300 L 520 300 L 520 160" class="arrow" />
+  <path d="M 520 160 L 560 160" class="arrow" />
+  <text x="440" y="280" class="hint">3) 预训练</text>
+
+  <!-- 导入预训练权重（上方单独标注） -->
+  <rect x="700" y="10" width="200" height="44" class="step" />
+  <text x="800" y="40" text-anchor="middle" class="text"><tspan class="num">6)</tspan> 导入预训练权重</text>
+  <path d="M 800 54 L 800 80" class="arrow" />
+
+  <!-- 中间下方：循环训练与评估（水平排列，避免交叉） -->
+  <rect x="540" y="270" width="240" height="64" class="step" />
+  <text x="660" y="310" text-anchor="middle" class="text"><tspan class="num">4)</tspan> 循环训练</text>
+
+  <rect x="820" y="270" width="240" height="64" class="step" />
+  <text x="940" y="310" text-anchor="middle" class="text"><tspan class="num">5)</tspan> 评估模型</text>
+
+  <path d="M 800 240 L 800 270" class="arrow" />
+
+  <!-- 总览：三张子图入口（更简洁的总览，避免细节堆叠） -->
+
+  <text x="800" y="36" text-anchor="middle" class="text title">训练大语言模型总览（点击或打开同目录下的三张子图查看细节）</text>
+
+  <rect x="120" y="120" width="420" height="160" class="box" rx="10"/>
+  <text x="330" y="160" class="text" text-anchor="middle">准备阶段</text>
+  <text x="330" y="182" class="hint" text-anchor="middle">（数据准备 / Tokenizer / 架构）</text>
+  <text x="330" y="202" class="hint" text-anchor="middle">文件：`training_stage_prep.svg`</text>
+
+  <rect x="590" y="120" width="420" height="160" class="box" rx="10"/>
+  <text x="800" y="160" class="text" text-anchor="middle">预训练与基础模型</text>
+  <text x="800" y="182" class="hint" text-anchor="middle">（海量语料 / 自监督 / 循环训练 / 评估）</text>
+  <text x="800" y="202" class="hint" text-anchor="middle">文件：`training_stage_pretrain.svg`</text>
+
+  <rect x="1060" y="120" width="420" height="160" class="box" rx="10"/>
+  <text x="1270" y="160" class="text" text-anchor="middle">微调与应用</text>
+  <text x="1270" y="182" class="hint" text-anchor="middle">（微调、个性化、部署）</text>
+  <text x="1270" y="202" class="hint" text-anchor="middle">文件：`training_stage_finetune.svg`</text>
+
+  <!-- 总览箭头（仅示意方向，保持简洁） -->
+  <path d="M 540 200 L 590 200" class="arrow" />
+  <path d="M 1010 200 L 1060 200" class="arrow" />
+
+  <text x="800" y="720" text-anchor="middle" class="hint">我已把细节拆分到三张图以彻底消除遮挡。请打开同目录下的 `training_stage_prep.svg`、`training_stage_pretrain.svg`、`training_stage_finetune.svg` 逐张检查。</text>
+</svg>

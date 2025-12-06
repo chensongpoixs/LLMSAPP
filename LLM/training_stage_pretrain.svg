@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="400" viewBox="0 0 1000 400">
+  <style>
+    .box{fill:#dff7e6;stroke:#2b8a3a;stroke-width:2}
+    .title{font-family: "Microsoft YaHei", Arial; font-size:18px; font-weight:700; fill:#0b2340}
+    .text{font-family: "Microsoft YaHei", Arial; font-size:15px; fill:#0b2340}
+    .arrow{stroke:#0b2340;stroke-width:2;fill:none;marker-end:url(#a)}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#0b2340"/>
+    </marker>
+  </defs>
+  <text x="500" y="28" text-anchor="middle" class="title">预训练与基础模型（清晰版）</text>
+  <rect x="120" y="80" width="760" height="120" class="box" rx="8"/>
+  <text x="500" y="120" text-anchor="middle" class="text">3) 预训练（海量未标注语料）</text>
+  <text x="500" y="145" text-anchor="middle" class="text">目标：自监督 / 自回归；策略：长序列、混合语料、稳定性训练</text>
+
+  <g>
+    <rect x="200" y="230" width="200" height="80" class="box"/>
+    <text x="300" y="265" class="text" text-anchor="middle">4) 循环训练</text>
+    <text x="300" y="285" class="text" text-anchor="middle">（数据增强、Hard-sampling）</text>
+  </g>
+
+  <g>
+    <rect x="600" y="230" width="200" height="80" class="box"/>
+    <text x="700" y="265" class="text" text-anchor="middle">5) 评估模型</text>
+    <text x="700" y="285" class="text" text-anchor="middle">（自动指标 + 人工评审）</text>
+  </g>
+
+  <path d="M300 230 L300 200 L500 200" class="arrow"/>
+  <path d="M700 230 L700 200 L500 200" class="arrow"/>
+
+  <rect x="430" y="320" width="140" height="44" class="box"/>
+  <text x="500" y="350" text-anchor="middle" class="text"><tspan class="num">6)</tspan> 导入预训练权重</text>
+</svg>

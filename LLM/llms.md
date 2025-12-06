@@ -59,3 +59,6 @@ HuggingFace Hub
 
 
 ### 2. 文本生成过程
+
+
+![](/LLM/5146781b-dba2-4d33-9a88-119768ac1eb9.png)
