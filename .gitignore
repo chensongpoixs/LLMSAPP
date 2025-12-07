@@ -26,3 +26,4 @@ TestResults.xml
 /01_mnist/data
 /01_mnist/model_weights.pth
 /LLM/华盖集.txt
+/LLM/data
