@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="2200" viewBox="0 0 1200 2200">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333" />
+    </marker>
+    <style>
+      .box { fill:#f7f9fc; stroke:#2b6cb0; stroke-width:2; rx:8; }
+      .box-strong { fill:#e6f2ff; stroke:#1e40af; stroke-width:2; rx:8; }
+      .text { font-family: Microsoft YaHei, sans-serif; font-size:14px; fill:#0f172a; }
+      .title { font-size:18px; font-weight:700; }
+      .small { font-size:12px; fill:#475569; }
+      .section { font-size:16px; font-weight:600; fill:#0f172a; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title text">文本向量化的完整流程（详细）</text>
+  <text x="600" y="64" text-anchor="middle" class="small text">从原始文本到训练/推理向量：采集 → 清洗 → 分词 → 编码 → 表示 → 存储</text>
+
+  <!-- Data source -->
+  <g transform="translate(150,100)">
+    <rect x="0" y="0" width="300" height="60" class="box-strong" />
+    <text x="150" y="34" text-anchor="middle" class="text">原始文本采集</text>
+    <text x="150" y="52" text-anchor="middle" class="small text">（爬取、日志、数据库、人工标注）</text>
+  </g>
+
+  <!-- Clean -->
+  <g transform="translate(150,200)">
+    <rect x="0" y="0" width="300" height="80" class="box" />
+    <text x="150" y="26" text-anchor="middle" class="section text">文本清洗（Preprocessing）</text>
+    <text x="150" y="46" text-anchor="middle" class="small text">去编码噪声、统一编码、去除章节标记、空白规范化</text>
+    <text x="150" y="64" text-anchor="middle" class="small text">（正则、过滤、简单规则）</text>
+  </g>
+
+  <line x1="300" y1="160" x2="300" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Sentence/Paragraph split -->
+  <g transform="translate(150,320)">
+    <rect x="0" y="0" width="300" height="60" class="box" />
+    <text x="150" y="34" text-anchor="middle" class="text">分句 / 分段（Sentence / Paragraph Split）</text>
+  </g>
+
+  <line x1="300" y1="280" x2="300" y2="320" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Tokenization -->
+  <g transform="translate(150,420)">
+    <rect x="0" y="0" width="300" height="120" class="box-strong" />
+    <text x="150" y="26" text-anchor="middle" class="section text">分词 / Tokenization</text>
+    <text x="150" y="48" text-anchor="middle" class="small text">中文：jieba、HanLP；英语：空格分词、词干化</text>
+    <text x="150" y="68" text-anchor="middle" class="small text">子词方法：BPE、WordPiece、Unigram（用于子词表）</text>
+    <text x="150" y="90" text-anchor="middle" class="small text">输出：token list、token ids、offsets</text>
+  </g>
+
+  <line x1="300" y1="380" x2="300" y2="420" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Vocabulary and subword training -->
+  <g transform="translate(150,560)">
+    <rect x="0" y="0" width="300" height="120" class="box" />
+    <text x="150" y="24" text-anchor="middle" class="section text">词表 / 子词表构建</text>
+    <text x="150" y="46" text-anchor="middle" class="small text">统计频次、设置阈值、添加特殊标记（[UNK],[CLS],[PAD]）</text>
+    <text x="150" y="70" text-anchor="middle" class="small text">训练 BPE/WordPiece/Unigram 模型生成 subword vocab</text>
+    <text x="150" y="92" text-anchor="middle" class="small text">输出：vocab.txt、tokenizer model</text>
+  </g>
+
+  <line x1="300" y1="540" x2="300" y2="560" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Optional steps: stopwords, normalization -->
+  <g transform="translate(500,420)">
+    <rect x="0" y="0" width="320" height="120" class="box" />
+    <text x="160" y="26" text-anchor="middle" class="section text">可选：词形/同义归一 & 停用词</text>
+    <text x="160" y="50" text-anchor="middle" class="small text">同义词替换、词形还原、停用词过滤（视任务而定）</text>
+    <text x="160" y="72" text-anchor="middle" class="small text">注意：对上下文向量化（Transformer）通常不做停用词删除</text>
+  </g>
+
+  <!-- Arrow from Tokenization to optional box -->
+  <line x1="450" y1="480" x2="500" y2="480" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Representation selection branching -->
+  <g transform="translate(150,700)">
+    <rect x="0" y="0" width="300" height="40" class="box-strong" />
+    <text x="150" y="26" text-anchor="middle" class="text">表示方法选择（Representation）</text>
+  </g>
+
+  <line x1="300" y1="680" x2="300" y2="700" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Three branches: Traditional, Embeddings, Contextual -->
+  <g transform="translate(30,760)">
+    <rect x="0" y="0" width="340" height="120" class="box" />
+    <text x="170" y="26" text-anchor="middle" class="section text">传统方法</text>
+    <text x="170" y="52" text-anchor="middle" class="small text">One-hot、Count、TF-IDF → 稀疏向量</text>
+    <text x="170" y="76" text-anchor="middle" class="small text">适合传统 ML（SVM、LR）</text>
+  </g>
+
+  <g transform="translate(430,760)">
+    <rect x="0" y="0" width="340" height="140" class="box" />
+    <text x="170" y="26" text-anchor="middle" class="section text">静态词向量</text>
+    <text x="170" y="52" text-anchor="middle" class="small text">word2vec / GloVe / FastText → 每词固定向量</text>
+    <text x="170" y="76" text-anchor="middle" class="small text">构建词向量矩阵用于句子聚合</text>
+  </g>
+
+  <g transform="translate(830,760)">
+    <rect x="0" y="0" width="340" height="160" class="box-strong" />
+    <text x="170" y="26" text-anchor="middle" class="section text">上下文向量（推荐）</text>
+    <text x="170" y="52" text-anchor="middle" class="small text">Transformer（BERT / RoBERTa / GPT）生成上下文相关 token/句向量</text>
+    <text x="170" y="76" text-anchor="middle" class="small text">支持子词、分段、掩码训练</text>
+    <text x="170" y="100" text-anchor="middle" class="small text">输出：token embeddings、pooling 后的句/文档向量</text>
+  </g>
+
+  <!-- arrows from Representation to three branches -->
+  <line x1="300" y1="740" x2="340" y2="760" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="300" y1="740" x2="560" y2="760" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="300" y1="740" x2="900" y2="760" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Aggregation / Encoding -->
+  <g transform="translate(150,940)">
+    <rect x="0" y="0" width="300" height="120" class="box" />
+    <text x="150" y="28" text-anchor="middle" class="section text">句/文档向量构建</text>
+    <text x="150" y="52" text-anchor="middle" class="small text">平均/加权平均、RNN/CNN 编码、Transformer Pooling（[CLS] / mean）</text>
+    <text x="150" y="76" text-anchor="middle" class="small text">选择策略影响下游任务表现</text>
+  </g>
+
+  <line x1="300" y1="880" x2="300" y2="940" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Dimensionality reduction & normalization -->
+  <g transform="translate(150,1080)">
+    <rect x="0" y="0" width="300" height="100" class="box" />
+    <text x="150" y="28" text-anchor="middle" class="section text">维度约简 / 归一化</text>
+    <text x="150" y="52" text-anchor="middle" class="small text">PCA / SVD / t-SNE（可视化），向量标准化（L2 / z-score）</text>
+    <text x="150" y="76" text-anchor="middle" class="small text">可选：降维用于加速检索或可视化分析</text>
+  </g>
+
+  <line x1="300" y1="1040" x2="300" y2="1080" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Packaging and augmentation -->
+  <g transform="translate(150,1210)">
+    <rect x="0" y="0" width="300" height="120" class="box-strong" />
+    <text x="150" y="28" text-anchor="middle" class="section text">构建训练样本 & 数据增强</text>
+    <text x="150" y="52" text-anchor="middle" class="small text">滑动窗口、截断、padding、masking、n-gram、正负样本生成</text>
+    <text x="150" y="76" text-anchor="middle" class="small text">增强：同义替换、回译、随机删除</text>
+  </g>
+
+  <line x1="300" y1="1170" x2="300" y2="1210" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Storage & format -->
+  <g transform="translate(150,1360)">
+    <rect x="0" y="0" width="300" height="100" class="box" />
+    <text x="150" y="32" text-anchor="middle" class="section text">缓存 / 存储格式</text>
+    <text x="150" y="56" text-anchor="middle" class="small text">TFRecord / JSONL / HDF5 / numpy arrays；保存 vocab & tokenizer</text>
+  </g>
+
+  <line x1="300" y1="1320" x2="300" y2="1360" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Validation & statistics -->
+  <g transform="translate(150,1490)">
+    <rect x="0" y="0" width="300" height="120" class="box" />
+    <text x="150" y="28" text-anchor="middle" class="section text">质量验证与统计</text>
+    <text x="150" y="52" text-anchor="middle" class="small text">句长分布、OOV 比例、词频分布、示例检查、样本均衡性</text>
+    <text x="150" y="76" text-anchor="middle" class="small text">根据统计结果调整 tokenizer / 截断策略 / 采样策略</text>
+  </g>
+
+  <line x1="300" y1="1450" x2="300" y2="1490" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Final outputs -->
+  <g transform="translate(150,1640)">
+    <rect x="0" y="0" width="300" height="80" class="box-strong" />
+    <text x="150" y="36" text-anchor="middle" class="section text">输出：向量化数据集 & 词表</text>
+    <text x="150" y="58" text-anchor="middle" class="small text">训练/评估用数据、vocab.txt、tokenizer model、预处理脚本</text>
+  </g>
+
+  <line x1="300" y1="1600" x2="300" y2="1640" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Notes and best practices side box -->
+  <g transform="translate(500,1100)">
+    <rect x="0" y="0" width="620" height="420" class="box" />
+    <text x="310" y="28" text-anchor="middle" class="section text">实践建议与注意点</text>
+    <text x="20" y="56" class="small text">- 为下游任务定制 tokenizer（任务敏感性）</text>
+    <text x="20" y="78" class="small text">- 对 OOV、低频词采取子词策略或 UNK 处理</text>
+    <text x="20" y="100" class="small text">- 上下文向量通常保留子词信息，避免过度去噪</text>
+    <text x="20" y="122" class="small text">- 保存随机种子与处理流水线，确保可复现性</text>
+    <text x="20" y="144" class="small text">- 对大规模语料使用分布式或批处理流水线（Spark / Dask / TF data）</text>
+    <text x="20" y="166" class="small text">- 评估：使用下游小样本验证不同表示的效果</text>
+    <text x="20" y="188" class="small text">- 若用于检索，考虑向量归一化与 ANN 索引（Faiss / Annoy）</text>
+    <text x="20" y="210" class="small text">- 记录 vocab 版本与 tokenizer 配置以便回滚/对比</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="2080" text-anchor="middle" class="small text">生成：文本向量化详细流程图 · 作者：chensong · 日期：2025-12-07</text>
+
+</svg>
