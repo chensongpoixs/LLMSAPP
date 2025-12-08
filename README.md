@@ -77,6 +77,13 @@
 
 
 
+```javascript
+
+pip install jupyter
+pip install matplotlib
+```
+
+
 
 ### 1. 准备阶段
 
