@@ -28,3 +28,5 @@ TestResults.xml
 /LLM/华盖集.txt
 /LLM/data
 /文本与分词/__pycache__/Tokenizer.cpython-310.pyc
+/01_mnist/__pycache__/test.cpython-310.pyc
+/LLM/model_weights.pth
