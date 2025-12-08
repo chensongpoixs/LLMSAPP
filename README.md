@@ -111,9 +111,24 @@ pip install matplotlib
 4. 过滤掉色情、暴力等信息
 
 
+
+[1、文本向量化](/文本与分词/1、文本向量化.md)
+
+[2、构建文本字典原理](/文本与分词/2、构建文本字典原理.md)
+
+[3、Tokenize类封装](/文本与分词/3、Tokenizer类封装.md)
+
+[4、基于统计的分词技术(tiktoken)](/文本与分词/4、基于统计的分词技术.md)
+
+[5、文本向量化(Embedding).md](/文本与分词/5、文本向量化(Embedding).md)
+
+
 ### 2. 预训练阶段
 
 ![2. 预训练阶段](/LLM/training_stage_pretrain.svg)
+
+
+
 
 
 ### 3. 微调与应用

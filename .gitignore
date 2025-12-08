@@ -27,3 +27,4 @@ TestResults.xml
 /01_mnist/model_weights.pth
 /LLM/华盖集.txt
 /LLM/data
+/文本与分词/__pycache__/Tokenizer.cpython-310.pyc

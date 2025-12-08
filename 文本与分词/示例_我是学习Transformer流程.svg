@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <style>
+    .box { fill:#ffffff; stroke:#0b5fff; stroke-width:2; rx:8; }
+    .box-soft { fill:#f0f7ff; stroke:#0b5fff; stroke-width:1.5; rx:6; }
+    .title { font-family: Microsoft YaHei, sans-serif; font-size:20px; font-weight:700; fill:#07203b; }
+    .label { font-family: Microsoft YaHei, sans-serif; font-size:14px; fill:#07203b; }
+    .mono { font-family: Consolas, monospace; font-size:13px; fill:#0b1b2b; }
+    .note { font-family: Microsoft YaHei, sans-serif; font-size:12px; fill:#334155; }
+    .arrow { stroke:#0b2b5b; stroke-width:2; marker-end:url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#0b2b5b" />
+    </marker>
+  </defs>
+
+  <text x="600" y="36" text-anchor="middle" class="title">示例：输入“我是学习Transformer”的完整向量化与解码流程</text>
+
+  <!-- Input text -->
+  <g transform="translate(60,80)">
+    <rect class="box" x="0" y="0" width="1080" height="70" />
+    <text x="540" y="44" text-anchor="middle" class="label">原始输入文本： 我是学习Transformer</text>
+  </g>
+
+  <!-- Tokenization -->
+  <g transform="translate(60,170)">
+    <rect class="box-soft" x="0" y="0" width="320" height="160" />
+    <text x="160" y="26" text-anchor="middle" class="label">1) 分词 / Tokenization</text>
+    <text x="160" y="56" text-anchor="middle" class="mono">示例分词（子词）:</text>
+    <text x="160" y="80" text-anchor="middle" class="mono">['我', '是', '学习', 'Transform', 'er']</text>
+    <text x="160" y="104" text-anchor="middle" class="note">（中文词与英文子词混合，子词由 BPE/WordPiece/Unigram 得到）</text>
+  </g>
+
+  <line x1="380" y1="250" x2="470" y2="250" class="arrow" />
+
+  <!-- Token IDs -->
+  <g transform="translate(470,170)">
+    <rect class="box-soft" x="0" y="0" width="320" height="160" />
+    <text x="160" y="26" text-anchor="middle" class="label">2) Token → ID</text>
+    <text x="160" y="56" text-anchor="middle" class="mono">示例 token id:</text>
+    <text x="160" y="80" text-anchor="middle" class="mono">[101, 102, 203, 4500, 12]</text>
+    <text x="160" y="104" text-anchor="middle" class="note">（实际 id 由 tokenizer/vocab 决定，此处为示例）</text>
+  </g>
+
+  <line x1="790" y1="250" x2="880" y2="250" class="arrow" />
+
+  <!-- Embeddings -->
+  <g transform="translate(880,170)">
+    <rect class="box-soft" x="0" y="0" width="260" height="160" />
+    <text x="130" y="26" text-anchor="middle" class="label">3) Token Embedding</text>
+    <text x="130" y="56" text-anchor="middle" class="mono">id → 向量 (d=768)</text>
+    <text x="130" y="84" text-anchor="middle" class="mono">E = [e1, e2, e3, e4, e5]</text>
+    <text x="130" y="106" text-anchor="middle" class="note">每个 token id 对应 embedding lookup，得到连续向量序列</text>
+  </g>
+
+  <!-- Positional Encoding -->
+  <line x1="200" y1="340" x2="200" y2="400" class="arrow" />
+  <line x1="540" y1="340" x2="540" y2="400" class="arrow" />
+  <line x1="1000" y1="340" x2="1000" y2="400" class="arrow" />
+
+  <g transform="translate(60,400)">
+    <rect class="box" x="0" y="0" width="1080" height="90" />
+    <text x="540" y="30" text-anchor="middle" class="label">4) 加入位置编码（Positional Encoding）</text>
+    <text x="540" y="56" text-anchor="middle" class="mono">E_pos = E + PE  → [h1, h2, h3, h4, h5]</text>
+  </g>
+
+  <!-- Transformer decoder block -->
+  <g transform="translate(60,520)">
+    <rect class="box" x="0" y="0" width="520" height="240" />
+    <text x="260" y="30" text-anchor="middle" class="label">5) Transformer 解码器（单层示例）</text>
+
+    <text x="70" y="64" class="mono">a) Masked Self-Attention</text>
+    <text x="70" y="84" class="note">计算 Q,K,V；对于生成任务，未来位置被遮蔽；输出注意力表示</text>
+
+    <text x="70" y="110" class="mono">b) Add & Norm</text>
+    <text x="70" y="130" class="note">残差连接与层归一化</text>
+
+    <text x="70" y="156" class="mono">c) Feed-Forward (FFN)</text>
+    <text x="70" y="176" class="note">两层线性 + 非线性（GELU）</text>
+
+    <text x="70" y="202" class="mono">d) Add & Norm</text>
+    <text x="70" y="222" class="note">再一次残差连接与层归一化，得到最终 hidden states</text>
+  </g>
+
+  <line x1="580" y1="640" x2="680" y2="640" class="arrow" />
+
+  <!-- Linear + Softmax -->
+  <g transform="translate(700,520)">
+    <rect class="box" x="0" y="0" width="360" height="140" />
+    <text x="180" y="36" text-anchor="middle" class="label">6) 输出层：线性 + Softmax</text>
+    <text x="180" y="66" text-anchor="middle" class="mono">logits = Linear(h_t)  → P(token)</text>
+    <text x="180" y="96" text-anchor="middle" class="note">根据概率选择下一个 token（贪心/采样/束搜索）</text>
+  </g>
+
+  <line x1="880" y1="660" x2="540" y2="780" class="arrow" />
+
+  <!-- Decoding and postprocessing -->
+  <g transform="translate(460,760)">
+    <rect class="box-soft" x="0" y="0" width="420" height="90" />
+    <text x="210" y="28" text-anchor="middle" class="label">7) 解码与后处理（Detokenize）</text>
+    <text x="210" y="52" text-anchor="middle" class="mono">例如选择 id -> token 序列：[101,102,203,4500,12] → ['我','是','学习','Transform','er']</text>
+    <text x="210" y="74" text-anchor="middle" class="note">合并子词得到最终文本："我是学习Transformer"（或继续生成下一个 token）</text>
+  </g>
+
+  <!-- Footer note -->
+  <text x="600" y="860" text-anchor="middle" class="note">注：示例中 id/维度/模型层为简化展示，实际模型有多层、多头注意力及更复杂的 tokenizer。</text>
+
+</svg>
