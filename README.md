@@ -124,6 +124,9 @@ pip install matplotlib
 
 [5、注意力机制](/5.注意力机制/README.md)
 
+
+[6、Transformer神秘架构](/6.Transformer架构神秘/README.md)
+
 ### 2. 预训练阶段
 
 ![2. 预训练阶段](/LLM/training_stage_pretrain.svg)
