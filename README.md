@@ -122,6 +122,7 @@ pip install matplotlib
 
 [5、文本向量化(Embedding).md](/文本与分词/5、文本向量化(Embedding).md)
 
+[5、注意力机制](/5.注意力机制/README.md)
 
 ### 2. 预训练阶段
 

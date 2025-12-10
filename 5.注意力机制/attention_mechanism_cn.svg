@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" viewBox="0 0 760 520">
+  <defs>
+    <linearGradient id="gradCenter" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    <marker id="arrowHeadRed" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c" />
+    </marker>
+    <marker id="arrowHeadBlue" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0563c1" />
+    </marker>
+    <marker id="arrowHeadGreen" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669" />
+    </marker>
+    <style>
+      .title { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:46px; fill:#b91c1c; font-weight:800; }
+      .panel-label { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:18px; fill:#374151; }
+      .src-box { fill:#0ea5e9; stroke:#075985; stroke-width:2; rx:8; }
+      .tgt-box { fill:#ffffff; stroke:#9ca3af; stroke-width:2; rx:8; }
+      .center-box { fill:url(#gradCenter); stroke:#5b120f; stroke-width:2; rx:10; }
+      .src-text { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:16px; fill:#ffffff; font-weight:600; }
+      .tgt-text { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:16px; fill:#111827; font-weight:600; }
+      .center-text { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:20px; fill:#ffffff; text-anchor:middle; }
+      .weight { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:13px; fill:#374151; }
+      .note { font-family: 'Microsoft YaHei', Arial, sans-serif; font-size:12px; fill:#6b7280; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="380" y="56" text-anchor="middle" class="title">注意力机制</text>
+
+  <!-- Left panel: source tokens -->
+  <rect x="60" y="110" width="240" height="320" fill="none" stroke="#7f1d1d" stroke-width="2" rx="8"/>
+  <text x="180" y="144" text-anchor="middle" class="panel-label">源Token</text>
+
+  <!-- source tokens list -->
+  <g>
+    <rect x="100" y="180" width="160" height="48" class="src-box"/>
+    <text x="180" y="213" text-anchor="middle" class="src-text">this</text>
+
+    <rect x="100" y="238" width="160" height="48" class="src-box"/>
+    <text x="180" y="271" text-anchor="middle" class="src-text">is</text>
+
+    <rect x="100" y="296" width="160" height="48" class="src-box"/>
+    <text x="180" y="329" text-anchor="middle" class="src-text">a</text>
+
+    <rect x="100" y="354" width="160" height="48" class="src-box"/>
+    <text x="180" y="387" text-anchor="middle" class="src-text">dog</text>
+  </g>
+
+  <!-- center attention block -->
+  <rect x="340" y="150" width="140" height="260" class="center-box"/>
+  <text x="410" y="280" class="center-text">注意力机制</text>
+
+  <!-- Right panel: target tokens -->
+  <rect x="520" y="110" width="240" height="320" fill="none" stroke="#7f1d1d" stroke-width="2" rx="8"/>
+  <text x="640" y="144" text-anchor="middle" class="panel-label">目标Token</text>
+
+  <!-- target tokens list -->
+  <g>
+    <rect x="560" y="180" width="160" height="48" class="tgt-box"/>
+    <text x="640" y="213" text-anchor="middle" class="tgt-text">这</text>
+
+    <rect x="560" y="238" width="160" height="48" class="tgt-box"/>
+    <text x="640" y="271" text-anchor="middle" class="tgt-text">是</text>
+
+    <rect x="560" y="296" width="160" height="48" class="tgt-box"/>
+    <text x="640" y="329" text-anchor="middle" class="tgt-text">一</text>
+
+    <rect x="560" y="354" width="160" height="48" class="tgt-box"/>
+    <text x="640" y="387" text-anchor="middle" class="tgt-text">只</text>
+
+    <rect x="560" y="412" width="160" height="48" class="tgt-box"/>
+    <text x="640" y="445" text-anchor="middle" class="tgt-text">狗</text>
+  </g>
+
+  <!-- arrow: left -> center (blue thick) -->
+  <line x1="260" y1="204" x2="340" y2="204" stroke="#0563c1" stroke-width="5" marker-end="url(#arrowHeadBlue)" />
+  <text x="300" y="194" class="weight" text-anchor="middle">1.00</text>
+
+  <!-- arrows: center -> each target (red) with weights -->
+  <line x1="480" y1="204" x2="560" y2="204" stroke="#b91c1c" stroke-width="3.5" marker-end="url(#arrowHeadRed)" />
+  <text x="520" y="194" class="weight" text-anchor="middle">0.72</text>
+
+  <line x1="480" y1="262" x2="560" y2="262" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#arrowHeadRed)" />
+  <text x="520" y="252" class="weight" text-anchor="middle">0.12</text>
+
+  <line x1="480" y1="320" x2="560" y2="320" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#arrowHeadRed)" />
+  <text x="520" y="310" class="weight" text-anchor="middle">0.06</text>
+
+  <line x1="480" y1="378" x2="560" y2="378" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#arrowHeadRed)" />
+  <text x="520" y="368" class="weight" text-anchor="middle">0.05</text>
+
+  <line x1="480" y1="436" x2="560" y2="436" stroke="#b91c1c" stroke-width="1.6" marker-end="url(#arrowHeadRed)" />
+  <text x="520" y="426" class="weight" text-anchor="middle">0.05</text>
+
+  <!-- arrows: target -> center (green thin) indicating attention feedback with small weights -->
+  <line x1="560" y1="204" x2="480" y2="190" stroke="#059669" stroke-width="2" marker-end="url(#arrowHeadGreen)" />
+  <text x="530" y="190" class="weight" text-anchor="middle" fill="#059669">0.68</text>
+
+  <line x1="560" y1="262" x2="480" y2="246" stroke="#059669" stroke-width="1.6" marker-end="url(#arrowHeadGreen)" />
+  <text x="530" y="246" class="weight" text-anchor="middle" fill="#059669">0.15</text>
+
+  <line x1="560" y1="320" x2="480" y2="302" stroke="#059669" stroke-width="1.2" marker-end="url(#arrowHeadGreen)" />
+  <text x="530" y="302" class="weight" text-anchor="middle" fill="#059669">0.08</text>
+
+  <line x1="560" y1="378" x2="480" y2="358" stroke="#059669" stroke-width="1.0" marker-end="url(#arrowHeadGreen)" />
+  <text x="530" y="358" class="weight" text-anchor="middle" fill="#059669">0.05</text>
+
+  <line x1="560" y1="436" x2="480" y2="414" stroke="#059669" stroke-width="1.0" marker-end="url(#arrowHeadGreen)" />
+  <text x="530" y="414" class="weight" text-anchor="middle" fill="#059669">0.04</text>
+
+  <!-- small footer note -->
+  <text x="380" y="500" text-anchor="middle" class="note">示例：箭头宽度表示注意力强度；绿色箭头为反向注意力指示（辅助理解）</text>
+
+</svg>
