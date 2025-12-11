@@ -3,6 +3,10 @@
 
 [Google 2017年分布 Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf)
 
+![Transformer架构流程图](/6.Transformer架构神秘/Transformer.jpg)
+
+主要致力于在序列建摸中提升并行性与长距离原来建模能力， 拜脱对循环与的依赖， 
+
 
 我来为你详细绘制Transformer的编码器和解码器流程图。
 
@@ -176,14 +180,101 @@
 这个架构使得Transformer能够处理序列到序列的任务，如机器翻译、文本摘要等，同时具有高度并行化的优势。
 
 
-1. 位置编码
-2. 多头注意力机制
+
+![](/6.Transformer架构神秘/word_embedding_detailed.svg)
+
+
+1. 位置信息：用<font color='red'>**位置编码**</font>赋予词向量序列信息
+2. <font color='red'>**三种注意力机制**</font>:编码器多头注意力、<font color='red'>**交叉注意力**</font>、解码器多头自注意力(含因果掩码)
 3. 残差网络
 4. 层归一化
 5. 前馈神经网络
+
+<font color='red'>**残差连接+层归一化+前馈网络(FFN)**</font>：形成标准层块，稳定深层训练
 
 
 ## 一、Transformer的输入
 
 1. Embedding（向量编码）
 2. Positional Encoding（位置编码）
+
+
+ 
+
+![Transformer模型的输入--词嵌入（Word Embedding）](/6.Transformer架构神秘/word_embedding.svg)
+
+
+
+位置编码格式 
+
+${PE_{(pos, 2i)} = sin(\frac{pos}{10000^{\frac{2i}{d}}}) }$
+
+
+
+${PE_{(pos, 2i+1)}}$ = ${cos(\frac{pos}{10000^{\frac{2i}{d}}})}$
+
+
+- pos: 表示该词在句子中位置(从0开始)
+- i: 表示当前维度的位置
+- d: 表示词向量维度
+
+也就是是，对于输入的每个token（列如第5个词），我们遍历维度， 对每一个维度使用公式计算出其数值， 为其生成一个长度为d_model的向量， 交替使用sin和cos来填充奇偶维度
+
+
+为什么要用正函数？
+
+- 多尺度建模能力
+
+通过 <font color='red'>  
+
+公式${10000^{\frac{2i}{d}}}$ 
+
+ </font>
+这样的频率控制， sin/cos的周期从大到小， **可以编码不同粒度的顺序信息**。 低纬捕捉长距离位置变化， 高维度捕捉局部变化
+
+
+- 平滑变化
+
+随着位置<font color='red'>pos</font>变化， 编码向量是连续的， 符合自然语言中**位置是连续变量**的特点
+
+- 支持序列泛化
+
+因为是数字函数， 位置可以扩展到比训练时更长的序列， 而不会像可学习位置编码那样固定在训练长度上
+
+- 简单高效
+
+不需要额外学习参数， 占用显存小， 适合参数紧凑的场景
+
+- 可视化：位置编码长啥样？
+
+![](/6.Transformer架构神秘/positional_emdding.png)
+
+我们可以绘制前 100 个位置编码在不同维度上的曲线图：
+
+```javascript
+import numpy as np
+import matplotlib.pyplot as plt
+
+def get_positional_encoding(seq_len, d_model):
+    pos = np.arange(seq_len)[:, np.newaxis]
+    i = np.arange(d_model)[np.newaxis, :]
+    angle_rates = 1 / np.power(10000, (2 * (i // 2)) / np.float32(d_model))
+    angle_rads = pos * angle_rates
+
+    # apply sin to even indices, cos to odd indices
+    pos_encoding = np.zeros_like(angle_rads)
+    pos_encoding[:, 0::2] = np.sin(angle_rads[:, 0::2])
+    pos_encoding[:, 1::2] = np.cos(angle_rads[:, 1::2])
+    return pos_encoding
+
+# visualize
+pe = get_positional_encoding(100, 16)
+plt.figure(figsize=(12, 6))
+plt.plot(pe[:, :8])
+plt.legend([f"dim {i}" for i in range(8)])
+plt.title("Positional Encoding (first 8 dimensions)")
+plt.xlabel("Position")
+plt.ylabel("Value")
+plt.grid(True)
+plt.show() 
+```

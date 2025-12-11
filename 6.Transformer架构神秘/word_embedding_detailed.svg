@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="900" viewBox="0 0 1900 900">
+  <style>
+    .title { font-family: Arial, Helvetica, sans-serif; font-size:22px; font-weight:700; fill:#0f172a; }
+    .box { fill:#ffffff; stroke:#1f2937; stroke-width:1.2; }
+    .step { font-family: Arial, sans-serif; font-size:13px; fill:#111827; }
+    .hint { font-family: Arial, sans-serif; font-size:12px; fill:#374151; }
+    .small { font-family: Arial, sans-serif; font-size:11px; fill:#475569; }
+    .arrow { stroke:#0f172a; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+    .block-title { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:700; fill:#0f172a; }
+    .code { font-family: Consolas, 'Courier New', monospace; font-size:12px; fill:#0b1220; }
+    .highlight { fill:#dc2626; font-weight:700; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#0f172a" />
+    </marker>
+  </defs>
+
+  <text x="20" y="34" class="title">详细流程：<tspan class="highlight">词</tspan>→<tspan class="highlight">ID</tspan>→<tspan class="highlight">独热</tspan>（二进制）→<tspan class="highlight">词嵌入</tspan>→<tspan class="highlight">位置编码</tspan>→<tspan class="highlight">序列向量</tspan>→<tspan class="highlight">降维聚类</tspan></text>
+
+  <!-- Step 1: Raw text / tokens -->
+  <g transform="translate(24,70)">
+    <rect x="0" y="0" width="230" height="110" class="box" rx="8" />
+    <text x="14" y="26" class="block-title">步骤 1：<tspan class="highlight">分词</tspan> / <tspan class="highlight">Tokenization</tspan></text>
+    <text x="14" y="50" class="step">输入文本（例）："我 爱 篮球"</text>
+    <text x="14" y="72" class="small">输出 token 列表：["我", "爱", "篮球"]</text>
+    <text x="14" y="92" class="small">方法：空格/字级/子词（BPE/WordPiece）</text>
+  </g>
+
+  <!-- Step 2: Token -> ID mapping -->
+  <g transform="translate(280,70)">
+    <rect x="0" y="0" width="210" height="110" class="box" rx="8" />
+    <text x="12" y="26" class="block-title">步骤 2：<tspan class="highlight">词表映射</tspan>（<tspan class="highlight">vocab</tspan>）</text>
+    <text x="12" y="52" class="step"><tspan class="highlight">词</tspan> → <tspan class="highlight">词ID</tspan>（<tspan class="highlight">index</tspan>）</text>
+    <text x="12" y="76" class="small">例："我"→12, "爱"→245, "篮球"→78</text>
+    <text x="12" y="96" class="small">数据结构：词表 table（size = V）</text>
+  </g>
+
+  <!-- Step 3: ID -> One-hot (binary) -->
+  <g transform="translate(520,40)">
+    <rect x="0" y="0" width="320" height="160" class="box" rx="8" />
+    <text x="12" y="26" class="block-title">步骤 3：ID → <tspan class="highlight">One-hot</tspan>（<tspan class="highlight">独热</tspan>/二进制向量）</text>
+    <text x="12" y="52" class="small">将 ID 转为长度 <tspan class="highlight">V</tspan> 的二进制向量（一个 1，其他 0）</text>
+    <g transform="translate(12,70)">
+      <!-- sample one-hot vector visualization -->
+      <text x="0" y="0" class="code">v = 8 (示意)</text>
+      <rect x="0" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <rect x="30" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <rect x="60" y="6" width="26" height="26" fill="#ffc107" stroke="#c88a00"/>
+      <rect x="90" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <rect x="120" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <rect x="150" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <rect x="180" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <rect x="210" y="6" width="26" height="26" fill="#fff" stroke="#c7c7c7"/>
+      <text x="0" y="52" class="small">（二进制示意：只有第3位为1）</text>
+    </g>
+    <text x="14" y="130" class="hint">用途：可用于数学表达，但通常用索引直接查表以提速</text>
+  </g>
+
+  <!-- arrow 1 (after step 1 and 2) -->
+  <path class="arrow" d="M254 120 L280 120" />
+
+  <!-- arrow 2 (after step 2 and 3) -->
+  <path class="arrow" d="M490 125 L520 120" />
+
+  <!-- Step 4: Embedding lookup / matrix multiply -->
+  <g transform="translate(1380,40)">
+    <rect x="0" y="0" width="400" height="260" class="box" rx="8" />
+    <text x="14" y="28" class="block-title">步骤 4：从<tspan class="highlight">词嵌入</tspan>矩阵<tspan class="highlight">查表</tspan>（或<tspan class="highlight">矩阵乘法</tspan>）</text>
+    <text x="14" y="52" class="small"><tspan class="highlight">Embedding</tspan> 矩阵：<tspan class="highlight">E</tspan> ∈ R^{<tspan class="highlight">V</tspan> × <tspan class="highlight">d</tspan>}</text>
+    <text x="14" y="72" class="small">方法 A（<tspan class="highlight">查表</tspan>）：<tspan class="highlight">embedding</tspan> = <tspan class="highlight">E</tspan>[id]</text>
+    <text x="14" y="92" class="small">方法 B（数学）：one-hot^T × <tspan class="highlight">E</tspan> = <tspan class="highlight">embedding</tspan></text>
+
+    <!-- embedding matrix visual -->
+    <g transform="translate(14,108)">
+      <!-- mini matrix -->
+      <rect x="0" y="0" width="280" height="120" fill="#f8fafc" stroke="#e2e8f0" rx="6"/>
+      <text x="12" y="18" class="small">E (V × d) 示意</text>
+      <!-- colored columns to suggest dimensions -->
+      <rect x="12" y="30" width="36" height="20" fill="#60a5fa"/>
+      <rect x="52" y="30" width="36" height="20" fill="#34d399"/>
+      <rect x="92" y="30" width="36" height="20" fill="#f97316"/>
+      <rect x="132" y="30" width="36" height="20" fill="#a78bfa"/>
+      <rect x="172" y="30" width="36" height="20" fill="#fb7185"/>
+      <rect x="212" y="30" width="36" height="20" fill="#f59e0b"/>
+
+      <!-- output embedding vector -->
+      <rect x="312" y="28" width="78" height="96" fill="#ffffff" stroke="#c7c7c7" rx="6"/>
+      <text x="351" y="46" class="small" text-anchor="middle"><tspan class="highlight">embedding</tspan></text>
+      <text x="351" y="66" class="code" text-anchor="middle">(<tspan class="highlight">d</tspan> × 1)</text>
+
+      <!-- arrow from matrix to embedding -->
+      <path class="arrow" d="M292 74 L312 74" />
+    </g>
+
+    <text x="14" y="238" class="hint">说明：实际实现通常直接通过<tspan class="highlight">索引查表</tspan>（更快），矩阵乘法只是等价数学表达</text>
+  </g>
+
+  <!-- arrow 2b: from step 3 to step 4 (after step 4) -->
+  <path class="arrow" d="M840 120 L1380 170" />
+
+  <!-- Step 5: Position Encoding add & sequence assembly -->
+  <g transform="translate(520,320)">
+    <rect x="0" y="0" width="840" height="190" class="box" rx="8" />
+    <text x="14" y="26" class="block-title">步骤 5：<tspan class="highlight">位置编码</tspan> + 组装为<tspan class="highlight">序列嵌入</tspan></text>
+    <text x="14" y="48" class="small">对每个位置 i，生成 <tspan class="highlight">PE_i</tspan> ∈ R^<tspan class="highlight">d</tspan>（正弦/余弦或可学习向量），然后：</text>
+    <text x="14" y="66" class="small">input_embedding_i = <tspan class="highlight">embedding_i</tspan> + <tspan class="highlight">PE_i</tspan></text>
+
+    <!-- visualize sequence matrix -->
+    <g transform="translate(14,86)">
+      <text x="0" y="0" class="small">序列（长度 T = 3）示意：</text>
+      <!-- three column vectors -->
+      <rect x="0" y="8" width="80" height="120" fill="#fff" stroke="#cbd5e1" rx="6"/>
+      <text x="40" y="36" class="small" text-anchor="middle">e_1+PE_1</text>
+      <rect x="110" y="8" width="80" height="120" fill="#fff" stroke="#cbd5e1" rx="6"/>
+      <text x="150" y="36" class="small" text-anchor="middle">e_2+PE_2</text>
+      <rect x="220" y="8" width="80" height="120" fill="#fff" stroke="#cbd5e1" rx="6"/>
+      <text x="260" y="36" class="small" text-anchor="middle">e_3+PE_3</text>
+      <text x="360" y="64" class="small">→ 组成矩阵 <tspan class="highlight">X_seq</tspan> ∈ R^{<tspan class="highlight">d</tspan> × <tspan class="highlight">T</tspan>} （或 <tspan class="highlight">T</tspan> × <tspan class="highlight">d</tspan>，框架不同）</text>
+    </g>
+  </g>
+
+  <!-- arrow 3 (to positional encoding, after step 5) -->
+  <path class="arrow" d="M1780 300 L1780 320" />
+
+  <!-- Step 6: Transformer encoder (brief) -->
+  <g transform="translate(360,540)">
+    <rect x="0" y="0" width="680" height="130" class="box" rx="8" />
+    <text x="14" y="28" class="block-title">步骤 6：<tspan class="highlight">Transformer</tspan> 编码器（示意）</text>
+    <text x="14" y="52" class="small"><tspan class="highlight">多头自注意力</tspan>（<tspan class="highlight">Multi-Head Attention</tspan>） + <tspan class="highlight">前馈网络</tspan> + <tspan class="highlight">残差</tspan> &amp; <tspan class="highlight">LayerNorm</tspan></text>
+    <text x="14" y="72" class="small">输出：上下文感知的序列嵌入 <tspan class="highlight">H</tspan> ∈ R^{<tspan class="highlight">d</tspan> × <tspan class="highlight">T</tspan>}</text>
+    <text x="14" y="96" class="hint">（此处省略内部细节，聚焦嵌入层到模型的完整流程）</text>
+  </g>
+
+  <!-- arrow 4 to transformer block (after step 6) -->
+  <path class="arrow" d="M940 510 L700 540" />
+
+  <!-- Step 7: Dimensionality reduction & visualization (detailed) -->
+  <g transform="translate(44,700)">
+    <rect x="0" y="0" width="980" height="200" class="box" rx="8" />
+    <text x="12" y="26" class="block-title">步骤 7：<tspan class="highlight">降维</tspan>（<tspan class="highlight">PCA</tspan> / <tspan class="highlight">t-SNE</tspan> / <tspan class="highlight">UMAP</tspan>）并<tspan class="highlight">可视化</tspan>（详细）</text>
+    <text x="12" y="48" class="small">将高维 <tspan class="highlight">embedding</tspan>（<tspan class="highlight">d</tspan> 维）降为 2 维以便展示<tspan class="highlight">语义聚类</tspan>；常见方法：<tspan class="highlight">PCA</tspan>（线性）、<tspan class="highlight">t-SNE</tspan>、<tspan class="highlight">UMAP</tspan>（非线性）</text>
+
+    <!-- scatter area with axes -->
+    <g transform="translate(20,70)">
+      <!-- background area -->
+      <rect x="0" y="0" width="680" height="110" fill="#ffffff" stroke="#e6eef8" rx="6" />
+
+      <!-- axes -->
+      <line x1="40" y1="55" x2="640" y2="55" stroke="#111827" stroke-width="1" />
+      <line x1="340" y1="10" x2="340" y2="100" stroke="#111827" stroke-width="1" />
+      <text x="640" y="50" class="small">Dim 1</text>
+      <text x="345" y="10" class="small">Dim 2</text>
+
+      <!-- cluster hulls (semi-transparent) -->
+      <ellipse cx="480" cy="30" rx="80" ry="28" fill="#fee2e2" stroke="#ef4444" stroke-width="1" fill-opacity="0.6" />
+      <ellipse cx="140" cy="28" rx="70" ry="32" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" fill-opacity="0.55" />
+      <ellipse cx="180" cy="78" rx="90" ry="20" fill="#ecfdf5" stroke="#10b981" stroke-width="1" fill-opacity="0.55" />
+      <ellipse cx="520" cy="78" rx="60" ry="26" fill="#fff7ed" stroke="#f59e0b" stroke-width="1" fill-opacity="0.55" />
+
+      <!-- sports cluster (red) -->
+      <circle cx="460" cy="22" r="5" fill="#ef4444" class="cluster-dot"/>
+      <text x="472" y="26" class="small">篮球</text>
+      <circle cx="500" cy="28" r="5" fill="#ef4444" class="cluster-dot"/>
+      <text x="512" y="32" class="small">棒球</text>
+      <circle cx="440" cy="44" r="5" fill="#ef4444" class="cluster-dot"/>
+      <text x="452" y="48" class="small">排球</text>
+      <circle cx="520" cy="50" r="5" fill="#ef4444" class="cluster-dot"/>
+      <text x="532" y="54" class="small">网球</text>
+
+      <!-- pronoun cluster (blue) -->
+      <circle cx="120" cy="18" r="5" fill="#3b82f6" class="cluster-dot"/>
+      <text x="132" y="22" class="small">我</text>
+      <circle cx="160" cy="28" r="5" fill="#3b82f6" class="cluster-dot"/>
+      <text x="172" y="32" class="small">你</text>
+      <circle cx="100" cy="44" r="5" fill="#3b82f6" class="cluster-dot"/>
+      <text x="112" y="48" class="small">我们</text>
+
+      <!-- animal cluster (green) -->
+      <circle cx="200" cy="78" r="5" fill="#10b981" class="cluster-dot"/>
+      <text x="212" y="82" class="small">猪</text>
+      <circle cx="160" cy="78" r="5" fill="#10b981" class="cluster-dot"/>
+      <text x="172" y="82" class="small">鸡</text>
+      <circle cx="240" cy="74" r="5" fill="#10b981" class="cluster-dot"/>
+      <text x="252" y="78" class="small">狗</text>
+
+      <!-- object/measure cluster (orange) -->
+      <circle cx="540" cy="78" r="5" fill="#f59e0b" class="cluster-dot"/>
+      <text x="552" y="82" class="small">本</text>
+      <circle cx="580" cy="70" r="5" fill="#f59e0b" class="cluster-dot"/>
+      <text x="592" y="74" class="small">条</text>
+      <circle cx="520" cy="98" r="5" fill="#f59e0b" class="cluster-dot"/>
+      <text x="532" y="102" class="small">只</text>
+
+      <!-- method arrows & notes -->
+      <path d="M720 15 L780 15" stroke="#111827" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="790" y="20" class="small"><tspan class="highlight">PCA</tspan>: 保留线性成分，快速</text>
+      <path d="M720 45 L780 45" stroke="#111827" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="790" y="50" class="small"><tspan class="highlight">t-SNE</tspan> / <tspan class="highlight">UMAP</tspan>: 非线性，常呈现更明显的簇</text>
+
+    </g>
+
+    <!-- legend and explanation on the right of scatter -->
+    <g transform="translate(730,90)">
+      <text x="0" y="0" class="block-title">图例 &amp; 方法</text>
+      <g transform="translate(0,14)">
+        <rect x="0" y="12" width="12" height="12" fill="#ef4444"/>
+        <text x="18" y="22" class="small">运动 / 球类</text>
+      </g>
+      <g transform="translate(0,36)">
+        <rect x="0" y="12" width="12" height="12" fill="#3b82f6"/>
+        <text x="18" y="22" class="small">人称代词</text>
+      </g>
+      <g transform="translate(0,60)">
+        <rect x="0" y="12" width="12" height="12" fill="#10b981"/>
+        <text x="18" y="22" class="small">动物 / 家畜</text>
+      </g>
+      <g transform="translate(0,84)">
+        <rect x="0" y="12" width="12" height="12" fill="#f59e0b"/>
+        <text x="18" y="22" class="small">量词 / 对象</text>
+      </g>
+
+      <text x="0" y="140" class="small">注意：降维仅用于可视化，实际模型仍使用高维表示。</text>
+    </g>
+  </g>
+
+  <!-- arrow 5 to dimensionality reduction block (after step 7) -->
+  <path class="arrow" d="M700 670 L534 700" />
+
+  <!-- Bottom-left explanatory legend -->
+  <g transform="translate(1040,740)">
+    <rect x="0" y="0" width="520" height="130" class="box" rx="8" />
+    <text x="12" y="24" class="block-title">注释 / 性能说明</text>
+    <text x="12" y="48" class="small">- 实际系统通常不显式构造 one-hot 向量，而是使用索引到 embedding 表查找；更节省时间与内存。</text>
+    <text x="12" y="68" class="small">- 位置编码可以是固定的正弦/余弦函数或可学习参数。</text>
+    <text x="12" y="88" class="small">- 若是批量（batch）输入，形状通常为 (batch, T, d) 或 (T, batch, d)。</text>
+    <text x="12" y="108" class="small">- 降维仅用于可视化，不影响模型训练。</text>
+  </g>
+
+</svg>

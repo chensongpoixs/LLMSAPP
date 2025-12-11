@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+  <style>
+    .title { font-family: 'Helvetica Neue', Arial, sans-serif; font-size:28px; font-weight:700; fill:#111; }
+    .subtitle { font-family: 'Helvetica Neue', Arial, sans-serif; font-size:16px; fill:#333; }
+    .label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size:14px; fill:#222; }
+    .small { font-family: 'Helvetica Neue', Arial, sans-serif; font-size:12px; fill:#444; }
+    .box { fill:#f7f9fb; stroke:#cfd8e3; stroke-width:1.2; rx:6; }
+    .matrix-cell { stroke:#ffffff; stroke-width:1; }
+    .arrow { stroke:#333; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+    .cluster-dot { stroke:#222; stroke-width:0.8; }
+    .group-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size:13px; font-weight:600; fill:#b91c1c; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="18" y="36" class="title">Transformer模型的输入 — 词嵌入 (Word Embedding)</text>
+
+  <!-- Left panel: one-hot and embedding matrix -->
+  <!-- One-hot column group -->
+  <g transform="translate(20,80)">
+    <text x="0" y="0" class="subtitle">对应的词向量 / 独热向量</text>
+
+    <!-- ID -> one-hot flow -->
+    <g transform="translate(6,24)">
+      <!-- small token list -->
+      <g>
+        <rect x="0" y="0" width="110" height="26" fill="#fff" stroke="#d1d5db" rx="4"/>
+        <text x="8" y="18" class="label">篮球</text>
+        <rect x="0" y="36" width="110" height="26" fill="#fff" stroke="#d1d5db" rx="4"/>
+        <text x="8" y="54" class="label">鸡</text>
+        <rect x="0" y="72" width="110" height="26" fill="#fff" stroke="#d1d5db" rx="4"/>
+        <text x="8" y="90" class="label">我</text>
+      </g>
+
+      <!-- arrow to ID box -->
+      <path class="arrow" d="M120 28 L160 28" />
+      <rect x="168" y="6" width="60" height="44" fill="#f1f5f9" stroke="#cbd5e1" rx="6"/>
+      <text x="198" y="32" class="small" text-anchor="middle">ID (整数)</text>
+
+      <!-- arrow to one-hot -->
+      <path class="arrow" d="M230 28 L270 28" />
+
+      <!-- One-hot vertical stack (v = 8 shown) -->
+      <g transform="translate(290,0)">
+        <text x="0" y="-8" class="small">独热向量 (示例)</text>
+        <!-- small squares column -->
+        <g>
+          <rect x="0" y="0" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="36" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="72" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="108" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="144" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="180" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="216" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <rect x="0" y="252" width="28" height="28" fill="#ffffff" stroke="#cfcfcf" rx="3" />
+          <!-- active one-hot (highlighted) -->
+          <rect x="0" y="72" width="28" height="28" fill="#ffc107" stroke="#c88a00" rx="3" />
+        </g>
+      </g>
+
+      <!-- arrows and label to matrix -->
+      <text x="50" y="180" class="label">× 词嵌入矩阵</text>
+    </g>
+  </g>
+
+  <!-- Embedding matrix (colored blocks) -->
+  <g transform="translate(170,120)">
+    <rect x="0" y="-36" width="420" height="340" class="box" />
+    <text x="12" y="-14" class="small">词嵌入矩阵 (V × d) —— V 为词表大小, d 为嵌入维度</text>
+
+    <!-- draw grid of colored cells (6 rows × 10 cols as visual) -->
+    <g transform="translate(12,12)">
+      <!-- create some colored columns to mimic embedding columns -->
+      <!-- we'll draw 10 columns (width 36) and 6 rows (height 36) -->
+      <!-- colors cycling -->
+      <g>
+        <rect x="0" y="0" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+        <rect x="36" y="0" width="36" height="36" fill="#10b981" class="matrix-cell"/>
+        <rect x="72" y="0" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="108" y="0" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+        <rect x="144" y="0" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="180" y="0" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="216" y="0" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="252" y="0" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="288" y="0" width="36" height="36" fill="#fb923c" class="matrix-cell"/>
+        <rect x="324" y="0" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+
+        <!-- second row -->
+        <rect x="0" y="36" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+        <rect x="36" y="36" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="72" y="36" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="108" y="36" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+        <rect x="144" y="36" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="180" y="36" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="216" y="36" width="36" height="36" fill="#fb923c" class="matrix-cell"/>
+        <rect x="252" y="36" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="288" y="36" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="324" y="36" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+
+        <!-- third row -->
+        <rect x="0" y="72" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="36" y="72" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="72" y="72" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+        <rect x="108" y="72" width="36" height="36" fill="#fb923c" class="matrix-cell"/>
+        <rect x="144" y="72" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="180" y="72" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+        <rect x="216" y="72" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="252" y="72" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="288" y="72" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="324" y="72" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+
+        <!-- fourth row -->
+        <rect x="0" y="108" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="36" y="108" width="36" height="36" fill="#fb923c" class="matrix-cell"/>
+        <rect x="72" y="108" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="108" y="108" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="144" y="108" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="180" y="108" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+        <rect x="216" y="108" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+        <rect x="252" y="108" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="288" y="108" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="324" y="108" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+
+        <!-- fifth row -->
+        <rect x="0" y="144" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="36" y="144" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+        <rect x="72" y="144" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="108" y="144" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+        <rect x="144" y="144" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="180" y="144" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="216" y="144" width="36" height="36" fill="#fb923c" class="matrix-cell"/>
+        <rect x="252" y="144" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="288" y="144" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="324" y="144" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+
+        <!-- sixth row -->
+        <rect x="0" y="180" width="36" height="36" fill="#fb923c" class="matrix-cell"/>
+        <rect x="36" y="180" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="72" y="180" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+        <rect x="108" y="180" width="36" height="36" fill="#a78bfa" class="matrix-cell"/>
+        <rect x="144" y="180" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="180" y="180" width="36" height="36" fill="#d97706" class="matrix-cell"/>
+        <rect x="216" y="180" width="36" height="36" fill="#60a5fa" class="matrix-cell"/>
+        <rect x="252" y="180" width="36" height="36" fill="#f97316" class="matrix-cell"/>
+        <rect x="288" y="180" width="36" height="36" fill="#34d399" class="matrix-cell"/>
+        <rect x="324" y="180" width="36" height="36" fill="#f472b6" class="matrix-cell"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Output vector (word vector) -->
+  <g transform="translate(610,160)">
+    <rect x="0" y="-26" width="120" height="260" class="box"/>
+    <text x="60" y="-6" class="small" text-anchor="middle">对应的词向量 (d × 1)</text>
+    <!-- coloured bar representing embedding vector -->
+    <g transform="translate(20,10)">
+      <rect x="0" y="0" width="80" height="24" fill="#d97706"/>
+      <rect x="0" y="36" width="80" height="24" fill="#10b981"/>
+      <rect x="0" y="72" width="80" height="24" fill="#60a5fa"/>
+      <rect x="0" y="108" width="80" height="24" fill="#f97316"/>
+      <rect x="0" y="144" width="80" height="24" fill="#a78bfa"/>
+    </g>
+  </g>
+
+  <!-- Multiplication arrow between matrix and output -->
+  <path class="arrow" d="M540 230 L610 230" />
+  <text x="520" y="210" class="label" transform="rotate(-5 520,210)">=</text>
+
+  <!-- Right panel: 2D scatter (降维为二维的词向量) -->
+  <g transform="translate(760,60)">
+    <rect x="0" y="0" width="600" height="620" fill="#ffffff" stroke="#e6eef8" stroke-width="1.4" rx="6" />
+    <text x="12" y="26" class="small">降维为二维的词向量（示意）</text>
+
+    <!-- axes -->
+    <line x1="300" y1="50" x2="300" y2="570" stroke="#111" stroke-width="1.6" />
+    <line x1="30" y1="310" x2="570" y2="310" stroke="#111" stroke-width="1.6" />
+
+    <!-- Top-right cluster: sports (red) -->
+    <g>
+      <circle cx="420" cy="130" r="8" fill="#d32f2f" class="cluster-dot"/>
+      <text x="436" y="134" class="label">篮球</text>
+      <circle cx="470" cy="140" r="8" fill="#d32f2f" class="cluster-dot"/>
+      <text x="486" y="144" class="label">棒球</text>
+      <circle cx="440" cy="170" r="8" fill="#d32f2f" class="cluster-dot"/>
+      <text x="456" y="174" class="label">足球</text>
+      <circle cx="480" cy="170" r="8" fill="#d32f2f" class="cluster-dot"/>
+      <text x="496" y="174" class="label">排球</text>
+      <circle cx="505" cy="150" r="8" fill="#d32f2f" class="cluster-dot"/>
+      <text x="521" y="154" class="label">网球</text>
+      <circle cx="465" cy="110" r="8" fill="#d32f2f" class="cluster-dot"/>
+      <text x="481" y="114" class="label">乒乓球</text>
+      <text x="520" y="96" class="group-label">运动/球类</text>
+    </g>
+
+    <!-- Top-left cluster: pronouns (blue) -->
+    <g>
+      <circle cx="200" cy="120" r="7" fill="#42a5f5" class="cluster-dot"/>
+      <text x="216" y="124" class="label">我</text>
+      <circle cx="240" cy="120" r="7" fill="#42a5f5" class="cluster-dot"/>
+      <text x="256" y="124" class="label">你</text>
+      <circle cx="220" cy="150" r="7" fill="#42a5f5" class="cluster-dot"/>
+      <text x="236" y="154" class="label">我们</text>
+      <circle cx="180" cy="150" r="7" fill="#42a5f5" class="cluster-dot"/>
+      <text x="196" y="154" class="label">他</text>
+      <circle cx="160" cy="130" r="7" fill="#42a5f5" class="cluster-dot"/>
+      <text x="176" y="134" class="label">她</text>
+      <circle cx="220" cy="180" r="7" fill="#42a5f5" class="cluster-dot"/>
+      <text x="236" y="184" class="label">它</text>
+      <text x="240" y="96" class="group-label">人称代词</text>
+    </g>
+
+    <!-- Bottom-left cluster: animals (green) -->
+    <g>
+      <circle cx="180" cy="420" r="7" fill="#4caf50" class="cluster-dot"/>
+      <text x="196" y="424" class="label">鸡</text>
+      <circle cx="220" cy="400" r="7" fill="#4caf50" class="cluster-dot"/>
+      <text x="236" y="404" class="label">鸭</text>
+      <circle cx="240" cy="460" r="7" fill="#4caf50" class="cluster-dot"/>
+      <text x="256" y="464" class="label">猪</text>
+      <circle cx="200" cy="460" r="7" fill="#4caf50" class="cluster-dot"/>
+      <text x="216" y="464" class="label">狗</text>
+      <circle cx="260" cy="430" r="7" fill="#4caf50" class="cluster-dot"/>
+      <text x="276" y="434" class="label">牛</text>
+      <circle cx="220" cy="440" r="7" fill="#4caf50" class="cluster-dot"/>
+      <text x="236" y="444" class="label">羊</text>
+      <text x="260" y="390" class="group-label">动物/家畜</text>
+    </g>
+
+    <!-- Bottom-right cluster: objects/count nouns (orange) -->
+    <g>
+      <circle cx="480" cy="440" r="7" fill="#fb8c00" class="cluster-dot"/>
+      <text x="496" y="444" class="label">本</text>
+      <circle cx="520" cy="460" r="7" fill="#fb8c00" class="cluster-dot"/>
+      <text x="536" y="464" class="label">条</text>
+      <circle cx="440" cy="480" r="7" fill="#fb8c00" class="cluster-dot"/>
+      <text x="456" y="484" class="label">个</text>
+      <circle cx="520" cy="420" r="7" fill="#fb8c00" class="cluster-dot"/>
+      <text x="536" y="424" class="label">只</text>
+      <circle cx="560" cy="440" r="7" fill="#fb8c00" class="cluster-dot"/>
+      <text x="576" y="444" class="label">位</text>
+      <text x="480" y="496" class="group-label">量词/对象</text>
+    </g>
+
+  </g>
+
+  <!-- explanatory text bottom-left -->
+  <g transform="translate(18,420)">
+    <text x="0" y="0" class="small">V: 为词表的数量</text>
+    <text x="0" y="20" class="small">d: 词嵌入矩阵的大小（如 Transformer 中 d=512）</text>
+    <text x="0" y="40" class="small">词嵌入矩阵是经训练得到的权重表，将词ID映射为向量；语义相近聚类，差异分散，便于在向量空间做相似度计算。</text>
+  </g>
+
+</svg>
