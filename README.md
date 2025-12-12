@@ -112,20 +112,20 @@ pip install matplotlib
 
 
 
-[1、文本向量化](/文本与分词/1、文本向量化.md)
+[1、文本向量化](/02.文本与分词/1、文本向量化.md)
 
-[2、构建文本字典原理](/文本与分词/2、构建文本字典原理.md)
+[2、构建文本字典原理](/02.文本与分词/2、构建文本字典原理.md)
 
-[3、Tokenize类封装](/文本与分词/3、Tokenizer类封装.md)
+[3、Tokenize类封装](/02文本与分词/3、Tokenizer类封装.md)
 
-[4、基于统计的分词技术(tiktoken)](/文本与分词/4、基于统计的分词技术.md)
+[4、基于统计的分词技术(tiktoken)](/02文本与分词/4、基于统计的分词技术.md)
 
-[5、文本向量化(Embedding).md](/文本与分词/5、文本向量化(Embedding).md)
+[5、文本向量化(Embedding).md](/02文本与分词/5、文本向量化(Embedding).md)
 
-[5、注意力机制](/5.注意力机制/README.md)
+[5、注意力机制](/05.注意力机制/README.md)
 
 
-[6、Transformer神秘架构](/6.Transformer架构神秘/README.md)
+[6、Transformer神秘架构](/06.Transformer架构神秘/README.md)
 
 ### 2. 预训练阶段
 

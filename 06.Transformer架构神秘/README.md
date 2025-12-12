@@ -3,7 +3,7 @@
 
 [Google 2017年分布 Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf)
 
-![Transformer架构流程图](/6.Transformer架构神秘/Transformer.jpg)
+![Transformer架构流程图](/06.Transformer架构神秘/Transformer.jpg)
 
 主要致力于在序列建摸中提升并行性与长距离原来建模能力， 拜脱对循环与的依赖， 
 
@@ -181,7 +181,7 @@
 
 
 
-![](/6.Transformer架构神秘/word_embedding_detailed.svg)
+![](/06.Transformer架构神秘/word_embedding_detailed.svg)
 
 
 1. 位置信息：用<font color='red'>**位置编码**</font>赋予词向量序列信息
@@ -201,7 +201,7 @@
 
  
 
-![Transformer模型的输入--词嵌入（Word Embedding）](/6.Transformer架构神秘/word_embedding.svg)
+![Transformer模型的输入--词嵌入（Word Embedding）](/06.Transformer架构神秘/word_embedding.svg)
 
 
 
@@ -247,7 +247,7 @@ ${PE_{(pos, 2i+1)}}$ = ${cos(\frac{pos}{10000^{\frac{2i}{d}}})}$
 
 - 可视化：位置编码长啥样？
 
-![](/6.Transformer架构神秘/positional_emdding.png)
+![](/06.Transformer架构神秘/positional_emdding.png)
 
 我们可以绘制前 100 个位置编码在不同维度上的曲线图：
 
