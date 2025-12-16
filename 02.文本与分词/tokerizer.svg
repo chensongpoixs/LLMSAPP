@@ -1,0 +1,96 @@
+<svg width="1200" height="260" viewBox="0 0 1200 260" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1200" height="260" fill="#f8fafc"/>
+
+  <!-- 样式定义 -->
+  <style>
+    .box {
+      fill: #ffffff;
+      stroke: #94a3b8;
+      stroke-width: 2;
+      rx: 8;
+      ry: 8;
+    }
+    .title {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      fill: #0f172a;
+      text-anchor: middle;
+    }
+    .subtitle {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      fill: #64748b;
+      text-anchor: middle;
+    }
+    .arrow {
+      stroke: #64748b;
+      stroke-width: 2;
+      marker-end: url(#arrowhead);
+    }
+    .arrow-label {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11px;
+      fill: #6b7280;
+      text-anchor: middle;
+    }
+  </style>
+
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7"
+            refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <!-- 1 输入原始文本 -->
+  <rect class="box" x="40" y="70" width="160" height="80" />
+  <text class="title" x="120" y="100">输入原始文本</text>
+  <text class="subtitle" x="120" y="122">如："我爱编程。"</text>
+
+  <!-- 箭头 1 -> 2 -->
+  <line class="arrow" x1="200" y1="110" x2="260" y2="110" />
+  <text class="arrow-label" x="230" y="95">编码 / 规范化</text>
+
+  <!-- 2 文本预处理 -->
+  <rect class="box" x="260" y="70" width="180" height="80" />
+  <text class="title" x="350" y="100">文本预处理</text>
+  <text class="subtitle" x="350" y="122">去空格、大小写、符号等</text>
+
+  <!-- 箭头 2 -> 3 -->
+  <line class="arrow" x1="440" y1="110" x2="520" y2="110" />
+  <text class="arrow-label" x="480" y="95">送入分词器</text>
+
+  <!-- 3 chensong 分词器 -->
+  <rect class="box" x="520" y="50" width="200" height="120" />
+  <text class="title" x="620" y="90">chensong 分词器</text>
+  <text class="subtitle" x="620" y="112">按规则切分为词元</text>
+  <text class="subtitle" x="620" y="132">示例：["我", "爱", "编程", "。"]</text>
+
+  <!-- 箭头 3 -> 4 -->
+  <line class="arrow" x1="720" y1="110" x2="800" y2="110" />
+  <text class="arrow-label" x="760" y="95">查词表</text>
+
+  <!-- 4 词元 → 词元ID -->
+  <rect class="box" x="800" y="50" width="200" height="120" />
+  <text class="title" x="900" y="80">词元 → 词元ID</text>
+  <text class="subtitle" x="900" y="104">Vocabulary Lookup</text>
+  <text class="subtitle" x="900" y="126">["我","爱","编程","。"]</text>
+  <text class="subtitle" x="900" y="144">→ [356, 9987, 12034, 8024]</text>
+
+  <!-- 箭头 4 -> 5 -->
+  <line class="arrow" x1="1000" y1="110" x2="1080" y2="110" />
+  <text class="arrow-label" x="1040" y="95">输入模型</text>
+
+  <!-- 5 输出词元ID -->
+  <rect class="box" x="1080" y="70" width="120" height="80" />
+  <text class="title" x="1140" y="100">输出词元ID</text>
+  <text class="subtitle" x="1140" y="122">预测序列</text>
+
+  <!-- 底部说明 -->
+  <text class="subtitle" x="600" y="210">
+    整体流程：文本 → 预处理 → chensong 分词器 → 词元序列 → 词元ID序列 → 模型输出词元ID
+  </text>
+</svg>
