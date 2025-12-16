@@ -31,3 +31,8 @@ TestResults.xml
 /01_mnist/__pycache__/test.cpython-310.pyc
 /LLM/model_weights.pth
 /tools/check_svg.py
+/02.文本与分词/data
+/02.文本与分词/models
+/02.文本与分词/__pycache__
+/02.文本与分词/__pycache__
+/02.文本与分词/__pycache__/Tokenizer.cpython-310.pyc
