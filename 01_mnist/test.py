@@ -123,6 +123,7 @@ def test(dataloader, model, loss_fn):
             X, y = X.to(device), y.to(device); # 将数据和标签移动到指定GPU设备
             pred = model(X); # 通过模型进行前向传播
             test_loss += loss_fn(pred, y).item(); # 累加损失
+            # pred.argmax(1) 获取每行的最大值索引,与y比较计算正确预测数量
             correct += (pred.argmax(1) == y).type(torch.float).sum().item(); # 计算正确预测数量
     test_loss /= num_batches; # 计算平均损失
     correct /= size; # 计算准确率

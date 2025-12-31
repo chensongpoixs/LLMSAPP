@@ -14,39 +14,40 @@ Docstring for 02.文本与分词.文本标准化与格式统一
 import re
 
 
-# Path to the dataset directory (relative to repository root)
+# 红楼梦的数据集位置
 base_data= "./data/hongloumeng.txt";
+# 文本统一化 
 base_basesetdata = "./data/baseset_hongloumeng.txt";
 
 
 def main():
-    """Main entrypoint: read, clean, and save the dataset.
-    The function reads `hongloumeng.txt` from `base_data_path`, applies a sequence
+    """
+    读取红楼梦的数据 进行文本标准化与格式统一的操作 
+
+    1. 清洗
+    2. 去重
+    3. tokenizer
     """
 
-    # Read the raw text file. Ensure the file exists in `./data/`.
+    # 读取数据集
     with open(base_data , "r", encoding="utf-8") as f:
         context = f.read()
 
-    # 1) Remove custom chapter-separator blocks and collapse surrounding noise.
-    #    The original data contained separators matching a pattern like:
-    #    lines including several `※` characters followed by `&` (legacy marker).
-    #    The code below walks line-by-line and skips content between the
-    #    separator and the next chapter heading (lines starting with '##').
+   
+    # 删除行
     lines = context.splitlines()  # split into lines for simple stateful filtering
     clean_lines = []
     skip_mode = False
-
+    # 遍历 行的数据
     for line in lines:
         stripped = line.strip()
 
-        # Enter skip mode when encountering the separator marker. This is a
-        # heuristic targeted at noisy metadata present in the raw file.
+        # 过滤不规范数据删除了
         if re.match(r'^.*※.*※.*※.* .*&', stripped):
             skip_mode = True
             continue
 
-        # Exit skip mode when a chapter heading (starting with '##') is found.
+        # 删除## 的
         if skip_mode and re.match(r'^##.*$', stripped):
             skip_mode = False
             continue
@@ -58,9 +59,7 @@ def main():
     # Re-join the filtered lines back into a single string
     context = '\n'.join(clean_lines)
 
-    # 2) Collapse multiple whitespace characters (including newlines and tabs)
-    #    into a single space to normalize spacing across the file. This makes
-    #    downstream tokenization and sentence detection more predictable.
+    # 当前 => 
     cleaned_context = re.sub(r'\s+', ' ', context, flags=re.MULTILINE)
 
     # Optional: remove unusual special characters but keep common Chinese

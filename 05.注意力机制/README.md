@@ -37,7 +37,7 @@ RNN的顺序处理机制决定了它必须完成上一步才能执行下一步�
 ### 2、什么是注意力机制？
 
 
-![](/5.注意力机制/attention_mechanism_cn.svg)
+![](/05.注意力机制/attention_mechanism_cn.svg)
 
 <font color='red'>注意力机制是一种动态地为输入信息分配注意力权重， 从而让输出聚焦于最相关输入部分的机制</font>
 
