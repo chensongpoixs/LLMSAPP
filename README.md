@@ -150,7 +150,7 @@ pip install matplotlib
 [8、评估大语言模型.md](/06.Transformer架构神秘/评估大语言模型.md)
 
 
-[9、优化器的设置](/06.Transformer架构神秘/优化器的设置.md)
+[9、优化器的设置  两项技术 temperature 和 TOP-K合作关系](/06.Transformer架构神秘/优化器的设置.md)
 
 ### 3. 微调与应用
 
