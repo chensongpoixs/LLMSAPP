@@ -38,3 +38,5 @@ TestResults.xml
 /02.文本与分词/__pycache__/Tokenizer.cpython-310.pyc
 /transformer-explainer
 /06.Transformer架构神秘/__pycache__
+/06.Transformer架构神秘/model.pth
+/06.Transformer架构神秘/model_opt.pth

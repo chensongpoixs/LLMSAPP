@@ -152,6 +152,8 @@ pip install matplotlib
 
 [9、优化器的设置  两项技术 temperature 和 TOP-K合作关系](/06.Transformer架构神秘/优化器的设置.md)
 
+[10、 保存模型和加载模型](/06.Transformer架构神秘/保存模型和加载模型.md)
+
 ### 3. 微调与应用
 
 ![3. 微调与应用](/LLM/training_stage_finetune.svg)
