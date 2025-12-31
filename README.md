@@ -144,7 +144,7 @@ pip install matplotlib
 [6、Transformer神秘架构](/06.Transformer架构神秘/README.md)
 
 
-
+[7、每次训练批次做事情  损失函数 调整 深度学习的参数](/06.Transformer架构神秘/每次训练批次做事情.md)
 
 
 
