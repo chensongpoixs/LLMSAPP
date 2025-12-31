@@ -1,0 +1,549 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="logitsGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#dbeafe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#bfdbfe;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="probGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fde68a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="barGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="probBarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 箭头标记 -->
+    <marker id="arrowhead" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#3b82f6" />
+    </marker>
+    <marker id="arrowhead-orange" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#f59e0b" />
+    </marker>
+    
+    <!-- 阴影滤镜 -->
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 样式定义 -->
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.02); }
+    }
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 4px currentColor); }
+      50% { filter: drop-shadow(0 0 12px currentColor); }
+    }
+    @keyframes flow {
+      0% { offset-distance: 0%; opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0.2; }
+    }
+    @keyframes barGrow {
+      0% { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
+    }
+    @keyframes highlight {
+      0%, 100% { fill-opacity: 0.3; }
+      50% { fill-opacity: 0.8; }
+    }
+    
+    .box {
+      fill: #ffffff;
+      stroke: #cbd5e1;
+      stroke-width: 2;
+      rx: 6;
+      ry: 6;
+      filter: url(#shadow);
+    }
+    .box-logits {
+      fill: url(#logitsGrad);
+      stroke: #3b82f6;
+      stroke-width: 3;
+      rx: 8;
+      ry: 8;
+      filter: url(#shadow);
+    }
+    .box-prob {
+      fill: url(#probGrad);
+      stroke: #f59e0b;
+      stroke-width: 3;
+      rx: 8;
+      ry: 8;
+      filter: url(#shadow);
+    }
+    .title {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      fill: #0f172a;
+      text-anchor: middle;
+    }
+    .subtitle {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+      font-size: 15px;
+      fill: #334155;
+      text-anchor: middle;
+      font-weight: 600;
+    }
+    .label {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+      font-size: 12px;
+      fill: #475569;
+      text-anchor: middle;
+    }
+    .dim-label {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      fill: #1e40af;
+      font-weight: 700;
+      text-anchor: middle;
+    }
+    .pulse-anim {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .glow-blue {
+      animation: glow 2s ease-in-out infinite;
+      color: #3b82f6;
+    }
+    .glow-orange {
+      animation: glow 2s ease-in-out infinite;
+      color: #f59e0b;
+    }
+    .data-point {
+      fill: #3b82f6;
+      r: 6;
+    }
+    .bar {
+      fill: url(#barGrad);
+      stroke: #2563eb;
+      stroke-width: 1;
+    }
+    .prob-bar {
+      fill: url(#probBarGrad);
+      stroke: #d97706;
+      stroke-width: 1;
+    }
+    .arrow {
+      stroke: #3b82f6;
+      stroke-width: 3;
+      marker-end: url(#arrowhead);
+    }
+    .arrow-softmax {
+      stroke: #f59e0b;
+      stroke-width: 3;
+      marker-end: url(#arrowhead-orange);
+    }
+  </style>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1600" height="1000" fill="#f1f5f9"/>
+
+  <!-- 标题区域 -->
+  <rect x="0" y="0" width="1600" height="70" fill="#1e293b"/>
+  <text class="title" x="800" y="45" fill="#ffffff" font-size="28">Logits 形状与概率分布详细可视化（动画版）</text>
+
+  <!-- 维度说明卡片 -->
+  <rect class="box" x="50" y="85" width="1500" height="100" fill="#ffffff"/>
+  <text class="subtitle" x="800" y="120" font-size="18" fill="#0f172a">张量形状: (batch_size, seq_len, vocab_size) = (2, 5, 50257)</text>
+  
+  <g>
+    <rect x="150" y="140" width="200" height="35" fill="#dbeafe" rx="4" stroke="#3b82f6" stroke-width="2"/>
+    <text class="label" x="250" y="160" font-weight="600" fill="#1e40af">batch_size = 2</text>
+    <text class="label" x="250" y="175" font-size="11">批次大小（并行处理的样本数）</text>
+  </g>
+  
+  <g>
+    <rect x="450" y="140" width="200" height="35" fill="#dbeafe" rx="4" stroke="#3b82f6" stroke-width="2"/>
+    <text class="label" x="550" y="160" font-weight="600" fill="#1e40af">seq_len = 5</text>
+    <text class="label" x="550" y="175" font-size="11">序列长度（每个样本的token数量）</text>
+  </g>
+  
+  <g>
+    <rect x="750" y="140" width="300" height="35" fill="#dbeafe" rx="4" stroke="#3b82f6" stroke-width="2"/>
+    <text class="label" x="900" y="160" font-weight="600" fill="#1e40af">vocab_size = 50,257</text>
+    <text class="label" x="900" y="175" font-size="11">词汇表大小（所有可能的token数量）</text>
+  </g>
+  
+  <g>
+    <rect x="1150" y="140" width="350" height="35" fill="#fef3c7" rx="4" stroke="#f59e0b" stroke-width="2"/>
+    <text class="label" x="1325" y="160" font-weight="600" fill="#92400e">总元素数: 502,570</text>
+    <text class="label" x="1325" y="175" font-size="11">2 × 5 × 50,257 = 502,570 个浮点数</text>
+  </g>
+
+  <!-- Batch 0 详细展示 -->
+  <g id="batch0-group">
+    <rect class="box" x="50" y="210" width="680" height="350" fill="#ffffff"/>
+    <text class="dim-label" x="390" y="240" font-size="20">Batch 0 - Logits 详细展示</text>
+    
+    <!-- Token 0 详细展示 -->
+    <g id="batch0-token0">
+      <rect class="box-logits pulse-anim" x="70" y="270" width="170" height="260"/>
+      <text x="155" y="298" font-family="Segoe UI, system-ui" font-size="14" fill="#1e40af" font-weight="600" text-anchor="middle">Token 0</text>
+      <text x="155" y="316" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="middle">logits[0][0][0:50257]</text>
+      
+      <!-- 词汇表logits条形图（简化显示前10个） -->
+      <text x="155" y="338" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">前10个词汇的Logits值:</text>
+      <!-- Bar 0 -->
+      <rect class="bar" x="80" y="348" width="18" height="8" fill="#ef4444"/>
+      <text x="89" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">-2.3</text>
+      <!-- Bar 1 -->
+      <rect class="bar" x="115" y="348" width="75" height="8" fill="#10b981"/>
+      <text x="152.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">5.1</text>
+      <!-- Bar 2 -->
+      <rect class="bar" x="200" y="348" width="25" height="8" fill="#3b82f6"/>
+      <text x="212.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">0.8</text>
+      
+      <!-- 中间值显示 -->
+      <text x="155" y="378" font-family="Segoe UI, system-ui" font-size="9" fill="#64748b" font-style="italic" text-anchor="middle">... (中间省略 50,247 个值) ...</text>
+      
+      <!-- 最后几个值 -->
+      <text x="155" y="400" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">最后3个词汇的Logits值:</text>
+      <rect class="bar" x="80" y="410" width="32" height="8" fill="#6366f1"/>
+      <text x="96" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">-1.2</text>
+      <rect class="bar" x="122" y="410" width="48" height="8" fill="#6366f1"/>
+      <text x="146" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">2.5</text>
+      <rect class="bar" x="180" y="410" width="28" height="8" fill="#6366f1"/>
+      <text x="194" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">1.1</text>
+      
+      <!-- 形状标注 -->
+      <rect x="75" y="438" width="160" height="30" fill="#eff6ff" rx="3" stroke="#3b82f6" stroke-width="1"/>
+      <text x="155" y="453" font-family="Segoe UI, system-ui" font-size="11" fill="#1e40af" font-weight="600" text-anchor="middle">形状: (50257,)</text>
+      <text x="155" y="467" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">范围: (-∞, +∞)</text>
+      
+      <!-- 最大值标注 -->
+      <circle cx="152.5" cy="348" r="4" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="152.5" y="341" font-family="Segoe UI, system-ui" font-size="9" fill="#059669" font-weight="600" text-anchor="middle">最大值</text>
+    </g>
+
+    <!-- Token 1 -->
+    <g id="batch0-token1">
+      <rect class="box-logits" x="270" y="270" width="170" height="260"/>
+      <text x="355" y="298" font-family="Segoe UI, system-ui" font-size="14" fill="#1e40af" font-weight="600" text-anchor="middle">Token 1</text>
+      <text x="355" y="316" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="middle">logits[0][1][0:50257]</text>
+      
+      <text x="355" y="338" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">前10个词汇的Logits值:</text>
+      <rect class="bar" x="280" y="348" width="38" height="8" fill="#3b82f6"/>
+      <text x="299" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">1.5</text>
+      <rect class="bar" x="328" y="348" width="14" height="8" fill="#ef4444"/>
+      <text x="335" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">-0.9</text>
+      <rect class="bar" x="352" y="348" width="65" height="8" fill="#10b981"/>
+      <text x="384.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">4.2</text>
+      
+      <text x="355" y="378" font-family="Segoe UI, system-ui" font-size="9" fill="#64748b" font-style="italic" text-anchor="middle">... (中间省略 50,247 个值) ...</text>
+      
+      <text x="355" y="400" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">最后3个词汇的Logits值:</text>
+      <rect class="bar" x="280" y="410" width="52" height="8" fill="#6366f1"/>
+      <text x="306" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">2.1</text>
+      <rect class="bar" x="342" y="410" width="42" height="8" fill="#6366f1"/>
+      <text x="363" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">1.8</text>
+      <rect class="bar" x="394" y="410" width="18" height="8" fill="#6366f1"/>
+      <text x="403" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">0.9</text>
+      
+      <rect x="275" y="438" width="160" height="30" fill="#eff6ff" rx="3" stroke="#3b82f6" stroke-width="1"/>
+      <text x="355" y="453" font-family="Segoe UI, system-ui" font-size="11" fill="#1e40af" font-weight="600" text-anchor="middle">形状: (50257,)</text>
+      <text x="355" y="467" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">范围: (-∞, +∞)</text>
+    </g>
+
+    <!-- Token 2 -->
+    <g id="batch0-token2">
+      <rect class="box-logits pulse-anim" x="470" y="270" width="170" height="260"/>
+      <text x="555" y="298" font-family="Segoe UI, system-ui" font-size="14" fill="#1e40af" font-weight="600" text-anchor="middle">Token 2</text>
+      <text x="555" y="316" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="middle">logits[0][2][0:50257]</text>
+      
+      <text x="555" y="338" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">前10个词汇的Logits值:</text>
+      <rect class="bar" x="480" y="348" width="23" height="8" fill="#ef4444"/>
+      <text x="491.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">-1.1</text>
+      <rect class="bar" x="513" y="348" width="61" height="8" fill="#3b82f6"/>
+      <text x="543.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">3.8</text>
+      <rect class="bar" x="584" y="348" width="89" height="8" fill="#10b981"/>
+      <text x="628.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">6.5</text>
+      
+      <text x="555" y="378" font-family="Segoe UI, system-ui" font-size="9" fill="#64748b" font-style="italic" text-anchor="middle">... (中间省略 50,247 个值) ...</text>
+      
+      <text x="555" y="400" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">最后3个词汇的Logits值:</text>
+      <rect class="bar" x="480" y="410" width="18" height="8" fill="#6366f1"/>
+      <text x="489" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">-0.5</text>
+      <rect class="bar" x="508" y="410" width="33" height="8" fill="#6366f1"/>
+      <text x="524.5" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">1.2</text>
+      <rect class="bar" x="551" y="410" width="56" height="8" fill="#6366f1"/>
+      <text x="579" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#1e40af" text-anchor="middle">2.8</text>
+      
+      <rect x="475" y="438" width="160" height="30" fill="#eff6ff" rx="3" stroke="#3b82f6" stroke-width="1"/>
+      <text x="555" y="453" font-family="Segoe UI, system-ui" font-size="11" fill="#1e40af" font-weight="600" text-anchor="middle">形状: (50257,)</text>
+      <text x="555" y="467" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="middle">范围: (-∞, +∞)</text>
+      
+      <circle cx="628.5" cy="348" r="4" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="628.5" y="341" font-family="Segoe UI, system-ui" font-size="9" fill="#059669" font-weight="600" text-anchor="middle">最大值</text>
+    </g>
+
+    <!-- 更多tokens标注 -->
+    <text x="660" y="400" font-family="Segoe UI, system-ui" font-size="14" fill="#64748b" text-anchor="middle">...</text>
+    <text x="660" y="415" font-family="Segoe UI, system-ui" font-size="12" fill="#64748b" text-anchor="middle">Token 3, 4</text>
+
+    <!-- seq_len 标注 -->
+    <line x1="70" y1="550" x2="640" y2="550" stroke="#3b82f6" stroke-width="3" stroke-dasharray="5,5"/>
+    <text class="dim-label" x="355" y="575" font-size="18">seq_len = 5 (序列长度)</text>
+  </g>
+
+  <!-- Softmax 转换区域（带动画） -->
+  <g id="softmax-section">
+    <rect class="box" x="750" y="300" width="180" height="160" fill="#fff7ed" stroke="#f59e0b" stroke-width="3" rx="8"/>
+    <text x="840" y="335" font-family="Segoe UI, system-ui" font-size="16" fill="#92400e" font-weight="600" text-anchor="middle">Softmax</text>
+    <text x="840" y="360" font-family="Segoe UI, system-ui" font-size="12" fill="#78350f" font-weight="600" text-anchor="middle">转换公式:</text>
+    <text x="840" y="380" font-family="Segoe UI, system-ui" font-size="11" fill="#92400e" text-anchor="middle">P(i) = exp(logit[i])</text>
+    <text x="840" y="395" font-family="Segoe UI, system-ui" font-size="11" fill="#92400e" text-anchor="middle">/ Σ exp(logit[j])</text>
+    <text x="840" y="420" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="middle">• 归一化到 [0, 1]</text>
+    <text x="840" y="435" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="middle">• 所有概率之和 = 1.0</text>
+    
+    <!-- 流动箭头 -->
+    <line class="arrow-softmax" x1="730" y1="400" x2="750" y2="380"/>
+    <circle class="data-point">
+      <animateMotion dur="2s" repeatCount="indefinite" begin="0s" path="M 730,400 L 750,380"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    
+    <line class="arrow-softmax" x1="930" y1="380" x2="950" y2="400"/>
+    <circle class="data-point" fill="#f59e0b">
+      <animateMotion dur="2s" repeatCount="indefinite" begin="1s" path="M 930,380 L 950,400"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="1s"/>
+    </circle>
+  </g>
+
+  <!-- Batch 0 概率分布 -->
+  <g id="batch0-prob">
+    <rect class="box" x="980" y="210" width="570" height="350" fill="#ffffff"/>
+    <text class="dim-label" x="1265" y="240" font-size="20" fill="#92400e">Batch 0 - 概率分布 (Probabilities)</text>
+    
+    <!-- Token 0 Prob -->
+    <g id="prob-b0-t0">
+      <rect class="box-prob pulse-anim" x="1000" y="270" width="170" height="260"/>
+      <text x="1085" y="298" font-family="Segoe UI, system-ui" font-size="14" fill="#92400e" font-weight="600" text-anchor="middle">Token 0</text>
+      <text x="1085" y="316" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="middle">prob[0][0][0:50257]</text>
+      
+      <text x="1085" y="338" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" text-anchor="middle">前10个词汇的概率:</text>
+      <rect class="prob-bar" x="1010" y="348" width="7" height="8" fill="#ef4444"/>
+      <text x="1013.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.01</text>
+      <rect class="prob-bar" x="1027" y="348" width="80" height="8" fill="#10b981"/>
+      <text x="1067" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.85</text>
+      <rect class="prob-bar" x="1117" y="348" width="11" height="8" fill="#3b82f6"/>
+      <text x="1122.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.03</text>
+      
+      <text x="1085" y="378" font-family="Segoe UI, system-ui" font-size="9" fill="#92400e" font-style="italic" text-anchor="middle">... (中间省略 50,247 个值) ...</text>
+      
+      <text x="1085" y="400" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" text-anchor="middle">最后3个词汇的概率:</text>
+      <rect class="prob-bar" x="1010" y="410" width="4" height="8" fill="#6366f1"/>
+      <text x="1012" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.005</text>
+      <rect class="prob-bar" x="1024" y="410" width="6" height="8" fill="#6366f1"/>
+      <text x="1027" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.008</text>
+      <rect class="prob-bar" x="1040" y="410" width="4" height="8" fill="#6366f1"/>
+      <text x="1042" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.003</text>
+      
+      <rect x="1005" y="438" width="160" height="38" fill="#fef3c7" rx="3" stroke="#f59e0b" stroke-width="1"/>
+      <text x="1085" y="453" font-family="Segoe UI, system-ui" font-size="11" fill="#92400e" font-weight="600" text-anchor="middle">形状: (50257,)</text>
+      <text x="1085" y="467" font-family="Segoe UI, system-ui" font-size="10" fill="#78350f" text-anchor="middle">范围: [0, 1]</text>
+      <text x="1085" y="481" font-family="Segoe UI, system-ui" font-size="10" fill="#059669" font-weight="600" text-anchor="middle">Σ = 1.0 ✓</text>
+      
+      <circle cx="1067" cy="348" r="4" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="1067" y="341" font-family="Segoe UI, system-ui" font-size="9" fill="#059669" font-weight="600" text-anchor="middle">最大概率</text>
+      <text x="1085" y="495" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" font-weight="600" text-anchor="middle">预测: argmax = 1</text>
+    </g>
+
+    <!-- Token 1 Prob -->
+    <g id="prob-b0-t1">
+      <rect class="box-prob" x="1200" y="270" width="170" height="260"/>
+      <text x="1285" y="298" font-family="Segoe UI, system-ui" font-size="14" fill="#92400e" font-weight="600" text-anchor="middle">Token 1</text>
+      <text x="1285" y="316" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="middle">prob[0][1][0:50257]</text>
+      
+      <text x="1285" y="338" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" text-anchor="middle">前10个词汇的概率:</text>
+      <rect class="prob-bar" x="1210" y="348" width="33" height="8" fill="#3b82f6"/>
+      <text x="1226.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.15</text>
+      <rect class="prob-bar" x="1253" y="348" width="9" height="8" fill="#ef4444"/>
+      <text x="1257.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.05</text>
+      <rect class="prob-bar" x="1272" y="348" width="73" height="8" fill="#10b981"/>
+      <text x="1308.5" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.72</text>
+      
+      <text x="1285" y="378" font-family="Segoe UI, system-ui" font-size="9" fill="#92400e" font-style="italic" text-anchor="middle">... (中间省略 50,247 个值) ...</text>
+      
+      <text x="1285" y="400" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" text-anchor="middle">最后3个词汇的概率:</text>
+      <rect class="prob-bar" x="1210" y="410" width="7" height="8" fill="#6366f1"/>
+      <text x="1213.5" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.03</text>
+      <rect class="prob-bar" x="1227" y="410" width="6" height="8" fill="#6366f1"/>
+      <text x="1230" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.02</text>
+      <rect class="prob-bar" x="1243" y="410" width="5" height="8" fill="#6366f1"/>
+      <text x="1245.5" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.01</text>
+      
+      <rect x="1205" y="438" width="160" height="38" fill="#fef3c7" rx="3" stroke="#f59e0b" stroke-width="1"/>
+      <text x="1285" y="453" font-family="Segoe UI, system-ui" font-size="11" fill="#92400e" font-weight="600" text-anchor="middle">形状: (50257,)</text>
+      <text x="1285" y="467" font-family="Segoe UI, system-ui" font-size="10" fill="#78350f" text-anchor="middle">范围: [0, 1]</text>
+      <text x="1285" y="481" font-family="Segoe UI, system-ui" font-size="10" fill="#059669" font-weight="600" text-anchor="middle">Σ = 1.0 ✓</text>
+      
+      <circle cx="1308.5" cy="348" r="4" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="1308.5" y="341" font-family="Segoe UI, system-ui" font-size="9" fill="#059669" font-weight="600" text-anchor="middle">最大概率</text>
+      <text x="1285" y="495" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" font-weight="600" text-anchor="middle">预测: argmax = 2</text>
+    </g>
+
+    <!-- Token 2 Prob -->
+    <g id="prob-b0-t2">
+      <rect class="box-prob pulse-anim" x="1370" y="270" width="170" height="260"/>
+      <text x="1455" y="298" font-family="Segoe UI, system-ui" font-size="14" fill="#92400e" font-weight="600" text-anchor="middle">Token 2</text>
+      <text x="1455" y="316" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="middle">prob[0][2][0:50257]</text>
+      
+      <text x="1455" y="338" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" text-anchor="middle">前10个词汇的概率:</text>
+      <rect class="prob-bar" x="1380" y="348" width="6" height="8" fill="#ef4444"/>
+      <text x="1383" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.008</text>
+      <rect class="prob-bar" x="1396" y="348" width="42" height="8" fill="#3b82f6"/>
+      <text x="1417" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.28</text>
+      <rect class="prob-bar" x="1448" y="348" width="82" height="8" fill="#10b981"/>
+      <text x="1489" y="361" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.76</text>
+      
+      <text x="1455" y="378" font-family="Segoe UI, system-ui" font-size="9" fill="#92400e" font-style="italic" text-anchor="middle">... (中间省略 50,247 个值) ...</text>
+      
+      <text x="1455" y="400" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" text-anchor="middle">最后3个词汇的概率:</text>
+      <rect class="prob-bar" x="1380" y="410" width="4" height="8" fill="#6366f1"/>
+      <text x="1382" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.002</text>
+      <rect class="prob-bar" x="1394" y="410" width="5" height="8" fill="#6366f1"/>
+      <text x="1396.5" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.003</text>
+      <rect class="prob-bar" x="1409" y="410" width="7" height="8" fill="#6366f1"/>
+      <text x="1412.5" y="423" font-family="Segoe UI, system-ui" font-size="8" fill="#92400e" text-anchor="middle">0.004</text>
+      
+      <rect x="1375" y="438" width="160" height="38" fill="#fef3c7" rx="3" stroke="#f59e0b" stroke-width="1"/>
+      <text x="1455" y="453" font-family="Segoe UI, system-ui" font-size="11" fill="#92400e" font-weight="600" text-anchor="middle">形状: (50257,)</text>
+      <text x="1455" y="467" font-family="Segoe UI, system-ui" font-size="10" fill="#78350f" text-anchor="middle">范围: [0, 1]</text>
+      <text x="1455" y="481" font-family="Segoe UI, system-ui" font-size="10" fill="#059669" font-weight="600" text-anchor="middle">Σ = 1.0 ✓</text>
+      
+      <circle cx="1489" cy="348" r="4" fill="#10b981">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="1489" y="341" font-family="Segoe UI, system-ui" font-size="9" fill="#059669" font-weight="600" text-anchor="middle">最大概率</text>
+      <text x="1455" y="495" font-family="Segoe UI, system-ui" font-size="10" fill="#92400e" font-weight="600" text-anchor="middle">预测: argmax = 2</text>
+    </g>
+  </g>
+
+  <!-- Batch 1 简化展示 -->
+  <g id="batch1-group">
+    <rect class="box" x="50" y="580" width="680" height="180" fill="#ffffff"/>
+    <text class="dim-label" x="390" y="610" font-size="18">Batch 1 - Logits (简化展示)</text>
+    
+    <g id="batch1-tokens">
+      <rect class="box-logits" x="80" y="630" width="150" height="110"/>
+      <text class="label" x="155" y="655" font-size="12" fill="#1e40af" font-weight="600">Token 0</text>
+      <text class="label" x="155" y="675" font-size="10" fill="#475569">logits[1][0][:]</text>
+      <text class="label" x="155" y="695" font-size="9" fill="#64748b">[3.2, -1.5, 2.7, ...]</text>
+      <text class="label" x="155" y="715" font-size="9" fill="#64748b">形状: (50257,)</text>
+      <text class="label" x="155" y="730" font-size="9" fill="#64748b">范围: (-∞, +∞)</text>
+      
+      <rect class="box-logits" x="260" y="630" width="150" height="110"/>
+      <text class="label" x="335" y="655" font-size="12" fill="#1e40af" font-weight="600">Token 1</text>
+      <text class="label" x="335" y="675" font-size="10" fill="#475569">logits[1][1][:]</text>
+      <text class="label" x="335" y="695" font-size="9" fill="#64748b">[-0.8, 4.6, 1.3, ...]</text>
+      <text class="label" x="335" y="715" font-size="9" fill="#64748b">形状: (50257,)</text>
+      <text class="label" x="335" y="730" font-size="9" fill="#64748b">范围: (-∞, +∞)</text>
+      
+      <rect class="box-logits" x="440" y="630" width="150" height="110"/>
+      <text class="label" x="515" y="655" font-size="12" fill="#1e40af" font-weight="600">Token 2</text>
+      <text class="label" x="515" y="675" font-size="10" fill="#475569">logits[1][2][:]</text>
+      <text class="label" x="515" y="695" font-size="9" fill="#64748b">[2.9, -1.2, 5.4, ...]</text>
+      <text class="label" x="515" y="715" font-size="9" fill="#64748b">形状: (50257,)</text>
+      <text class="label" x="515" y="730" font-size="9" fill="#64748b">范围: (-∞, +∞)</text>
+      
+      <text class="label" x="630" y="695" font-size="14" fill="#64748b">...</text>
+      <text class="label" x="630" y="715" font-size="11" fill="#64748b">Token 3, 4</text>
+    </g>
+  </g>
+
+  <!-- Batch 1 概率分布（简化） -->
+  <g id="batch1-prob">
+    <rect class="box" x="980" y="580" width="570" height="180" fill="#ffffff"/>
+    <text class="dim-label" x="1265" y="610" font-size="18" fill="#92400e">Batch 1 - 概率分布 (简化展示)</text>
+    
+    <rect class="box-prob" x="1010" y="630" width="150" height="110"/>
+    <text class="label" x="1085" y="655" font-size="12" fill="#92400e" font-weight="600">Token 0</text>
+    <text class="label" x="1085" y="675" font-size="10" fill="#78350f">prob[1][0][:]</text>
+    <text class="label" x="1085" y="695" font-size="9" fill="#92400e">[0.08, 0.02, 0.18, ...]</text>
+    <text class="label" x="1085" y="715" font-size="9" fill="#78350f">形状: (50257,)</text>
+    <text class="label" x="1085" y="730" font-size="9" fill="#059669">Σ = 1.0 ✓</text>
+    
+    <rect class="box-prob" x="1190" y="630" width="150" height="110"/>
+    <text class="label" x="1265" y="655" font-size="12" fill="#92400e" font-weight="600">Token 1</text>
+    <text class="label" x="1265" y="675" font-size="10" fill="#78350f">prob[1][1][:]</text>
+    <text class="label" x="1265" y="695" font-size="9" fill="#92400e">[0.12, 0.04, 0.76, ...]</text>
+    <text class="label" x="1265" y="715" font-size="9" fill="#78350f">形状: (50257,)</text>
+    <text class="label" x="1265" y="730" font-size="9" fill="#059669">Σ = 1.0 ✓</text>
+    
+    <rect class="box-prob" x="1370" y="630" width="150" height="110"/>
+    <text class="label" x="1445" y="655" font-size="12" fill="#92400e" font-weight="600">Token 2</text>
+    <text class="label" x="1445" y="675" font-size="10" fill="#78350f">prob[1][2][:]</text>
+    <text class="label" x="1445" y="695" font-size="9" fill="#92400e">[0.15, 0.03, 0.68, ...]</text>
+    <text class="label" x="1445" y="715" font-size="9" fill="#78350f">形状: (50257,)</text>
+    <text class="label" x="1445" y="730" font-size="9" fill="#059669">Σ = 1.0 ✓</text>
+    
+    <text class="label" x="1560" y="695" font-size="14" fill="#64748b">...</text>
+    <text class="label" x="1560" y="715" font-size="11" fill="#64748b">Token 3, 4</text>
+  </g>
+
+  <!-- batch_size 标注 -->
+  <line x1="30" y1="280" x2="30" y2="760" stroke="#3b82f6" stroke-width="4" stroke-dasharray="6,6"/>
+  <text class="dim-label" x="15" y="520" writing-mode="tb" transform="rotate(-90, 15, 520)" font-size="18">batch_size = 2</text>
+
+  <!-- 详细说明区域 -->
+  <rect class="box" x="50" y="780" width="1500" height="210" fill="#ffffff"/>
+  <text class="subtitle" x="800" y="810" font-size="18" font-weight="700">关键概念说明</text>
+  
+  <!-- 三列说明 -->
+  <g>
+    <rect x="80" y="830" width="450" height="150" fill="#eff6ff" rx="6" stroke="#3b82f6" stroke-width="2"/>
+    <text x="305" y="855" font-family="Segoe UI, system-ui" font-size="14" font-weight="700" fill="#1e40af" text-anchor="middle">Logits (未归一化分数)</text>
+    <text x="100" y="880" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="start">• 形状: (batch_size, seq_len, vocab_size)</text>
+    <text x="100" y="900" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="start">• 数值范围: (-∞, +∞)，可以是任意实数</text>
+    <text x="100" y="920" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="start">• 值越大表示该token出现在该位置的可能性越高</text>
+    <text x="100" y="940" font-family="Segoe UI, system-ui" font-size="11" fill="#475569" text-anchor="start">• 示例: logits[0][2][100] = 6.5</text>
+    <text x="100" y="960" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="start">  表示Batch 0的Token 2位置，词汇表索引100</text>
+    <text x="100" y="975" font-family="Segoe UI, system-ui" font-size="10" fill="#64748b" text-anchor="start">  的token的logit值为6.5</text>
+  </g>
+  
+  <g>
+    <rect x="570" y="830" width="450" height="150" fill="#fff7ed" rx="6" stroke="#f59e0b" stroke-width="2"/>
+    <text x="795" y="855" font-family="Segoe UI, system-ui" font-size="14" font-weight="700" fill="#92400e" text-anchor="middle">Softmax 转换</text>
+    <text x="590" y="880" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 公式: P(i) = exp(logit[i]) / Σⱼ exp(logit[j])</text>
+    <text x="590" y="900" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 将logits转换为概率分布，所有概率之和 = 1.0</text>
+    <text x="590" y="920" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 数值范围: [0, 1]</text>
+    <text x="590" y="940" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 用于计算损失（Cross-Entropy Loss）</text>
+    <text x="590" y="960" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 用于采样预测下一个token</text>
+    <text x="590" y="975" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">  （Top-K, Top-P, 温度采样等）</text>
+  </g>
+  
+  <g>
+    <rect x="1060" y="830" width="450" height="150" fill="#fef3c7" rx="6" stroke="#f59e0b" stroke-width="2"/>
+    <text x="1285" y="855" font-family="Segoe UI, system-ui" font-size="14" font-weight="700" fill="#92400e" text-anchor="middle">Probabilities (概率分布)</text>
+    <text x="1080" y="880" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 形状: (batch_size, seq_len, vocab_size)</text>
+    <text x="1080" y="900" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 每个位置的vocab_size个概率之和 = 1.0</text>
+    <text x="1080" y="920" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 预测token: argmax(prob[i][j])</text>
+    <text x="1080" y="940" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">  找到概率最大的token索引</text>
+    <text x="1080" y="960" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">• 采样策略: Top-K（取前K个）</text>
+    <text x="1080" y="975" font-family="Segoe UI, system-ui" font-size="11" fill="#78350f" text-anchor="start">  Top-P（累积概率）</text>
+  </g>
+</svg>
