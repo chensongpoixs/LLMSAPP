@@ -134,13 +134,18 @@ pip install matplotlib
 
 ![2. 预训练阶段](/LLM/training_stage_pretrain.svg)
 
+[3. 交叉熵损失函数 torch.nn.funcational.cross_entropy(...)](06.Transformer架构神秘/交叉熵损失函数.md)
+
+[4、  Dataset与Dataloader的关系](06.Transformer架构神秘/Dataset与Dataloader的关系.md)
 
 [5、注意力机制](/05.注意力机制/README.md)
 
 
 [6、Transformer神秘架构](/06.Transformer架构神秘/README.md)
 
-[7. 交叉熵损失函数 torch.nn.funcational.cross_entropy(...)]()
+
+
+
 
 
 
