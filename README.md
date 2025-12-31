@@ -147,7 +147,10 @@ pip install matplotlib
 [7、每次训练批次做事情  损失函数 调整 深度学习的参数](/06.Transformer架构神秘/每次训练批次做事情.md)
 
 
+[8、评估大语言模型.md](/06.Transformer架构神秘/评估大语言模型.md)
 
+
+[9、优化器的设置](/06.Transformer架构神秘/优化器的设置.md)
 
 ### 3. 微调与应用
 
