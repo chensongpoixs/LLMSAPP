@@ -1,0 +1,346 @@
+<svg width="1400" height="800" viewBox="0 0 1400 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1400" height="800" fill="#f8fafc"/>
+
+  <!-- 样式定义 -->
+  <style>
+    .box {
+      fill: #ffffff;
+      stroke: #94a3b8;
+      stroke-width: 2;
+      rx: 8;
+      ry: 8;
+    }
+    .box-highlight {
+      fill: #dbeafe;
+      stroke: #3b82f6;
+      stroke-width: 2.5;
+      rx: 8;
+      ry: 8;
+    }
+    .box-loss {
+      fill: #fee2e2;
+      stroke: #ef4444;
+      stroke-width: 2.5;
+      rx: 8;
+      ry: 8;
+    }
+    .box-update {
+      fill: #dcfce7;
+      stroke: #22c55e;
+      stroke-width: 2.5;
+      rx: 8;
+      ry: 8;
+    }
+    .title {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      fill: #0f172a;
+      text-anchor: middle;
+    }
+    .subtitle {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      fill: #64748b;
+      text-anchor: middle;
+    }
+    .arrow {
+      stroke: #64748b;
+      stroke-width: 2.5;
+      marker-end: url(#arrowhead);
+    }
+    .arrow-back {
+      stroke: #3b82f6;
+      stroke-width: 2.5;
+      stroke-dasharray: 5,5;
+      marker-end: url(#arrowhead-blue);
+    }
+    .arrow-label {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11px;
+      fill: #6b7280;
+      text-anchor: middle;
+      font-weight: 500;
+    }
+    .arrow-label-back {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11px;
+      fill: #3b82f6;
+      text-anchor: middle;
+      font-weight: 600;
+    }
+    
+    /* 动画效果 */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 3px currentColor); }
+      50% { filter: drop-shadow(0 0 8px currentColor); }
+    }
+    @keyframes flow {
+      0% { offset-distance: 0%; opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0.3; }
+    }
+    
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .glow-blue {
+      animation: glow 2s ease-in-out infinite;
+      color: #3b82f6;
+    }
+    .glow-red {
+      animation: glow 2s ease-in-out infinite;
+      color: #ef4444;
+    }
+    .glow-green {
+      animation: glow 2s ease-in-out infinite;
+      color: #22c55e;
+    }
+    
+    .data-point {
+      fill: #3b82f6;
+      r: 5;
+    }
+    .gradient-point {
+      fill: #3b82f6;
+      r: 5;
+    }
+    .update-point {
+      fill: #22c55e;
+      r: 5;
+    }
+  </style>
+
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7"
+            refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#64748b" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7"
+            refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#3b82f6" />
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text class="title" x="700" y="30" font-size="20">监督学习训练流程图（动画版）</text>
+
+  <!-- 1. 输入训练数据 -->
+  <rect class="box pulse" x="50" y="80" width="180" height="100" />
+  <text class="title" x="140" y="110">输入训练数据</text>
+  <text class="subtitle" x="140" y="135">X: 特征数据</text>
+  <text class="subtitle" x="140" y="155">y: 真实标签</text>
+  <text class="subtitle" x="140" y="175">(X, y) 训练样本</text>
+
+  <!-- 箭头 1 -> 2 -->
+  <line class="arrow" x1="230" y1="130" x2="320" y2="130" />
+  <text class="arrow-label" x="275" y="120">前向传播</text>
+  <!-- 流动的数据点 -->
+  <circle class="data-point">
+    <animateMotion dur="2s" repeatCount="indefinite" begin="0s">
+      <mpath href="#arrow1-2"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+  </circle>
+  <path id="arrow1-2" d="M 230,130 L 320,130" fill="none" stroke="none"/>
+
+  <!-- 2. 神经网络模型 -->
+  <rect class="box-highlight glow-blue" x="320" y="60" width="200" height="140" />
+  <text class="title" x="420" y="95">神经网络模型</text>
+  <text class="subtitle" x="420" y="120">输入层 → 隐藏层 → 输出层</text>
+  <text class="subtitle" x="420" y="140">参数: W, b (权重和偏置)</text>
+  <text class="subtitle" x="420" y="160">激活函数: ReLU, Sigmoid等</text>
+  <text class="subtitle" x="420" y="180">输出: ŷ (预测值)</text>
+
+  <!-- 箭头 2 -> 3 -->
+  <line class="arrow" x1="520" y1="130" x2="620" y2="130" />
+  <text class="arrow-label" x="570" y="120">预测输出</text>
+  <!-- 流动的数据点 -->
+  <circle class="data-point">
+    <animateMotion dur="2s" repeatCount="indefinite" begin="2s">
+      <mpath href="#arrow2-3"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="2s"/>
+  </circle>
+  <path id="arrow2-3" d="M 520,130 L 620,130" fill="none" stroke="none"/>
+
+  <!-- 3. 计算损失函数 -->
+  <rect class="box-loss glow-red" x="620" y="60" width="200" height="140" />
+  <text class="title" x="720" y="95">计算损失函数</text>
+  <text class="subtitle" x="720" y="120">L(ŷ, y) = Loss</text>
+  <text class="subtitle" x="720" y="140">常见损失函数:</text>
+  <text class="subtitle" x="720" y="160">• MSE: (ŷ-y)²</text>
+  <text class="subtitle" x="720" y="180">• Cross-Entropy</text>
+
+  <!-- 箭头 3 -> 4 -->
+  <line class="arrow" x1="820" y1="130" x2="920" y2="130" />
+  <text class="arrow-label" x="870" y="120">损失值</text>
+  <!-- 流动的数据点 -->
+  <circle class="data-point" fill="#ef4444">
+    <animateMotion dur="2s" repeatCount="indefinite" begin="4s">
+      <mpath href="#arrow3-4"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="4s"/>
+  </circle>
+  <path id="arrow3-4" d="M 820,130 L 920,130" fill="none" stroke="none"/>
+
+  <!-- 4. 评估差距 -->
+  <rect class="box pulse" x="920" y="80" width="180" height="100" />
+  <text class="title" x="1010" y="110">评估差距</text>
+  <text class="subtitle" x="1010" y="135">误差 = |ŷ - y|</text>
+  <text class="subtitle" x="1010" y="155">准确率、精确率等</text>
+  <text class="subtitle" x="1010" y="175">判断是否收敛</text>
+
+  <!-- 判断条件：是否满足停止条件 -->
+  <polygon class="pulse" points="1100,250 1200,250 1200,300 1100,300" fill="#fff7ed" stroke="#f97316" stroke-width="2.5" rx="8" ry="8"/>
+  <text class="title" x="1150" y="275" font-size="14">是否满足停止条件?</text>
+  <text class="subtitle" x="1150" y="295" font-size="11">损失 &lt; 阈值 或 达到最大迭代次数</text>
+
+  <!-- 箭头 4 -> 判断 -->
+  <line class="arrow" x1="1010" y1="180" x2="1150" y2="250" />
+  <text class="arrow-label" x="1080" y="210">评估结果</text>
+  <!-- 流动的数据点 -->
+  <circle class="data-point">
+    <animateMotion dur="2s" repeatCount="indefinite" begin="6s">
+      <mpath href="#arrow4-judge"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="6s"/>
+  </circle>
+  <path id="arrow4-judge" d="M 1010,180 L 1150,250" fill="none" stroke="none"/>
+
+  <!-- 是：结束训练 -->
+  <rect class="box-update glow-green" x="1220" y="240" width="150" height="80" />
+  <text class="title" x="1295" y="270" font-size="14">结束训练</text>
+  <text class="subtitle" x="1295" y="295">保存模型参数</text>
+  <text class="subtitle" x="1295" y="315">模型已收敛</text>
+
+  <!-- 箭头 判断 -> 结束 -->
+  <line class="arrow" x1="1200" y1="275" x2="1220" y2="280" />
+  <text class="arrow-label" x="1210" y="270" font-size="10">是</text>
+  <!-- 流动的数据点（偶尔显示） -->
+  <circle class="update-point">
+    <animateMotion dur="1.5s" repeatCount="indefinite" begin="8s">
+      <mpath href="#arrow-judge-end"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="1.5s" repeatCount="indefinite" begin="8s"/>
+  </circle>
+  <path id="arrow-judge-end" d="M 1200,275 L 1220,280" fill="none" stroke="none"/>
+
+  <!-- 否：反向传播 -->
+  <rect class="box-highlight glow-blue" x="920" y="360" width="200" height="120" />
+  <text class="title" x="1020" y="395">反向传播</text>
+  <text class="subtitle" x="1020" y="420">Backpropagation</text>
+  <text class="subtitle" x="1020" y="440">计算梯度:</text>
+  <text class="subtitle" x="1020" y="460">∂L/∂W, ∂L/∂b</text>
+  <text class="subtitle" x="1020" y="480">链式法则求导</text>
+
+  <!-- 箭头 判断 -> 反向传播 -->
+  <line class="arrow" x1="1150" y1="300" x2="1020" y2="360" />
+  <text class="arrow-label" x="1085" y="330" font-size="10">否</text>
+  <!-- 流动的数据点 -->
+  <circle class="data-point">
+    <animateMotion dur="2s" repeatCount="indefinite" begin="6.5s">
+      <mpath href="#arrow-judge-backprop"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="6.5s"/>
+  </circle>
+  <path id="arrow-judge-backprop" d="M 1150,300 L 1020,360" fill="none" stroke="none"/>
+
+  <!-- 箭头 损失函数 -> 反向传播（反向传播路径） -->
+  <line class="arrow-back" x1="720" y1="200" x2="1020" y2="420" />
+  <text class="arrow-label-back" x="870" y="310">损失梯度</text>
+  <!-- 流动的梯度点 -->
+  <circle class="gradient-point">
+    <animateMotion dur="3s" repeatCount="indefinite" begin="4.5s">
+      <mpath href="#arrow-loss-backprop"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="4.5s"/>
+  </circle>
+  <path id="arrow-loss-backprop" d="M 720,200 L 1020,420" fill="none" stroke="none"/>
+
+  <!-- 5. 参数更新 -->
+  <rect class="box-update glow-green" x="620" y="360" width="200" height="120" />
+  <text class="title" x="720" y="395">参数更新</text>
+  <text class="subtitle" x="720" y="420">优化算法:</text>
+  <text class="subtitle" x="720" y="440">• SGD: W = W - α·∂L/∂W</text>
+  <text class="subtitle" x="720" y="460">• Adam, RMSprop等</text>
+  <text class="subtitle" x="720" y="470">学习率: α (learning rate)</text>
+
+  <!-- 箭头 反向传播 -> 参数更新 -->
+  <line class="arrow" x1="920" y1="420" x2="820" y2="420" />
+  <text class="arrow-label" x="870" y="410">梯度值</text>
+  <!-- 流动的数据点 -->
+  <circle class="gradient-point">
+    <animateMotion dur="2s" repeatCount="indefinite" begin="7.5s">
+      <mpath href="#arrow-backprop-update"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" begin="7.5s"/>
+  </circle>
+  <path id="arrow-backprop-update" d="M 920,420 L 820,420" fill="none" stroke="none"/>
+
+  <!-- 箭头 参数更新 -> 神经网络（循环） -->
+  <line class="arrow-back" x1="620" y1="420" x2="420" y2="200" />
+  <text class="arrow-label-back" x="520" y="310">更新后的参数</text>
+  <!-- 流动的参数更新点 -->
+  <circle class="update-point">
+    <animateMotion dur="3s" repeatCount="indefinite" begin="9.5s">
+      <mpath href="#arrow-update-network"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="9.5s"/>
+  </circle>
+  <path id="arrow-update-network" d="M 620,420 L 420,200" fill="none" stroke="none"/>
+
+  <!-- 循环箭头标注 -->
+  <path class="arrow-back" d="M 320,200 Q 200,200 200,130 Q 200,60 320,60" fill="none" />
+  <text class="arrow-label-back" x="260" y="50" font-size="10">迭代训练循环</text>
+  <!-- 循环流动点 -->
+  <circle class="update-point">
+    <animateMotion dur="4s" repeatCount="indefinite" begin="10.5s" path="M 320,200 Q 200,200 200,130 Q 200,60 320,60"/>
+    <animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="10.5s"/>
+  </circle>
+
+  <!-- 批次处理说明 -->
+  <rect class="box" x="50" y="520" width="300" height="120" />
+  <text class="title" x="200" y="550" font-size="14">批次处理 (Batch Processing)</text>
+  <text class="subtitle" x="200" y="575">将训练数据分成多个批次</text>
+  <text class="subtitle" x="200" y="595">每个批次: batch_size 个样本</text>
+  <text class="subtitle" x="200" y="615">一个Epoch = 遍历所有批次</text>
+  <text class="subtitle" x="200" y="635">多个Epoch直到收敛</text>
+
+  <!-- 优化器说明 -->
+  <rect class="box" x="400" y="520" width="300" height="120" />
+  <text class="title" x="550" y="550" font-size="14">优化器 (Optimizer)</text>
+  <text class="subtitle" x="550" y="575">SGD: 随机梯度下降</text>
+  <text class="subtitle" x="550" y="595">Adam: 自适应学习率</text>
+  <text class="subtitle" x="550" y="615">RMSprop: 均方根传播</text>
+  <text class="subtitle" x="550" y="635">学习率衰减策略</text>
+
+  <!-- 评估指标说明 -->
+  <rect class="box" x="750" y="520" width="300" height="120" />
+  <text class="title" x="900" y="550" font-size="14">评估指标 (Metrics)</text>
+  <text class="subtitle" x="900" y="575">损失值 (Loss): 越小越好</text>
+  <text class="subtitle" x="900" y="595">准确率 (Accuracy)</text>
+  <text class="subtitle" x="900" y="615">精确率、召回率、F1分数</text>
+  <text class="subtitle" x="900" y="635">验证集性能监控</text>
+
+  <!-- 关键公式区域 -->
+  <rect class="box" x="1100" y="520" width="250" height="120" />
+  <text class="title" x="1225" y="550" font-size="14">关键公式</text>
+  <text class="subtitle" x="1225" y="575" font-size="11">前向: ŷ = f(X; W, b)</text>
+  <text class="subtitle" x="1225" y="595" font-size="11">损失: L = Loss(ŷ, y)</text>
+  <text class="subtitle" x="1225" y="615" font-size="11">梯度: ∇W = ∂L/∂W</text>
+  <text class="subtitle" x="1225" y="635" font-size="11">更新: W ← W - α·∇W</text>
+
+  <!-- 底部说明 -->
+  <text class="subtitle" x="700" y="720" font-size="13" font-weight="600">
+    监督学习核心流程：数据输入 → 前向传播 → 计算损失 → 评估差距 → 反向传播 → 参数更新 → 迭代优化
+  </text>
+  <text class="subtitle" x="700" y="750" font-size="11" fill="#64748b">
+    蓝色虚线表示梯度反向传播，绿色表示参数更新，红色表示损失计算，橙色表示判断条件 | 动画展示数据流动过程
+  </text>
+</svg>

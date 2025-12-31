@@ -15,6 +15,9 @@
 
 
 
+
+![监督学习训练流程图](img/supervised_learning_flow.svg)
+
 ## 二、 AI前沿技术
 
 
@@ -29,6 +32,9 @@
 [Ollama是一个开源工具，旨在简化大型语言模型的本地化部署和使用，支持CPU/GPU混合计算，适用于隐私保护、成本控制等场景](https://ollama.com/)
 
 [MaxKB]()
+
+
+
 
 
 ## 三、 深度学习基本理论
