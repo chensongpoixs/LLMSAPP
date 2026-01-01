@@ -222,6 +222,13 @@ pip install matplotlib
 
 [斯坦福]()
 
+[1、模型评分](07.模型微调/模型评分.md)
+
+
+![](/img/LoRA工作原理流程图.svg)
+
+[2、LoRA(Low-Rank Adaptation)](LoRA模型微调.md)
+
 
 
 

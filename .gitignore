@@ -41,3 +41,4 @@ TestResults.xml
 /06.Transformer架构神秘/model.pth
 /06.Transformer架构神秘/model_opt.pth
 /07.模型微调/__pycache__
+/07.模型微调/model_sft.pth

@@ -173,7 +173,7 @@ def calc_loss(loader, model, device):
     for inputs, targets in loader:
         loss = calc_loss_batch(inputs, targets, model, device)
         total_loss += loss
-    return total_loss / num_batch
+    return total_loss // num_batch
 
 def print_train_info(model, tokenizer, device, prompt):
     model.eval()

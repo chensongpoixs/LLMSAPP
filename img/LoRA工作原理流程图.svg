@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+  <style>
+    .title { font-family: Arial, Helvetica, sans-serif; font-size:24px; font-weight:bold; fill:#0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; fill:#1e40af; }
+    .box { fill:#ffffff; stroke:#1f2937; stroke-width:1.5; }
+    .box-traditional { fill:#fee2e2; stroke:#dc2626; stroke-width:2; }
+    .box-lora { fill:#dbeafe; stroke:#2563eb; stroke-width:2; }
+    .step { font-family: Arial, sans-serif; font-size:14px; fill:#111827; }
+    .small { font-family: Arial, sans-serif; font-size:12px; fill:#475569; }
+    .formula { font-family: Consolas, monospace; font-size:13px; fill:#0b1220; }
+    .arrow { stroke:#0f172a; stroke-width:2.5; fill:none; marker-end:url(#arrowhead); }
+    .arrow-red { stroke:#dc2626; stroke-width:2.5; fill:none; marker-end:url(#arrowhead-red); }
+    .arrow-blue { stroke:#2563eb; stroke-width:2.5; fill:none; marker-end:url(#arrowhead-blue); }
+    .highlight { fill:#dc2626; font-weight:bold; }
+    .highlight-blue { fill:#2563eb; font-weight:bold; }
+    .matrix-label { font-family: Arial, sans-serif; font-size:11px; fill:#64748b; font-style:italic; }
+    
+    /* LoRA动画效果 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes highlight {
+      0%, 100% { fill: #2563eb; }
+      50% { fill: #60a5fa; }
+    }
+    @keyframes flow {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: 20; }
+    }
+    @keyframes matrixGlow {
+      0%, 100% { stroke: #3b82f6; stroke-width: 1; }
+      50% { stroke: #60a5fa; stroke-width: 2; }
+    }
+    
+    .lora-matrix-a {
+      animation: fadeIn 1s ease-in, pulse 2s ease-in-out 1s infinite;
+    }
+    .lora-matrix-b {
+      animation: fadeIn 1.2s ease-in, pulse 2s ease-in-out 1.2s infinite;
+    }
+    .lora-box {
+      animation: fadeIn 0.8s ease-in;
+    }
+    .lora-highlight {
+      animation: highlight 2s ease-in-out infinite;
+    }
+    .lora-arrow {
+      stroke-dasharray: 8,4;
+      stroke-dashoffset: 0;
+      animation: flow 1.5s linear infinite;
+    }
+    .lora-matrix-rect {
+      animation: matrixGlow 2s ease-in-out infinite;
+    }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#0f172a" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#dc2626" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="900" y="40" class="title" text-anchor="middle">LoRA（低秩适配）工作原理流程图</text>
+
+  <!-- 左侧：传统全量微调 -->
+  <g transform="translate(50,80)">
+    <rect x="0" y="0" width="800" height="500" class="box-traditional" rx="8" />
+    <text x="400" y="30" class="subtitle" text-anchor="middle">传统全量微调（Full Fine-Tuning）</text>
+    
+    <!-- 原始权重矩阵 -->
+    <g transform="translate(50,60)">
+      <text x="0" y="0" class="step">1. 原始预训练权重矩阵 <tspan class="highlight">W₀</tspan></text>
+      <rect x="0" y="15" width="200" height="120" fill="#f8fafc" stroke="#cbd5e1" rx="4"/>
+      <text x="100" y="85" class="matrix-label" text-anchor="middle">W₀</text>
+      <text x="100" y="105" class="small" text-anchor="middle">(d × d)</text>
+      <text x="0" y="150" class="small">参数量：<tspan class="highlight">d²</tspan>（例如：4096² ≈ 16.7M）</text>
+    </g>
+
+    <!-- 前向传播 -->
+    <g transform="translate(300,60)">
+      <text x="0" y="0" class="step">2. 前向传播</text>
+      <text x="0" y="25" class="formula">y = <tspan class="highlight">W₀</tspan> × x</text>
+      <rect x="0" y="40" width="80" height="40" fill="#fff" stroke="#cbd5e1" rx="4"/>
+      <text x="40" y="65" class="small" text-anchor="middle">输入 x</text>
+      <text x="100" y="65" class="formula">→</text>
+      <rect x="140" y="40" width="80" height="40" fill="#fff" stroke="#cbd5e1" rx="4"/>
+      <text x="180" y="65" class="small" text-anchor="middle">输出 y</text>
+    </g>
+
+    <!-- 参数更新 -->
+    <g transform="translate(50,220)">
+      <text x="0" y="0" class="step">3. 反向传播 &amp; 参数更新</text>
+      <text x="0" y="25" class="formula"><tspan class="highlight">W₀</tspan> := <tspan class="highlight">W₀</tspan> - α × ∇<tspan class="highlight">W₀</tspan></text>
+      <text x="0" y="50" class="small">需要更新 <tspan class="highlight">所有参数</tspan>（d² 个）</text>
+    </g>
+
+    <!-- 显存和参数量 -->
+    <g transform="translate(50,320)">
+      <text x="0" y="0" class="step">4. 资源消耗</text>
+      <text x="0" y="25" class="small">• 显存需求：<tspan class="highlight">100G+</tspan>（7B模型）</text>
+      <text x="0" y="45" class="small">• 参数量：<tspan class="highlight">全部参数</tspan>需要更新</text>
+      <text x="0" y="65" class="small">• 存储：需要保存完整模型权重</text>
+    </g>
+  </g>
+
+  <!-- 右侧：LoRA微调 -->
+  <g transform="translate(950,80)">
+    <rect x="0" y="0" width="800" height="500" class="box-lora lora-box" rx="8" />
+    <text x="400" y="30" class="subtitle" text-anchor="middle">LoRA微调（Low-Rank Adaptation）</text>
+    
+    <!-- 原始权重 + LoRA增量 -->
+    <g transform="translate(50,60)">
+      <text x="0" y="0" class="step">1. 原始权重 <tspan class="highlight-blue">W₀</tspan>（冻结）+ LoRA增量</text>
+      
+      <!-- 原始权重 -->
+      <g transform="translate(0,20)">
+        <rect x="0" y="0" width="120" height="80" fill="#f8fafc" stroke="#cbd5e1" rx="4"/>
+        <text x="60" y="50" class="matrix-label" text-anchor="middle">W₀</text>
+        <text x="60" y="70" class="small" text-anchor="middle">(d × d)</text>
+        <text x="0" y="95" class="small">冻结，不更新</text>
+      </g>
+
+      <!-- LoRA矩阵A和B -->
+      <g transform="translate(200,20)">
+        <text x="0" y="0" class="small">LoRA分解：</text>
+        <rect x="0" y="15" width="60" height="80" fill="#dbeafe" class="lora-matrix-rect" rx="4"/>
+        <text x="30" y="55" class="matrix-label lora-matrix-b" text-anchor="middle">B</text>
+        <text x="30" y="75" class="small lora-matrix-b" text-anchor="middle">(d × r)</text>
+        <text x="80" y="55" class="formula">×</text>
+        <rect x="110" y="15" width="60" height="80" fill="#dbeafe" class="lora-matrix-rect" rx="4"/>
+        <text x="140" y="55" class="matrix-label lora-matrix-a" text-anchor="middle">A</text>
+        <text x="140" y="75" class="small lora-matrix-a" text-anchor="middle">(r × d)</text>
+        <text x="0" y="110" class="small">参数量：<tspan class="highlight-blue lora-highlight">2×d×r</tspan></text>
+        <text x="0" y="130" class="small">（r &lt;&lt; d，例如：r=8, d=4096）</text>
+        <text x="0" y="150" class="small">总参数量：<tspan class="highlight-blue lora-highlight">2×4096×8 = 65,536</tspan></text>
+        <text x="0" y="170" class="small">相比全量：<tspan class="highlight-blue lora-highlight">65,536 / 16,777,216 ≈ 0.39%</tspan></text>
+      </g>
+    </g>
+
+    <!-- 前向传播 -->
+    <g transform="translate(50,220)">
+      <text x="0" y="0" class="step">2. 前向传播（增量方式）</text>
+      <text x="0" y="25" class="formula">y = <tspan class="highlight-blue">W₀</tspan> × x + <tspan class="highlight-blue lora-highlight">ΔW</tspan> × x</text>
+      <text x="0" y="45" class="formula">y = <tspan class="highlight-blue">W₀</tspan> × x + (<tspan class="highlight-blue lora-highlight">α/r</tspan>) × <tspan class="highlight-blue lora-highlight">B</tspan> × <tspan class="highlight-blue lora-highlight">A</tspan> × x</text>
+      <text x="0" y="70" class="small">其中：<tspan class="highlight-blue lora-highlight">ΔW = (α/r) × B × A</tspan></text>
+      <text x="0" y="90" class="small">• <tspan class="highlight-blue lora-highlight">A</tspan>矩阵：降维（d → r）</text>
+      <text x="0" y="110" class="small">• <tspan class="highlight-blue lora-highlight">B</tspan>矩阵：升维（r → d）</text>
+      <text x="0" y="130" class="small">• <tspan class="highlight-blue lora-highlight">r</tspan>：秩（rank），通常 r &lt;&lt; d</text>
+      <text x="0" y="150" class="small">• <tspan class="highlight-blue lora-highlight">α</tspan>：缩放因子，平衡增量变化</text>
+    </g>
+
+    <!-- 参数更新 -->
+    <g transform="translate(50,400)">
+      <text x="0" y="0" class="step">3. 反向传播 &amp; 参数更新</text>
+      <text x="0" y="25" class="formula"><tspan class="highlight-blue lora-highlight">A</tspan> := <tspan class="highlight-blue lora-highlight">A</tspan> - α × ∇<tspan class="highlight-blue lora-highlight">A</tspan></text>
+      <text x="0" y="45" class="formula"><tspan class="highlight-blue lora-highlight">B</tspan> := <tspan class="highlight-blue lora-highlight">B</tspan> - α × ∇<tspan class="highlight-blue lora-highlight">B</tspan></text>
+      <text x="0" y="70" class="small">只更新 <tspan class="highlight-blue lora-highlight">A 和 B</tspan>（2×d×r 个参数）</text>
+      <text x="0" y="90" class="small"><tspan class="highlight-blue">W₀</tspan> 保持不变（冻结）</text>
+    </g>
+  </g>
+
+  <!-- 中间对比箭头 -->
+  <path class="arrow lora-arrow" d="M850 330 L950 330" />
+
+  <!-- 下方：详细流程 -->
+  <g transform="translate(50,620)">
+    <rect x="0" y="0" width="1700" height="550" class="box" rx="8" />
+    <text x="850" y="30" class="subtitle" text-anchor="middle">LoRA详细工作流程</text>
+
+    <!-- 步骤1：初始化 -->
+    <g transform="translate(50,60)">
+      <rect x="0" y="0" width="380" height="220" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" rx="6"/>
+      <text x="190" y="25" class="step" text-anchor="middle" font-weight="bold">步骤 1：初始化</text>
+      <text x="10" y="50" class="small">1. 加载预训练模型权重 <tspan class="highlight-blue">W₀</tspan>（冻结）</text>
+      <text x="10" y="75" class="small">2. 初始化LoRA矩阵：</text>
+      <text x="20" y="100" class="formula">• <tspan class="highlight-blue lora-highlight">A</tspan>：随机初始化（r × d）</text>
+      <text x="20" y="125" class="formula">• <tspan class="highlight-blue lora-highlight">B</tspan>：初始化为零矩阵（d × r）</text>
+      <text x="10" y="155" class="small">3. 设置超参数：</text>
+      <text x="20" y="180" class="formula">• 秩 <tspan class="highlight-blue lora-highlight">r</tspan>：通常 4, 8, 16, 32</text>
+      <text x="20" y="200" class="formula">• 缩放因子 <tspan class="highlight-blue lora-highlight">α</tspan>：通常等于 r</text>
+    </g>
+
+    <!-- 步骤2：前向传播 -->
+    <g transform="translate(460,60)">
+      <rect x="0" y="0" width="380" height="220" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" rx="6"/>
+      <text x="190" y="25" class="step" text-anchor="middle" font-weight="bold">步骤 2：前向传播</text>
+      <text x="10" y="50" class="formula">输入：x (d × 1)</text>
+      <text x="10" y="75" class="formula">1. 通过原始权重：<tspan class="highlight-blue">y₀</tspan> = <tspan class="highlight-blue">W₀</tspan> × x</text>
+      <text x="10" y="100" class="formula">2. 通过LoRA增量：<tspan class="highlight-blue lora-highlight">Δy</tspan> = (<tspan class="highlight-blue lora-highlight">α/r</tspan>) × <tspan class="highlight-blue lora-highlight">B</tspan> × <tspan class="highlight-blue lora-highlight">A</tspan> × x</text>
+      <text x="10" y="125" class="formula">3. 最终输出：<tspan class="highlight-blue lora-highlight">y</tspan> = <tspan class="highlight-blue">y₀</tspan> + <tspan class="highlight-blue lora-highlight">Δy</tspan></text>
+      <text x="10" y="155" class="small">计算复杂度：O(d²) → O(d×r)，其中 r &lt;&lt; d</text>
+      <text x="10" y="180" class="small">例如：d=4096, r=8，计算量减少 <tspan class="highlight-blue">512倍</tspan></text>
+    </g>
+
+    <!-- 步骤3：反向传播 -->
+    <g transform="translate(870,60)">
+      <rect x="0" y="0" width="380" height="220" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" rx="6"/>
+      <text x="190" y="25" class="step" text-anchor="middle" font-weight="bold">步骤 3：反向传播</text>
+      <text x="10" y="50" class="small">1. 计算损失函数：L(y, y_target)</text>
+      <text x="10" y="75" class="formula">2. 计算梯度：</text>
+      <text x="20" y="100" class="formula">∇<tspan class="highlight-blue lora-highlight">A</tspan> = ∂L/∂<tspan class="highlight-blue lora-highlight">A</tspan></text>
+      <text x="20" y="125" class="formula">∇<tspan class="highlight-blue lora-highlight">B</tspan> = ∂L/∂<tspan class="highlight-blue lora-highlight">B</tspan></text>
+      <text x="10" y="155" class="small">3. 只更新 <tspan class="highlight-blue lora-highlight">A</tspan> 和 <tspan class="highlight-blue lora-highlight">B</tspan> 的梯度</text>
+      <text x="10" y="180" class="small"><tspan class="highlight-blue">W₀</tspan> 的梯度不计算（冻结）</text>
+    </g>
+
+    <!-- 步骤4：参数更新 -->
+    <g transform="translate(1280,60)">
+      <rect x="0" y="0" width="380" height="220" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" rx="6"/>
+      <text x="190" y="25" class="step" text-anchor="middle" font-weight="bold">步骤 4：参数更新</text>
+      <text x="10" y="50" class="formula">使用优化器（如Adam）更新：</text>
+      <text x="20" y="75" class="formula"><tspan class="highlight-blue lora-highlight">A</tspan> := <tspan class="highlight-blue lora-highlight">A</tspan> - lr × ∇<tspan class="highlight-blue lora-highlight">A</tspan></text>
+      <text x="20" y="100" class="formula"><tspan class="highlight-blue lora-highlight">B</tspan> := <tspan class="highlight-blue lora-highlight">B</tspan> - lr × ∇<tspan class="highlight-blue lora-highlight">B</tspan></text>
+      <text x="10" y="135" class="small">只更新 <tspan class="highlight-blue lora-highlight">2×d×r</tspan> 个参数</text>
+      <text x="10" y="160" class="small">相比全量微调，参数量减少 <tspan class="highlight-blue">99%+</tspan></text>
+      <text x="10" y="185" class="small">显存需求降低 <tspan class="highlight-blue">60%~80%</tspan></text>
+    </g>
+
+    <!-- 箭头连接 -->
+    <path class="arrow-blue lora-arrow" d="M430 170 L460 170" />
+    <path class="arrow-blue lora-arrow" d="M840 170 L870 170" />
+    <path class="arrow-blue lora-arrow" d="M1250 170 L1280 170" />
+
+    <!-- 优势总结 -->
+    <g transform="translate(50,310)">
+      <rect x="0" y="0" width="1610" height="220" fill="#ecfdf5" stroke="#10b981" stroke-width="2" rx="6"/>
+      <text x="805" y="30" class="step" text-anchor="middle" font-weight="bold" font-size="16">LoRA核心优势</text>
+      
+      <g transform="translate(50,50)">
+        <text x="0" y="0" class="step" font-weight="bold">1. 参数量大幅减少</text>
+        <text x="0" y="25" class="small">• 只需训练 <tspan class="highlight-blue">0.1%~1%</tspan> 的参数（A和B矩阵）</text>
+        <text x="0" y="45" class="small">• 例如：7B模型，LoRA只需 <tspan class="highlight-blue">7M~70M</tspan> 可训练参数</text>
+      </g>
+
+      <g transform="translate(550,50)">
+        <text x="0" y="0" class="step" font-weight="bold">2. 显存需求降低</text>
+        <text x="0" y="25" class="small">• 显存降低 <tspan class="highlight-blue lora-highlight">60%~80%</tspan></text>
+        <text x="0" y="45" class="small">• 7B模型：从 <tspan class="highlight">100G+</tspan> 降至 <tspan class="highlight-blue lora-highlight">20G~40G</tspan></text>
+      </g>
+
+      <g transform="translate(1050,50)">
+        <text x="0" y="0" class="step" font-weight="bold">3. 训练效率提升</text>
+        <text x="0" y="25" class="small">• 训练速度提升 <tspan class="highlight-blue lora-highlight">2~3倍</tspan></text>
+        <text x="0" y="45" class="small">• 存储空间：只需保存 <tspan class="highlight-blue lora-highlight">A和B</tspan>，而非完整模型</text>
+      </g>
+
+      <g transform="translate(50,120)">
+        <text x="0" y="0" class="step" font-weight="bold">4. 模块化设计</text>
+        <text x="0" y="25" class="small">• 一个基础模型可以适配多个任务（只需切换不同的LoRA权重）</text>
+        <text x="0" y="45" class="small">• 易于部署和版本管理</text>
+      </g>
+
+      <g transform="translate(550,120)">
+        <text x="0" y="0" class="step" font-weight="bold">5. 数学原理</text>
+        <text x="0" y="25" class="small">• 基于低秩矩阵分解：<tspan class="highlight-blue lora-highlight">ΔW ≈ B × A</tspan></text>
+        <text x="0" y="45" class="small">• 训练"增量"而非替换原参数，保持预训练知识</text>
+      </g>
+
+      <g transform="translate(1050,120)">
+        <text x="0" y="0" class="step" font-weight="bold">6. 应用场景</text>
+        <text x="0" y="25" class="small">• 领域适配（医疗、法律、金融等）</text>
+        <text x="0" y="45" class="small">• 多任务学习、个性化模型</text>
+      </g>
+    </g>
+  </g>
+
+</svg>
