@@ -29,58 +29,7 @@
  
 
 
-
-
-一、 Transformer结构
-
-1. 分词器(Tokenzier)
-2. 注意力机制(MHA/GQA/稀疏注意力/Kvcache)
-3. FFN/残差连接/LN
-4. 位置编码(RoPE/ALiBi)
-5. 模型结构类型(encoder/decoder)
-6. 解码策略(TOP-K/top-p/DPO)
-
-二、 主流大模型
-
-1. BERT/GPT/Llama/Qwen/GLM/Baichuian/DeepSeek(发展， + 核心优化点)
-
-三、 预训练
-
-1. 预训练任务
-2. 数据筛选/配比
-3. 合成数据
-
-四、后训练
-
-1. SFT(PEFT方法)
-2. RLHF/DPO/RLAIF/SimPO等对齐方法
-
-五、Moe
-
-1. 结构原理
-2. 训练思路
-
-六、RAG&Agnet
-
-1. RAG流程
-2. LangChain
-3. Agent框架（ReAct）
-
-七、部署和加速
-
-1. vllm/flsh_attention
-2. Deepspeed
-3. 多端部署
-
-八、模型评估
-
-1. Benchmark
-2. 幻觉检测
-
-九、其它结构
-
-1. Mamba
-2. RWKV
+[大模型哪些东西](/大模型哪些东西.md)
 
 
  
