@@ -18,6 +18,7 @@
 
 ![监督学习训练流程图](img/supervised_learning_flow.svg)
 
+
 开源项目数据IE
 
 [斯坦福](https://github.com/tatsu-lab/stanford_alpaca)
@@ -25,6 +26,64 @@
 [Alpaca GPT4](alpaca_gpt4_data.json)
 
 [LIMA:](https://huggingface.co/datasets/GAIR/lima)
+ 
+
+
+
+
+一、 Transformer结构
+
+1. 分词器(Tokenzier)
+2. 注意力机制(MHA/GQA/稀疏注意力/Kvcache)
+3. FFN/残差连接/LN
+4. 位置编码(RoPE/ALiBi)
+5. 模型结构类型(encoder/decoder)
+6. 解码策略(TOP-K/top-p/DPO)
+
+二、 主流大模型
+
+1. BERT/GPT/Llama/Qwen/GLM/Baichuian/DeepSeek(发展， + 核心优化点)
+
+三、 预训练
+
+1. 预训练任务
+2. 数据筛选/配比
+3. 合成数据
+
+四、后训练
+
+1. SFT(PEFT方法)
+2. RLHF/DPO/RLAIF/SimPO等对齐方法
+
+五、Moe
+
+1. 结构原理
+2. 训练思路
+
+六、RAG&Agnet
+
+1. RAG流程
+2. LangChain
+3. Agent框架（ReAct）
+
+七、部署和加速
+
+1. vllm/flsh_attention
+2. Deepspeed
+3. 多端部署
+
+八、模型评估
+
+1. Benchmark
+2. 幻觉检测
+
+九、其它结构
+
+1. Mamba
+2. RWKV
+
+
+ 
 
 ## 二、 AI前沿技术
 
@@ -142,25 +201,15 @@ pip install matplotlib
 
 ![2. 预训练阶段](/LLM/training_stage_pretrain.svg)
 
-[3. 交叉熵损失函数 torch.nn.funcational.cross_entropy(...)](06.Transformer架构神秘/交叉熵损失函数.md)
-
-[4、  Dataset与Dataloader的关系](06.Transformer架构神秘/Dataset与Dataloader的关系.md)
 
 [5、注意力机制](/05.注意力机制/README.md)
 
 
 [6、Transformer神秘架构](/06.Transformer架构神秘/README.md)
 
-
-[7、每次训练批次做事情  损失函数 调整 深度学习的参数](/06.Transformer架构神秘/每次训练批次做事情.md)
-
-
-[8、评估大语言模型.md](/06.Transformer架构神秘/评估大语言模型.md)
+[7. 交叉熵损失函数 torch.nn.funcational.cross_entropy(...)]()
 
 
-[9、优化器的设置  两项技术 temperature 和 TOP-K合作关系](/06.Transformer架构神秘/优化器的设置.md)
-
-[10、 保存模型和加载模型](/06.Transformer架构神秘/保存模型和加载模型.md)
 
 ### 3. 微调与应用
 
@@ -170,6 +219,8 @@ pip install matplotlib
 
 ![](/LLM/5146781b-dba2-4d33-9a88-119768ac1eb9.png)
 
+
+[斯坦福]()
 
 
 
