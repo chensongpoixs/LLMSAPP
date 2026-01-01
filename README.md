@@ -18,6 +18,14 @@
 
 ![监督学习训练流程图](img/supervised_learning_flow.svg)
 
+开源项目数据IE
+
+[斯坦福](https://github.com/tatsu-lab/stanford_alpaca)
+
+[Alpaca GPT4](alpaca_gpt4_data.json)
+
+[LIMA:](https://huggingface.co/datasets/GAIR/lima)
+
 ## 二、 AI前沿技术
 
 
@@ -161,6 +169,9 @@ pip install matplotlib
 
 
 ![](/LLM/5146781b-dba2-4d33-9a88-119768ac1eb9.png)
+
+
+
 
 
 
