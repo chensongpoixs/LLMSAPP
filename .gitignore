@@ -42,3 +42,5 @@ TestResults.xml
 /06.Transformer架构神秘/model_opt.pth
 /07.模型微调/__pycache__
 /07.模型微调/model_sft.pth
+/08.知识蒸馏/local_distill_data.jsonl
+/08.知识蒸馏/math_problems_100.json

@@ -179,6 +179,11 @@ pip install matplotlib
 [2、LoRA(Low-Rank Adaptation)](LoRA模型微调.md)
 
 
+### 4、 知识蒸馏
+
+
+
+
 
 
 
