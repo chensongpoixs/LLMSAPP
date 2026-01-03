@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="2000" viewBox="0 0 2000 2000">
+  <style>
+    .title { font-family: Arial, Helvetica, sans-serif; font-size:28px; font-weight:bold; fill:#0f172a; }
+    .subtitle { font-family: Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; fill:#1e40af; }
+    .box { fill:#ffffff; stroke:#1f2937; stroke-width:1.5; }
+    .box-encoder { fill:#dbeafe; stroke:#2563eb; stroke-width:2; }
+    .box-decoder { fill:#fef3c7; stroke:#f59e0b; stroke-width:2; }
+    .box-input { fill:#ecfdf5; stroke:#10b981; stroke-width:2; }
+    .box-output { fill:#fce7f3; stroke:#ec4899; stroke-width:2; }
+    .step { font-family: Arial, sans-serif; font-size:14px; fill:#111827; }
+    .small { font-family: Arial, sans-serif; font-size:12px; fill:#475569; }
+    .formula { font-family: Consolas, monospace; font-size:12px; fill:#0b1220; }
+    .arrow { stroke:#0f172a; stroke-width:2.5; fill:none; marker-end:url(#arrowhead); }
+    .arrow-blue { stroke:#2563eb; stroke-width:2.5; fill:none; marker-end:url(#arrowhead-blue); }
+    .arrow-orange { stroke:#f59e0b; stroke-width:2.5; fill:none; marker-end:url(#arrowhead-orange); }
+    .arrow-green { stroke:#10b981; stroke-width:2.5; fill:none; marker-end:url(#arrowhead-green); }
+    .highlight { fill:#dc2626; font-weight:bold; }
+    .highlight-blue { fill:#2563eb; font-weight:bold; }
+    .highlight-orange { fill:#f59e0b; font-weight:bold; }
+    .module-title { font-family: Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; fill:#0f172a; }
+    
+    /* Transformer动画效果 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    @keyframes flow {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: 20; }
+    }
+    @keyframes highlight {
+      0%, 100% { fill: #2563eb; font-weight: bold; }
+      50% { fill: #1d4ed8; font-weight: bold; }
+    }
+    @keyframes encoderFlow {
+      0% { stroke-dashoffset: 0; stroke-width: 2.5; }
+      50% { stroke-width: 3.5; }
+      100% { stroke-dashoffset: 20; stroke-width: 2.5; }
+    }
+    @keyframes highlightOrange {
+      0%, 100% { fill: #f59e0b; }
+      50% { fill: #fbbf24; }
+    }
+    @keyframes highlightGreen {
+      0%, 100% { fill: #10b981; }
+      50% { fill: #34d399; }
+    }
+    @keyframes dataFlow {
+      0% { opacity: 0; transform: translateX(-10px) scale(0.8); }
+      50% { opacity: 1; transform: translateX(0) scale(1.2); }
+      100% { opacity: 0; transform: translateX(10px) scale(0.8); }
+    }
+    @keyframes particleFlow {
+      0% { opacity: 0; r: 3; }
+      30% { opacity: 1; r: 6; }
+      70% { opacity: 1; r: 6; }
+      100% { opacity: 0; r: 3; }
+    }
+    @keyframes glowPulse {
+      0%, 100% { filter: drop-shadow(0 0 4px currentColor); opacity: 0.8; }
+      50% { filter: drop-shadow(0 0 12px currentColor); opacity: 1; }
+    }
+    @keyframes trailEffect {
+      0% { opacity: 0; stroke-width: 1; }
+      50% { opacity: 0.6; stroke-width: 3; }
+      100% { opacity: 0; stroke-width: 1; }
+    }
+    @keyframes compute {
+      0%, 100% { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; }
+      50% { fill: #bfdbfe; stroke: #2563eb; stroke-width: 3; }
+    }
+    @keyframes borderPulse {
+      0%, 100% { stroke-width: 2; stroke-opacity: 1; }
+      50% { stroke-width: 4; stroke-opacity: 0.8; }
+    }
+    @keyframes moduleGlow {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(37, 99, 235, 0.5)); }
+      50% { filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.9)); }
+    }
+    @keyframes attention {
+      0%, 100% { stroke-width: 2; opacity: 1; }
+      50% { stroke-width: 3; opacity: 0.8; }
+    }
+    @keyframes layerSequence {
+      0% { opacity: 0.4; transform: scale(0.98); }
+      25% { opacity: 1; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1); }
+      75% { opacity: 0.8; transform: scale(0.99); }
+      100% { opacity: 0.4; transform: scale(0.98); }
+    }
+    @keyframes moduleActivate {
+      0% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.02); filter: brightness(1.1); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+    @keyframes textPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+    @keyframes sequentialGlow {
+      0% { opacity: 0.6; filter: drop-shadow(0 0 2px currentColor); }
+      25% { opacity: 1; filter: drop-shadow(0 0 8px currentColor); }
+      50% { opacity: 1; filter: drop-shadow(0 0 8px currentColor); }
+      75% { opacity: 0.8; filter: drop-shadow(0 0 4px currentColor); }
+      100% { opacity: 0.6; filter: drop-shadow(0 0 2px currentColor); }
+    }
+    @keyframes boxGlow {
+      0%, 100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.3); }
+      50% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.6); }
+    }
+    
+    .input-animate {
+      animation: fadeIn 1s ease-in, pulse 3s ease-in-out 1s infinite;
+    }
+    .encoder-animate {
+      animation: fadeIn 1.5s ease-in, layerSequence 6s ease-in-out 1.5s infinite;
+    }
+    .decoder-animate {
+      animation: fadeIn 2s ease-in, layerSequence 6s ease-in-out 2s infinite;
+    }
+    .output-animate {
+      animation: fadeIn 2.5s ease-in, pulse 2s ease-in-out 2.5s infinite;
+    }
+    .arrow-flow {
+      stroke-dasharray: 8,4;
+      animation: flow 2s linear infinite;
+      filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+    }
+    .attention-module {
+      animation: compute 1.5s ease-in-out infinite, borderPulse 1.5s ease-in-out infinite, moduleActivate 3s ease-in-out infinite;
+    }
+    .module-title-animate {
+      animation: textPulse 2s ease-in-out infinite;
+    }
+    .formula-animate {
+      animation: sequentialGlow 4s ease-in-out infinite;
+    }
+    .step-box-animate {
+      animation: moduleActivate 2.5s ease-in-out infinite;
+    }
+    .encoder-arrow {
+      stroke-dasharray: 10,5;
+      animation: encoderFlow 1.5s linear infinite;
+      filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.6));
+    }
+    .encoder-data-flow {
+      animation: particleFlow 1.5s ease-in-out infinite, glowPulse 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px currentColor);
+    }
+    .encoder-layer-box {
+      animation: borderPulse 2s ease-in-out infinite;
+    }
+    .data-trail {
+      stroke-dasharray: 2,8;
+      animation: trailEffect 1.5s ease-in-out infinite;
+    }
+    .data-particle {
+      animation: particleFlow 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+    .data-point {
+      animation: dataFlow 2s ease-in-out infinite;
+    }
+    .highlight-encoder {
+      animation: highlight 1.5s ease-in-out infinite;
+      font-size: 13px;
+    }
+    .highlight-decoder {
+      animation: highlightOrange 2s ease-in-out infinite;
+    }
+    .highlight-input {
+      animation: highlightGreen 2s ease-in-out infinite;
+    }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#0f172a" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#2563eb" />
+    </marker>
+    <marker id="arrowhead-orange" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#f59e0b" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="1000" y="40" class="title" text-anchor="middle">Transformer 架构流程图</text>
+
+  <!-- 输入部分 -->
+  <g transform="translate(50,80)">
+    <rect x="0" y="0" width="900" height="180" class="box-input input-animate" rx="8" />
+    <text x="450" y="30" class="subtitle" text-anchor="middle">输入处理（Input Processing）</text>
+    
+    <!-- 输入序列 -->
+    <g transform="translate(50,50)">
+      <text x="0" y="0" class="step">1. 输入序列（Input Sequence）</text>
+      <rect x="0" y="15" width="200" height="40" fill="#ffffff" stroke="#cbd5e1" rx="4"/>
+      <text x="100" y="40" class="small" text-anchor="middle">["我", "爱", "学习"]</text>
+      <text x="0" y="70" class="small">形状：(seq_len, )</text>
+    </g>
+
+    <!-- Tokenization -->
+    <g transform="translate(300,50)">
+      <text x="0" y="0" class="step">2. 分词（Tokenization）</text>
+      <rect x="0" y="15" width="200" height="40" fill="#ffffff" stroke="#cbd5e1" rx="4"/>
+      <text x="100" y="40" class="small" text-anchor="middle">[101, 234, 567]</text>
+      <text x="0" y="70" class="small">Token IDs</text>
+    </g>
+
+    <!-- Embedding -->
+    <g transform="translate(550,50)">
+      <text x="0" y="0" class="step">3. 词嵌入（Embedding）</text>
+      <rect x="0" y="15" width="200" height="40" fill="#ffffff" stroke="#cbd5e1" rx="4"/>
+      <text x="100" y="30" class="small" text-anchor="middle">E ∈ R^{V × d_model}</text>
+      <text x="100" y="48" class="small" text-anchor="middle">输出：(seq_len, d_model)</text>
+      <text x="0" y="70" class="small">d_model = 512</text>
+    </g>
+
+    <!-- Positional Encoding -->
+    <g transform="translate(50,120)">
+      <text x="0" y="0" class="step">4. 位置编码（Positional Encoding）</text>
+      <text x="0" y="25" class="formula">PE(pos, 2i) = sin(pos / 10000^(2i/d_model))</text>
+      <text x="0" y="45" class="formula">PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))</text>
+      <text x="0" y="65" class="small">输出：(seq_len, d_model)</text>
+    </g>
+
+    <!-- 最终输入 -->
+    <g transform="translate(300,120)">
+      <text x="0" y="0" class="step">5. 输入嵌入（Input Embedding）</text>
+      <text x="0" y="25" class="formula">X = Embedding + Positional Encoding</text>
+      <text x="0" y="45" class="small">形状：<tspan class="highlight-blue highlight-input">(seq_len, d_model)</tspan></text>
+    </g>
+  </g>
+
+  <!-- 箭头：输入到编码器 -->
+  <path class="arrow-green arrow-flow" d="M500 260 L500 300" />
+  
+  <!-- 数据流动点和轨迹 -->
+  <path class="arrow-green data-trail" d="M500 280 L500 300" stroke="#34d399" stroke-width="2" opacity="0.4"/>
+  <circle cx="500" cy="280" r="7" fill="#10b981" class="data-particle" opacity="1">
+    <animate attributeName="cy" values="280;300;300;280" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="5;9;9;5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- 编码器部分 -->
+  <g transform="translate(50,300)">
+    <rect x="0" y="0" width="900" height="500" class="box-encoder encoder-animate" rx="8" />
+    <text x="450" y="30" class="subtitle" text-anchor="middle">编码器（Encoder）</text>
+    
+    <!-- Encoder Layer 1 -->
+    <g transform="translate(50,60)">
+      <rect x="0" y="0" width="800" height="240" fill="#ffffff" stroke="#3b82f6" stroke-width="2" class="encoder-layer-box" rx="6"/>
+      <text x="400" y="25" class="module-title module-title-animate" text-anchor="middle">编码器层 1（Encoder Layer 1）</text>
+      
+      <!-- Multi-Head Self-Attention -->
+      <g transform="translate(20,40)">
+        <rect x="0" y="0" width="360" height="120" fill="#eff6ff" stroke="#3b82f6" class="attention-module" rx="4"/>
+        <text x="180" y="20" class="step" text-anchor="middle" font-weight="bold">多头自注意力</text>
+        <text x="180" y="40" class="small" text-anchor="middle">(Multi-Head Self-Attention)</text>
+        <text x="10" y="60" class="formula formula-animate">1. <tspan class="highlight-encoder">Q, K, V</tspan> = X × <tspan class="highlight-encoder">W_q, W_k, W_v</tspan></text>
+        <text x="10" y="80" class="formula formula-animate">2. <tspan class="highlight-encoder">Scores</tspan> = <tspan class="highlight-encoder">QK^T/√d_k</tspan></text>
+        <text x="10" y="100" class="formula formula-animate">3. <tspan class="highlight-encoder">Attention</tspan> = <tspan class="highlight-encoder">softmax(Scores)</tspan> × V</text>
+      </g>
+
+      <!-- Add & Norm -->
+      <g transform="translate(400,40)">
+        <rect x="0" y="0" width="80" height="120" fill="#dbeafe" stroke="#3b82f6" class="attention-module" rx="4"/>
+        <text x="40" y="25" class="small highlight-encoder" text-anchor="middle" font-weight="bold">残差连接</text>
+        <text x="40" y="45" class="small" text-anchor="middle">+</text>
+        <text x="40" y="65" class="small highlight-encoder" text-anchor="middle" font-weight="bold">层归一化</text>
+        <text x="40" y="85" class="small" text-anchor="middle">(LayerNorm)</text>
+        <text x="40" y="105" class="small" text-anchor="middle" font-size="10px">x + Attention(x)</text>
+        <text x="40" y="115" class="small" text-anchor="middle" font-size="10px">LayerNorm(...)</text>
+      </g>
+
+      <!-- Feed Forward -->
+      <g transform="translate(500,40)">
+        <rect x="0" y="0" width="280" height="120" fill="#eff6ff" stroke="#3b82f6" class="attention-module" rx="4"/>
+        <text x="140" y="20" class="step" text-anchor="middle" font-weight="bold">前馈神经网络</text>
+        <text x="140" y="40" class="small" text-anchor="middle">(Feed Forward Network)</text>
+        <text x="10" y="60" class="formula">1. <tspan class="highlight-encoder">FFN(x)</tspan> = <tspan class="highlight-encoder">max(0, xW₁ + b₁)W₂ + b₂</tspan></text>
+        <text x="10" y="80" class="formula">2. 两层线性变换 + <tspan class="highlight-encoder">ReLU</tspan> 激活函数</text>
+        <text x="10" y="100" class="small">3. d_ff = 2048 (通常为 d_model × 4)</text>
+      </g>
+
+      <!-- Add & Norm 2 -->
+      <g transform="translate(500,170)">
+        <rect x="0" y="0" width="80" height="60" fill="#dbeafe" stroke="#3b82f6" class="attention-module" rx="4"/>
+        <text x="40" y="20" class="small highlight-encoder" text-anchor="middle" font-weight="bold">残差连接</text>
+        <text x="40" y="35" class="small" text-anchor="middle">+</text>
+        <text x="40" y="50" class="small highlight-encoder" text-anchor="middle">LayerNorm</text>
+      </g>
+
+      <!-- 内部箭头 -->
+      <path class="arrow-blue encoder-arrow" d="M380 100 L400 100" />
+      <path class="arrow-blue encoder-arrow" d="M480 100 L500 100" />
+      <path class="arrow-blue encoder-arrow" d="M780 160 L780 200 L580 200 L580 170" />
+      
+      <!-- 数据流动点和轨迹 -->
+      <!-- 箭头1的轨迹 -->
+      <path class="arrow-blue data-trail" d="M380 100 L400 100" stroke="#60a5fa" stroke-width="2" opacity="0.4"/>
+      <circle cx="390" cy="100" r="7" fill="#2563eb" class="encoder-data-flow data-particle" opacity="1">
+        <animate attributeName="cx" values="380;400;400;380" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <!-- 箭头2的轨迹 -->
+      <path class="arrow-blue data-trail" d="M480 100 L500 100" stroke="#60a5fa" stroke-width="2" opacity="0.4"/>
+      <circle cx="490" cy="100" r="7" fill="#2563eb" class="encoder-data-flow data-particle" opacity="1">
+        <animate attributeName="cx" values="480;500;500;480" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+      </circle>
+      <!-- 箭头3的轨迹：从前馈神经网络到Add & Norm 2 -->
+      <path class="arrow-blue data-trail" d="M780 160 L780 200 L580 200 L580 170" stroke="#60a5fa" stroke-width="2" opacity="0.4"/>
+      <circle cx="780" cy="160" r="7" fill="#2563eb" class="encoder-data-flow data-particle" opacity="1">
+        <animateMotion path="M780 160 L780 200 L580 200 L580 170" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+      </circle>
+    </g>
+
+    <!-- Encoder Layer N -->
+    <g transform="translate(50,310)">
+      <text x="400" y="0" class="step" text-anchor="middle" font-size="12px" fill="#64748b">... (重复 N 次，通常 N = 6) ...</text>
+      <rect x="0" y="10" width="800" height="120" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4,4" rx="8" opacity="0.9"/>
+      <text x="400" y="40" class="module-title" text-anchor="middle" font-size="14px">编码器层 N（Encoder Layer N）</text>
+      <text x="400" y="65" class="small" text-anchor="middle" font-size="11px">相同的结构：多头自注意力 + 前馈网络</text>
+      <text x="400" y="85" class="small" text-anchor="middle" font-size="11px">每层都有残差连接和层归一化</text>
+    </g>
+  </g>
+
+  <!-- 箭头：编码器到解码器 -->
+  <path class="arrow arrow-flow" d="M950 550 L1050 400" />
+  
+  <!-- 数据流动点和轨迹 -->
+  <path class="arrow data-trail" d="M950 550 L1050 400" stroke="#64748b" stroke-width="2" opacity="0.4"/>
+  <circle cx="950" cy="550" r="7" fill="#0f172a" class="data-particle" opacity="1">
+    <animateMotion path="M950 550 L1050 400" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="5;9;9;5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- 解码器部分 -->
+  <g transform="translate(1050,100)">
+    <rect x="0" y="0" width="900" height="800" class="box-decoder decoder-animate" rx="8" />
+    <text x="450" y="30" class="subtitle" text-anchor="middle">解码器（Decoder）</text>
+    
+    <!-- Decoder Input -->
+    <g transform="translate(50,60)">
+      <rect x="0" y="0" width="800" height="100" fill="#ffffff" stroke="#f59e0b" stroke-width="2" rx="6"/>
+      <text x="400" y="25" class="module-title" text-anchor="middle">目标序列输入（Target Sequence）</text>
+      <text x="400" y="50" class="small" text-anchor="middle">1. 右移一位（用于训练时的Teacher Forcing）</text>
+      <text x="400" y="70" class="small" text-anchor="middle">2. 嵌入 + 位置编码 → <tspan class="highlight-orange highlight-decoder">(seq_len, d_model)</tspan></text>
+    </g>
+
+    <!-- Decoder Layer 1 -->
+    <g transform="translate(50,170)">
+      <rect x="0" y="0" width="800" height="480" fill="#ffffff" stroke="#f59e0b" stroke-width="2" rx="6"/>
+      <text x="400" y="25" class="module-title module-title-animate" text-anchor="middle">解码器层 1（Decoder Layer 1）</text>
+      
+      <!-- Masked Multi-Head Self-Attention -->
+      <g transform="translate(20,50)">
+        <rect x="0" y="0" width="360" height="140" fill="#fef3c7" stroke="#f59e0b" class="attention-module" rx="4"/>
+        <text x="180" y="20" class="step" text-anchor="middle" font-weight="bold">掩码多头自注意力</text>
+        <text x="180" y="40" class="small" text-anchor="middle">(Masked Multi-Head Self-Attention)</text>
+        <text x="10" y="60" class="formula">1. <tspan class="highlight-decoder">Q, K, V</tspan> = X × <tspan class="highlight-decoder">W_q, W_k, W_v</tspan></text>
+        <text x="10" y="80" class="formula">2. <tspan class="highlight-decoder">Scores</tspan> = <tspan class="highlight-decoder">QK^T/√d_k</tspan></text>
+        <text x="10" y="100" class="formula">3. <tspan class="highlight-decoder">Masked</tspan> = <tspan class="highlight-decoder">Scores + mask</tspan> (mask[i][j] = -∞ if j &gt; i)</text>
+        <text x="10" y="120" class="formula">4. <tspan class="highlight-decoder">Attention</tspan> = <tspan class="highlight-decoder">softmax(Masked)</tspan> × V</text>
+      </g>
+
+      <!-- Add & Norm 1 -->
+      <g transform="translate(400,50)">
+        <rect x="0" y="0" width="80" height="140" fill="#fde68a" stroke="#f59e0b" class="attention-module" rx="4"/>
+        <text x="40" y="30" class="small highlight-decoder" text-anchor="middle" font-weight="bold">残差连接</text>
+        <text x="40" y="50" class="small" text-anchor="middle">+</text>
+        <text x="40" y="70" class="small highlight-decoder" text-anchor="middle" font-weight="bold">层归一化</text>
+        <text x="40" y="90" class="small" text-anchor="middle">(LayerNorm)</text>
+        <text x="40" y="110" class="small" text-anchor="middle" font-size="10px">x + Sublayer(x)</text>
+        <text x="40" y="125" class="small" text-anchor="middle" font-size="10px">LayerNorm(...)</text>
+      </g>
+
+      <!-- Encoder-Decoder Attention -->
+      <g transform="translate(500,50)">
+        <rect x="0" y="0" width="280" height="140" fill="#fef3c7" stroke="#f59e0b" class="attention-module" rx="4"/>
+        <text x="140" y="20" class="step" text-anchor="middle" font-weight="bold">编码器-解码器注意力</text>
+        <text x="140" y="40" class="small" text-anchor="middle">(Encoder-Decoder Attention / Cross-Attention)</text>
+        <text x="10" y="60" class="formula">1. <tspan class="highlight-decoder">Q</tspan> = Decoder × <tspan class="highlight-decoder">W_q</tspan></text>
+        <text x="10" y="80" class="formula">2. <tspan class="highlight-encoder">K, V</tspan> = Encoder × <tspan class="highlight-encoder">W_k, W_v</tspan></text>
+        <text x="10" y="100" class="formula">3. <tspan class="highlight-decoder">Attention</tspan> = <tspan class="highlight-decoder">softmax(QK^T/√d_k)</tspan> × V</text>
+        <text x="10" y="120" class="small">4. 连接源序列和目标序列</text>
+      </g>
+
+      <!-- Add & Norm 2 -->
+      <g transform="translate(400,210)">
+        <rect x="0" y="0" width="80" height="60" fill="#fde68a" stroke="#f59e0b" class="attention-module" rx="4"/>
+        <text x="40" y="25" class="small highlight-decoder" text-anchor="middle" font-weight="bold">残差连接</text>
+        <text x="40" y="45" class="small highlight-decoder" text-anchor="middle">+ LayerNorm</text>
+      </g>
+
+      <!-- Feed Forward -->
+      <g transform="translate(20,290)">
+        <rect x="0" y="0" width="360" height="120" fill="#fef3c7" stroke="#f59e0b" class="attention-module" rx="4"/>
+        <text x="180" y="20" class="step" text-anchor="middle" font-weight="bold">前馈神经网络</text>
+        <text x="180" y="40" class="small" text-anchor="middle">(Feed Forward Network)</text>
+        <text x="10" y="60" class="formula">1. <tspan class="highlight-decoder">FFN(x)</tspan> = <tspan class="highlight-decoder">max(0, xW₁ + b₁)W₂ + b₂</tspan></text>
+        <text x="10" y="80" class="formula">2. 两层线性变换 + <tspan class="highlight-decoder">ReLU</tspan> 激活函数</text>
+        <text x="10" y="100" class="small">3. d_ff = 2048 (通常为 d_model × 4)</text>
+      </g>
+
+      <!-- Add & Norm 3 -->
+      <g transform="translate(400,290)">
+        <rect x="0" y="0" width="80" height="120" fill="#fde68a" stroke="#f59e0b" class="attention-module" rx="4"/>
+        <text x="40" y="30" class="small highlight-decoder" text-anchor="middle" font-weight="bold">残差连接</text>
+        <text x="40" y="50" class="small" text-anchor="middle">+</text>
+        <text x="40" y="70" class="small highlight-decoder" text-anchor="middle" font-weight="bold">层归一化</text>
+        <text x="40" y="90" class="small" text-anchor="middle" font-size="10px">x + FFN(x)</text>
+        <text x="40" y="105" class="small" text-anchor="middle" font-size="10px">LayerNorm(...)</text>
+      </g>
+
+      <!-- 内部箭头 -->
+      <path class="arrow-orange arrow-flow" d="M380 120 L400 120" />
+      <path class="arrow-orange arrow-flow" d="M480 120 L500 120" />
+      <path class="arrow-orange arrow-flow" d="M780 120 L780 240 L400 240" />
+      <path class="arrow-orange arrow-flow" d="M380 350 L400 350" />
+      <path class="arrow-orange arrow-flow" d="M480 350 L500 350" />
+      <path class="arrow-orange arrow-flow" d="M500 410 L500 420" />
+      
+      <!-- 解码器数据流动点和轨迹 -->
+      <path class="arrow-orange data-trail" d="M380 120 L400 120" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+      <circle cx="390" cy="120" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+        <animate attributeName="cx" values="380;400;400;380" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <path class="arrow-orange data-trail" d="M480 120 L500 120" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+      <circle cx="490" cy="120" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+        <animate attributeName="cx" values="480;500;500;480" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+      </circle>
+      <path class="arrow-orange data-trail" d="M780 120 L780 240 L400 240" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+      <circle cx="780" cy="120" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+        <animateMotion path="M780 120 L780 240 L400 240" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+      </circle>
+      <path class="arrow-orange data-trail" d="M380 350 L400 350" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+      <circle cx="390" cy="350" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+        <animate attributeName="cx" values="380;400;400;380" dur="1.5s" repeatCount="indefinite" begin="0.9s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="0.9s"/>
+      </circle>
+      <path class="arrow-orange data-trail" d="M480 350 L500 350" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+      <circle cx="490" cy="350" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+        <animate attributeName="cx" values="480;500;500;480" dur="1.5s" repeatCount="indefinite" begin="1.2s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="1.2s"/>
+      </circle>
+      <path class="arrow-orange data-trail" d="M500 410 L500 420" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+      <circle cx="500" cy="415" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+        <animate attributeName="cy" values="410;420;420;410" dur="1.5s" repeatCount="indefinite" begin="1.5s"/>
+        <animate attributeName="r" values="5;8;8;5" dur="1.5s" repeatCount="indefinite" begin="1.5s"/>
+      </circle>
+    </g>
+
+    <!-- Decoder Layer N -->
+    <g transform="translate(50,660)">
+      <text x="400" y="0" class="step" text-anchor="middle" font-size="12px" fill="#64748b">... (重复 N 次，通常 N = 6) ...</text>
+      <rect x="0" y="10" width="800" height="120" fill="#fffbeb" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" rx="8" opacity="0.9"/>
+      <text x="400" y="40" class="module-title" text-anchor="middle" font-size="14px">解码器层 N（Decoder Layer N）</text>
+      <text x="400" y="65" class="small" text-anchor="middle" font-size="11px">相同的结构：掩码多头自注意力 + 编码器-解码器注意力 + 前馈网络</text>
+      <text x="400" y="85" class="small" text-anchor="middle" font-size="11px">每层都有残差连接和层归一化</text>
+    </g>
+  </g>
+
+  <!-- 箭头：编码器输出到解码器注意力 -->
+  <path class="arrow-blue arrow-flow" d="M950 550 L1050 450" />
+  
+  <!-- 数据流动点和轨迹 -->
+  <path class="arrow-blue data-trail" d="M950 550 L1050 450" stroke="#60a5fa" stroke-width="2" opacity="0.4"/>
+  <circle cx="950" cy="550" r="7" fill="#2563eb" class="data-particle" opacity="1">
+    <animateMotion path="M950 550 L1050 450" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    <animate attributeName="r" values="5;9;9;5" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+
+  <!-- 输出部分 -->
+  <g transform="translate(50,1020)">
+    <rect x="0" y="0" width="1900" height="200" class="box-output output-animate" rx="8" />
+    <text x="950" y="30" class="subtitle" text-anchor="middle">输出处理（Output Processing）</text>
+    
+    <!-- Linear Layer -->
+    <g transform="translate(50,60)">
+      <rect x="0" y="0" width="400" height="120" fill="#ffffff" stroke="#ec4899" stroke-width="2" rx="6"/>
+      <text x="200" y="25" class="module-title" text-anchor="middle">线性层（Linear Layer）</text>
+      <text x="200" y="50" class="formula">Linear(x) = x × W_output</text>
+      <text x="200" y="70" class="small" text-anchor="middle">W_output ∈ R^{d_model × vocab_size}</text>
+      <text x="200" y="90" class="small" text-anchor="middle">输出形状：<tspan class="highlight">(seq_len, vocab_size)</tspan></text>
+    </g>
+
+    <!-- Softmax -->
+    <g transform="translate(500,60)">
+      <rect x="0" y="0" width="400" height="120" fill="#ffffff" stroke="#ec4899" stroke-width="2" rx="6"/>
+      <text x="200" y="25" class="module-title" text-anchor="middle">Softmax 归一化</text>
+      <text x="200" y="50" class="formula">P(y_i) = exp(x_i) / Σ exp(x_j)</text>
+      <text x="200" y="70" class="small" text-anchor="middle">将 logits 转换为概率分布</text>
+      <text x="200" y="90" class="small" text-anchor="middle">输出：<tspan class="highlight">(seq_len, vocab_size)</tspan></text>
+    </g>
+
+    <!-- Output -->
+    <g transform="translate(950,60)">
+      <rect x="0" y="0" width="400" height="120" fill="#ffffff" stroke="#ec4899" stroke-width="2" rx="6"/>
+      <text x="200" y="25" class="module-title" text-anchor="middle">输出概率分布（Output Probabilities）</text>
+      <text x="200" y="50" class="small" text-anchor="middle">每个位置对应词汇表中每个词的概率</text>
+      <text x="200" y="70" class="small" text-anchor="middle">训练：使用交叉熵损失</text>
+      <text x="200" y="90" class="small" text-anchor="middle">推理：选择概率最高的词（或采样）</text>
+    </g>
+
+    <!-- 训练 vs 推理 -->
+    <g transform="translate(1400,60)">
+      <rect x="0" y="0" width="450" height="120" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="6"/>
+      <text x="225" y="25" class="module-title" text-anchor="middle">训练 vs 推理</text>
+      <text x="10" y="50" class="small">训练（Teacher Forcing）：</text>
+      <text x="20" y="70" class="small">• 并行处理整个目标序列</text>
+      <text x="10" y="90" class="small">推理（自回归）：</text>
+      <text x="20" y="110" class="small">• 逐个生成token，每次只生成一个词</text>
+    </g>
+  </g>
+
+  <!-- 箭头：解码器到输出 -->
+  <path class="arrow-orange arrow-flow" d="M1450 900 L1450 1020" />
+  
+  <!-- 数据流动点和轨迹 -->
+  <path class="arrow-orange data-trail" d="M1450 900 L1450 1020" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+  <circle cx="1450" cy="900" r="7" fill="#f59e0b" class="data-particle" opacity="1">
+    <animate attributeName="cy" values="900;1020;1020;900" dur="2s" repeatCount="indefinite" begin="1s"/>
+    <animate attributeName="r" values="5;9;9;5" dur="2s" repeatCount="indefinite" begin="1s"/>
+  </circle>
+
+  <!-- 反向传播流程（Backward Pass） -->
+  <g transform="translate(50,1240)">
+    <rect x="0" y="0" width="1900" height="280" fill="#fff7ed" stroke="#ea580c" stroke-width="2" rx="8" class="step-box-animate"/>
+    <text x="950" y="30" class="subtitle" text-anchor="middle" fill="#ea580c">反向传播流程（Backward Pass / Training）</text>
+    
+    <!-- 损失计算 -->
+    <g transform="translate(50,60)">
+      <rect x="0" y="0" width="350" height="200" fill="#ffffff" stroke="#ea580c" stroke-width="2" class="attention-module" rx="6"/>
+      <text x="175" y="25" class="module-title" text-anchor="middle">1. 损失计算（Loss Calculation）</text>
+      <text x="10" y="50" class="formula formula-animate">交叉熵损失：</text>
+      <text x="10" y="70" class="formula formula-animate">L = -Σ log P(y_true | x)</text>
+      <text x="10" y="90" class="small">• 预测概率 vs 真实标签</text>
+      <text x="10" y="110" class="small">• 计算每个位置的损失</text>
+      <text x="10" y="130" class="small">• 平均损失：L_avg = L / seq_len</text>
+      <text x="10" y="150" class="small">• 输出：<tspan class="highlight">标量损失值</tspan></text>
+      <text x="10" y="170" class="small">• 梯度：∂L/∂output = -1/P(y_true)</text>
+    </g>
+
+    <!-- 梯度反向传播 -->
+    <g transform="translate(450,60)">
+      <rect x="0" y="0" width="500" height="200" fill="#ffffff" stroke="#ea580c" stroke-width="2" class="attention-module" rx="6"/>
+      <text x="250" y="25" class="module-title" text-anchor="middle">2. 梯度反向传播（Gradient Backpropagation）</text>
+      <text x="10" y="50" class="formula formula-animate">输出层 → 解码器：</text>
+      <text x="20" y="70" class="small">• ∂L/∂W_output (线性层权重梯度)</text>
+      <text x="20" y="90" class="small">• ∂L/∂decoder_output (解码器输出梯度)</text>
+      <text x="10" y="110" class="formula formula-animate">解码器 → 编码器：</text>
+      <text x="20" y="130" class="small">• 通过编码器-解码器注意力传播</text>
+      <text x="20" y="150" class="small">• ∂L/∂encoder_output (编码器输出梯度)</text>
+      <text x="10" y="170" class="small">• 链式法则：∂L/∂x = ∂L/∂y × ∂y/∂x</text>
+    </g>
+
+    <!-- 参数更新 -->
+    <g transform="translate(1000,60)">
+      <rect x="0" y="0" width="400" height="200" fill="#ffffff" stroke="#ea580c" stroke-width="2" class="attention-module" rx="6"/>
+      <text x="200" y="25" class="module-title" text-anchor="middle">3. 参数更新（Parameter Update）</text>
+      <text x="10" y="50" class="formula formula-animate">优化器（如Adam）：</text>
+      <text x="10" y="70" class="formula">θ_new = θ_old - α × ∇_θ L</text>
+      <text x="10" y="90" class="small">• α：学习率（learning rate）</text>
+      <text x="10" y="110" class="small">• ∇_θ L：参数梯度</text>
+      <text x="10" y="130" class="small">• 更新所有参数：</text>
+      <text x="20" y="150" class="small">- W_q, W_k, W_v (注意力权重)</text>
+      <text x="20" y="170" class="small">- W_ffn (前馈网络权重)</text>
+      <text x="20" y="190" class="small">- W_output (输出层权重)</text>
+    </g>
+
+    <!-- 训练循环 -->
+    <g transform="translate(1450,60)">
+      <rect x="0" y="0" width="400" height="200" fill="#ffffff" stroke="#ea580c" stroke-width="2" class="attention-module" rx="6"/>
+      <text x="200" y="25" class="module-title" text-anchor="middle">4. 训练循环（Training Loop）</text>
+      <text x="10" y="50" class="small">for epoch in epochs:</text>
+      <text x="20" y="70" class="small">  for batch in batches:</text>
+      <text x="30" y="90" class="small">    1. 前向传播（Forward Pass）</text>
+      <text x="30" y="110" class="small">    2. 计算损失（Loss）</text>
+      <text x="30" y="130" class="small">    3. 反向传播（Backward Pass）</text>
+      <text x="30" y="150" class="small">    4. 参数更新（Update）</text>
+      <text x="10" y="170" class="small">• 重复直到收敛</text>
+      <text x="10" y="190" class="small">• 使用梯度裁剪防止梯度爆炸</text>
+    </g>
+
+    <!-- 反向传播箭头 -->
+    <path class="arrow-orange arrow-flow" d="M1450 1240 L1450 1020" stroke-dasharray="5,5" opacity="0.6"/>
+    <path class="arrow-orange arrow-flow" d="M1450 1020 L1050 500" stroke-dasharray="5,5" opacity="0.6"/>
+    <path class="arrow-blue arrow-flow" d="M950 550 L50 550" stroke-dasharray="5,5" opacity="0.6"/>
+    
+    <!-- 反向传播数据流动点 -->
+    <circle cx="1450" cy="1130" r="6" fill="#ea580c" class="data-particle" opacity="0.8">
+      <animate attributeName="cy" values="1240;1020;1020;1240" dur="3s" repeatCount="indefinite" begin="2s"/>
+      <animate attributeName="r" values="4;7;7;4" dur="3s" repeatCount="indefinite" begin="2s"/>
+    </circle>
+    <circle cx="1250" cy="760" r="6" fill="#ea580c" class="data-particle" opacity="0.8">
+      <animateMotion path="M1450 1020 L1050 500" dur="3s" repeatCount="indefinite" begin="2.5s"/>
+      <animate attributeName="r" values="4;7;7;4" dur="3s" repeatCount="indefinite" begin="2.5s"/>
+    </circle>
+    <circle cx="500" cy="550" r="6" fill="#2563eb" class="data-particle" opacity="0.8">
+      <animate attributeName="cx" values="950;50;50;950" dur="3s" repeatCount="indefinite" begin="3s"/>
+      <animate attributeName="r" values="4;7;7;4" dur="3s" repeatCount="indefinite" begin="3s"/>
+    </circle>
+  </g>
+
+  <!-- 关键公式和说明 -->
+  <g transform="translate(50,1530)">
+    <rect x="0" y="0" width="1900" height="320" class="box" rx="8" />
+    <text x="950" y="30" class="subtitle" text-anchor="middle">核心组件详解</text>
+    
+    <!-- 注意力机制 -->
+    <g transform="translate(50,60)">
+      <rect x="0" y="0" width="580" height="240" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" rx="6"/>
+      <text x="290" y="25" class="module-title" text-anchor="middle">多头注意力机制（Multi-Head Attention）</text>
+      <text x="10" y="50" class="step" font-weight="bold">步骤：</text>
+      <text x="20" y="75" class="formula">1. 线性投影：Q = XW_q, K = XW_k, V = XW_v</text>
+      <text x="20" y="95" class="formula">2. 分割成 h 个头：每个头维度 d_k = d_model / h</text>
+      <text x="20" y="115" class="formula">3. 计算注意力：Attention_i = softmax(Q_i K_i^T / √d_k) V_i</text>
+      <text x="20" y="135" class="formula">4. 拼接所有头：Concat(Attention_1, ..., Attention_h)</text>
+      <text x="20" y="155" class="formula">5. 线性投影：Output = Concat × W_o</text>
+      <text x="10" y="180" class="small">通常 h = 8，d_model = 512，d_k = d_v = 64</text>
+    </g>
+
+    <!-- 位置编码 -->
+    <g transform="translate(660,60)">
+      <rect x="0" y="0" width="580" height="240" fill="#ecfdf5" stroke="#10b981" stroke-width="2" rx="6"/>
+      <text x="290" y="25" class="module-title" text-anchor="middle">位置编码（Positional Encoding）</text>
+      <text x="10" y="50" class="formula">PE(pos, 2i) = sin(pos / 10000^(2i/d_model))</text>
+      <text x="10" y="70" class="formula">PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))</text>
+      <text x="10" y="95" class="step" font-weight="bold">特点：</text>
+      <text x="20" y="115" class="small">• 多尺度建模：不同维度捕捉不同粒度的位置信息</text>
+      <text x="20" y="135" class="small">• 平滑变化：位置是连续变量</text>
+      <text x="20" y="155" class="small">• 支持序列泛化：可扩展到比训练时更长的序列</text>
+      <text x="20" y="175" class="small">• 无需学习参数：固定函数，节省显存</text>
+    </g>
+
+    <!-- 残差连接和层归一化 -->
+    <g transform="translate(1270,60)">
+      <rect x="0" y="0" width="580" height="240" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="6"/>
+      <text x="290" y="25" class="module-title" text-anchor="middle">残差连接 + 层归一化</text>
+      <text x="10" y="50" class="step" font-weight="bold">残差连接（Residual Connection）：</text>
+      <text x="20" y="70" class="formula">output = LayerNorm(x + Sublayer(x))</text>
+      <text x="20" y="90" class="small">• 缓解梯度消失问题</text>
+      <text x="20" y="110" class="small">• 允许训练更深的网络</text>
+      <text x="10" y="135" class="step" font-weight="bold">层归一化（Layer Normalization）：</text>
+      <text x="20" y="155" class="formula">LN(x) = γ * (x - μ) / √(σ² + ε) + β</text>
+      <text x="20" y="175" class="small">• 稳定训练过程</text>
+      <text x="20" y="195" class="small">• 加速收敛</text>
+    </g>
+  </g>
+
+  <!-- 底部说明 -->
+  <g transform="translate(50,1590)">
+    <text x="0" y="0" class="small">注：此图展示了完整的Transformer架构，包括编码器和解码器。在实际应用中，有些模型只使用编码器（如BERT）或只使用解码器（如GPT）。</text>
+  </g>
+
+</svg>
+

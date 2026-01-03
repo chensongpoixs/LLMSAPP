@@ -14,7 +14,7 @@
 - AIGC（AI生成内容） - AI 的应用领域，通常使用 LLM 等技术
 
 
-
+![Transformer流程图](/06.Transformer架构神秘/Transformer流程图.svg)
 
 ![监督学习训练流程图](img/supervised_learning_flow.svg)
 
