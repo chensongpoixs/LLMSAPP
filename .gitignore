@@ -44,3 +44,4 @@ TestResults.xml
 /07.模型微调/model_sft.pth
 /08.知识蒸馏/local_distill_data.jsonl
 /08.知识蒸馏/math_problems_100.json
+/08.知识蒸馏/math_problems_1000.json

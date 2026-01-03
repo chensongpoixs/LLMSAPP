@@ -182,6 +182,9 @@ pip install matplotlib
 ### 4、 知识蒸馏
 
 
+[黑盒和白盒蒸馏](/08.知识蒸馏/README.md)
+
+
 
 
 
