@@ -129,5 +129,14 @@ void save_training_config(const std::string& exp_dir, const ModelConfig& cfg,
                          double learning_rate, double weight_decay, 
                          int batch_size, int num_epochs);
 
+/**
+ * 查找runs/train目录下最新的模型文件
+ * 优先查找best.pth，如果没有则查找last.pth
+ * 
+ * @param train_dir: runs/train目录路径（默认为"runs/train"）
+ * @return 最新模型文件的完整路径，如果未找到则返回空字符串
+ */
+std::string find_latest_model(const std::string& train_dir = "runs/train");
+
 #endif // TRAINING_UTILS_H
 

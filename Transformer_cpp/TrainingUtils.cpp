@@ -270,3 +270,47 @@ void save_training_config(const std::string& exp_dir, const ModelConfig& cfg,
     }
 }
 
+std::string find_latest_model(const std::string& train_dir) {
+    namespace fs = std::filesystem;
+    
+    if (!fs::exists(train_dir) || !fs::is_directory(train_dir)) {
+        Logger::warning("Training directory does not exist: {}", train_dir);
+        return "";
+    }
+    
+    // 获取最大实验编号
+    int max_exp_num = get_max_exp_number(train_dir);
+    
+    // 从最大编号开始向下查找，找到第一个存在的模型文件
+    for (int exp_num = max_exp_num; exp_num >= 1; --exp_num) {
+        std::string exp_dir_name = get_exp_dir_name(exp_num);
+        std::string exp_dir = train_dir + "/" + exp_dir_name;
+        std::string weights_dir = exp_dir + "/weights";
+        
+        if (!fs::exists(exp_dir) || !fs::is_directory(exp_dir)) {
+            continue;
+        }
+        
+        if (!fs::exists(weights_dir) || !fs::is_directory(weights_dir)) {
+            continue;
+        }
+        
+        // 优先查找 best.pth
+        std::string best_model = weights_dir + "/best.pth";
+        if (fs::exists(best_model) && fs::is_regular_file(best_model)) {
+            Logger::info("Found latest model (best): {}", best_model);
+            return best_model;
+        }
+        
+        // 如果没有 best.pth，查找 last.pth
+        std::string last_model = weights_dir + "/last.pth";
+        if (fs::exists(last_model) && fs::is_regular_file(last_model)) {
+            Logger::info("Found latest model (last): {}", last_model);
+            return last_model;
+        }
+    }
+    
+    Logger::warning("No model found in {}", train_dir);
+    return "";
+}
+

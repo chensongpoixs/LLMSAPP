@@ -134,7 +134,17 @@ int main(int argc, char * argv[])
     // ========================================================================
     // 4. Create model and generator
     // ========================================================================
-    std::string model_path = "transformer_model_full.pth";
+    // 查找runs/train目录下最新的模型文件
+    std::string model_path = find_latest_model("runs/train");
+    
+    // 如果没有找到，回退到默认路径
+    if (model_path.empty()) {
+        model_path = "transformer_model_full.pth";
+        Logger::info("No model found in runs/train, using default path: {}", model_path);
+    } else {
+        Logger::info("Using latest model from runs/train: {}", model_path);
+    }
+    
     std::shared_ptr<GPTModel> model = std::make_shared<GPTModel>(cfg);
     
     Logger::info("Attempting to load saved model: {}", model_path);
