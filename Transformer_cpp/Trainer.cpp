@@ -371,7 +371,8 @@ void Trainer::trainEpoch(int epoch, int num_epochs, int batch_size,
     // 计算平均损失
     float avg_loss = epoch_loss / num_batches_per_epoch;
     
-    // 更新最佳损失
+    // 更新最佳损失（记录历史最小损失值）
+    float previous_best_loss = best_loss_;  // 保存更新前的最佳损失值
     bool is_best = false;
     if (avg_loss < best_loss_) {
         best_loss_ = avg_loss;
@@ -399,30 +400,31 @@ void Trainer::trainEpoch(int epoch, int num_epochs, int batch_size,
         Logger::warning("Failed to save last checkpoint");
     }
     
-    // 如果当前损失比上一次小，保存best.pth
-    if (avg_loss < previous_loss_) {
-        std::ostringstream prev_loss_ss, curr_loss_ss;
-        prev_loss_ss << std::fixed << std::setprecision(6) << previous_loss_;
+    // 只有当当前损失比历史最小损失（best_loss_）还小时，才保存best.pth
+    if (is_best) {
+        std::ostringstream prev_best_loss_ss, curr_loss_ss;
+        prev_best_loss_ss << std::fixed << std::setprecision(6) << previous_best_loss;
         curr_loss_ss << std::fixed << std::setprecision(6) << avg_loss;
         
-        Logger::info("Loss improved: {} -> {} (saving best checkpoint)", 
-            prev_loss_ss.str(), curr_loss_ss.str());
+        Logger::info("Loss improved (new best): {} -> {} (saving best checkpoint)", 
+            prev_best_loss_ss.str(), curr_loss_ss.str());
         
         if (save_model_checkpoint(model_, best_checkpoint_path_)) {
-            Logger::info("Best checkpoint saved to: {}", best_checkpoint_path_);
+            Logger::info("Best checkpoint saved to: {} (best loss: {})", 
+                best_checkpoint_path_, curr_loss_ss.str());
         } else {
             Logger::warning("Failed to save best checkpoint");
         }
     } else {
-        std::ostringstream prev_loss_ss, curr_loss_ss;
-        prev_loss_ss << std::fixed << std::setprecision(6) << previous_loss_;
+        std::ostringstream best_loss_ss, curr_loss_ss;
+        best_loss_ss << std::fixed << std::setprecision(6) << best_loss_;
         curr_loss_ss << std::fixed << std::setprecision(6) << avg_loss;
         
-        Logger::info("Loss did not improve: {} -> {} (best checkpoint not updated)", 
-            prev_loss_ss.str(), curr_loss_ss.str());
+        Logger::info("Loss did not improve: {} (current: {}, best: {}) (best checkpoint not updated)", 
+            best_loss_ss.str(), curr_loss_ss.str(), best_loss_ss.str());
     }
     
-    // 更新上一次损失值
+    // 更新上一次损失值（用于其他用途，如趋势分析）
     previous_loss_ = avg_loss;
     
     // 保存当前epoch的信息

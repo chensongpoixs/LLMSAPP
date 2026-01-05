@@ -100,7 +100,8 @@ std::string Generator::tokensToText(const std::vector<int64_t>& tokens) {
 
 GenerationResult Generator::generate(const std::string& prompt,
                                     int max_new_tokens,
-                                    double temperature) {
+                                    double temperature,
+                                    int top_k) {
     GenerationResult result;
     result.prompt = prompt;
     
@@ -121,6 +122,7 @@ GenerationResult Generator::generate(const std::string& prompt,
     generated_tokens.reserve(prompt_tokens.size() + max_new_tokens);
     
     Logger::info("Starting generation...");
+    Logger::info("Generation parameters: temperature={}, top_k={}", temperature, top_k);
     
     // 记录推理开始时间
     auto inference_start = std::chrono::high_resolution_clock::now();
@@ -146,6 +148,26 @@ GenerationResult Generator::generate(const std::string& prompt,
         
         // 获取最后一个位置的logits (vocab_size)
         auto next_token_logits = logits[0][current_len - 1];
+        
+        // 应用 Top-K 采样（如果 top_k > 0）
+        if (top_k > 0 && top_k < next_token_logits.size(0)) {
+            // 获取 top_k 个最大值的索引和值
+            auto topk_result = torch::topk(next_token_logits, top_k);
+            auto topk_values = std::get<0>(topk_result);  // top_k 个最大值
+            auto topk_indices = std::get<1>(topk_result); // top_k 个最大值的索引
+            
+            // 创建一个新的 logits tensor，只保留 top_k 个值，其他设为负无穷
+            auto filtered_logits = torch::full_like(next_token_logits, 
+                -std::numeric_limits<float>::infinity());
+            
+            // 将 top_k 个值放回原位置
+            for (int j = 0; j < top_k; ++j) {
+                int64_t idx = topk_indices[j].item<int64_t>();
+                filtered_logits[idx] = topk_values[j];
+            }
+            
+            next_token_logits = filtered_logits;
+        }
         
         // 使用温度采样（temperature sampling）增加随机性
         auto scaled_logits = next_token_logits / temperature;

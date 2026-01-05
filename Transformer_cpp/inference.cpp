@@ -165,12 +165,15 @@ int main(int argc, char * argv[])
     std::string prompt = "hi are you ！！！";
     int max_new_tokens = 100;
     double temperature = 0.8;
+    int top_k = 50;  // Top-K采样参数（只从概率最高的50个token中采样）
     
     Logger::info("Prompt: \"{}\"", prompt);
     Logger::info("Max Generation Length: {} tokens", max_new_tokens);
+    Logger::info("Temperature: {}", temperature);
+    Logger::info("Top-K: {}", top_k);
     
     // 使用Generator生成文本
-    GenerationResult result = generator.generate(prompt, max_new_tokens, temperature);
+    GenerationResult result = generator.generate(prompt, max_new_tokens, temperature, top_k);
     
     // 打印结果
     Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

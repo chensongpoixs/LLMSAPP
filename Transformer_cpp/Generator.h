@@ -89,11 +89,13 @@ public:
      * @param prompt: 提示词
      * @param max_new_tokens: 最大生成token数量
      * @param temperature: 温度参数（控制随机性，默认0.8）
+     * @param top_k: Top-K采样参数（只从概率最高的k个token中采样，0表示不使用top_k，默认0）
      * @return 生成结果
      */
     GenerationResult generate(const std::string& prompt,
                              int max_new_tokens = 100,
-                             double temperature = 0.8);
+                             double temperature = 0.8,
+                             int top_k = 25);
     
     /**
      * 加载模型
