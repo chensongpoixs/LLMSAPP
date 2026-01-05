@@ -72,13 +72,13 @@ torch::Tensor TransformerBlock::forward(torch::Tensor x) {
     // ========== 第二部分: 前馈网络 ==========
     old_x = x;  // 为后面的残差连接保存值
     
-    // 1. Layer Norm
+    // 1. Layer Norm  归一化
     x = norm_2->forward(x);
     
-    // 2. Feed Forward Network
+    // 2. Feed Forward Network 前馈网络FFN 
     x = ffn->forward(x);
     
-    // 3. Dropout
+    // 3. Dropout 过拟合
     x = dropout->forward(x);
     
     // 4. 残差连接

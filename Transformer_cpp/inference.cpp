@@ -162,7 +162,7 @@ int main(int argc, char * argv[])
     Logger::info("Starting inference...");
     Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     
-    std::string prompt = "hi are you ！！！";
+    std::string prompt = "How Are You ！！！";
     int max_new_tokens = 100;
     double temperature = 0.8;
     int top_k = 50;  // Top-K采样参数（只从概率最高的50个token中采样）

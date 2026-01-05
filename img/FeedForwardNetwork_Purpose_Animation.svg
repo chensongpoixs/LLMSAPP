@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1550" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <!-- 渐变定义 -->
+    <linearGradient id="attentionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8E8E;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="ffnGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6EDDD6;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="outputGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#95E1D3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8F0E8;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 箭头标记 -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+    
+    <!-- 特征粒子 -->
+    <circle id="featureParticle" r="3" fill="#FFD700">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite"/>
+    </circle>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="1920" height="1550" fill="#F8F9FA"/>
+  
+  <!-- 标题 -->
+  <text x="800" y="40" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    前馈全连接层 (FFN) 的作用与重要性
+  </text>
+  
+  <!-- 核心总结（显眼位置 - 顶部） -->
+  <g id="coreSummary">
+    <rect x="200" y="60" width="1200" height="120" rx="15" fill="#FFD700" stroke="#FFA000" stroke-width="4" opacity="0.95">
+      <animate attributeName="stroke-width" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="800" y="95" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#E65100">
+      💡 核心总结
+    </text>
+    <text x="800" y="125" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#B71C1C">
+      注意力层负责"找关系"，而前馈全连接层则负责"挖深度"
+    </text>
+    <text x="800" y="155" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#333">
+      两者配合，共同构建强大的 Transformer 模型
+    </text>
+  </g>
+  
+  <!-- 第一部分：Transformer中的位置 -->
+  <g id="transformerContext">
+    <rect x="50" y="200" width="1500" height="280" rx="10" fill="white" stroke="#2C3E50" stroke-width="2" opacity="0.9"/>
+    <text x="800" y="230" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      前馈全连接层在 Transformer 架构中的位置
+    </text>
+    
+    <!-- Transformer Block 结构 -->
+    <rect x="200" y="260" width="1200" height="200" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="3"/>
+    <text x="800" y="290" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#2E7D32">
+      Transformer Block
+    </text>
+    
+    <!-- 输入 -->
+    <rect x="220" y="310" width="150" height="60" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="295" y="340" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#1976D2">
+      输入特征
+    </text>
+    <text x="295" y="360" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+      (B, L, d)
+    </text>
+    
+    <!-- 箭头1 -->
+    <line x1="370" y1="340" x2="420" y2="340" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+    
+    <!-- Multi-Head Attention -->
+    <rect x="420" y="310" width="200" height="60" rx="5" fill="url(#attentionGradient)" stroke="#C62828" stroke-width="2">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="520" y="340" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+      多头注意力
+    </text>
+    <text x="520" y="360" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      Multi-Head Attention
+    </text>
+    
+    <!-- 箭头2 -->
+    <line x1="620" y1="340" x2="670" y2="340" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+    
+    <!-- 注意力输出（简单特征） -->
+    <rect x="670" y="310" width="150" height="60" rx="5" fill="#FFF3E0" stroke="#FF9800" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.7;1;0.7" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="745" y="340" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#E65100">
+      注意力输出
+    </text>
+    <text x="745" y="360" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">
+      (简单特征)
+    </text>
+    
+    <!-- 箭头3 -->
+    <line x1="820" y1="340" x2="870" y2="340" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+    
+    <!-- Feed Forward Network -->
+    <rect x="870" y="310" width="200" height="60" rx="5" fill="url(#ffnGradient)" stroke="#00695C" stroke-width="3">
+      <animate attributeName="stroke-width" values="3;5;3" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+      <text x="970" y="340" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
+        前馈全连接层
+      </text>
+      <text x="970" y="360" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+        Feed Forward Network
+      </text>
+    
+    <!-- 箭头4 -->
+    <line x1="1070" y1="340" x2="1120" y2="340" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+    
+    <!-- FFN输出（增强特征） -->
+    <rect x="1120" y="310" width="150" height="60" rx="5" fill="url(#outputGradient)" stroke="#00897B" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.7;1;0.7" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="1195" y="340" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#004D40">
+      前馈全连接层输出
+    </text>
+    <text x="1195" y="360" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#333">
+      (增强特征)
+    </text>
+    
+    <!-- 说明文字 -->
+    <text x="800" y="460" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">
+      前馈全连接层的作用：对注意力机制的输出进行非线性变换，增强模型的表达能力
+    </text>
+  </g>
+  
+  <!-- 第二部分：特征变换可视化 -->
+  <g id="featureTransformation">
+    <rect x="50" y="510" width="1500" height="350" rx="10" fill="white" stroke="#2C3E50" stroke-width="2" opacity="0.9"/>
+    <text x="800" y="540" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      特征变换过程：从简单到复杂
+    </text>
+    
+    <!-- 注意力输出（简单特征） -->
+    <g id="simpleFeatures">
+      <rect x="100" y="570" width="250" height="200" rx="10" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+      <text x="225" y="600" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#E65100">
+        注意力输出
+      </text>
+      <text x="225" y="620" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">
+        (简单特征表示)
+      </text>
+      
+      <!-- 简单的特征向量可视化 -->
+      <g id="simpleVectors">
+        <!-- 向量1 -->
+        <rect x="120" y="640" width="80" height="15" rx="3" fill="#FFB74D" opacity="0.6">
+          <animate attributeName="width" values="30;80;30" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        <text x="160" y="652" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">特征1</text>
+        
+        <!-- 向量2 -->
+        <rect x="120" y="665" width="60" height="15" rx="3" fill="#FFB74D" opacity="0.6">
+          <animate attributeName="width" values="20;60;20" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+        </rect>
+        <text x="150" y="677" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">特征2</text>
+        
+        <!-- 向量3 -->
+        <rect x="120" y="690" width="70" height="15" rx="3" fill="#FFB74D" opacity="0.6">
+          <animate attributeName="width" values="25;70;25" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="155" y="702" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">特征3</text>
+        
+        <!-- 向量4 -->
+        <rect x="120" y="715" width="50" height="15" rx="3" fill="#FFB74D" opacity="0.6">
+          <animate attributeName="width" values="15;50;15" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+        </rect>
+        <text x="145" y="727" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">特征4</text>
+      </g>
+      
+      <text x="225" y="750" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666" font-style="italic">
+        特征维度: 768
+      </text>
+    </g>
+    
+    <!-- 箭头：简单 → 复杂 -->
+    <line x1="350" y1="670" x2="450" y2="670" stroke="#333" stroke-width="4" marker-end="url(#arrowhead)">
+      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- FFN 处理过程 -->
+    <g id="ffnProcess">
+      <rect x="450" y="570" width="300" height="200" rx="10" fill="url(#ffnGradient)" stroke="#00695C" stroke-width="3">
+        <animate attributeName="stroke-width" values="3;5;3" dur="2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="600" y="595" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+        前馈全连接层处理
+      </text>
+      
+      <!-- 扩展阶段 -->
+      <rect x="470" y="615" width="260" height="35" rx="5" fill="rgba(255,255,255,0.4)" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <text x="600" y="635" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#004D40">
+        步骤 1: 扩展维度
+      </text>
+      <text x="600" y="650" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        768 → 3072 (扩展4倍)
+      </text>
+      <rect x="470" y="655" width="0" height="8" rx="2" fill="rgba(0,77,64,0.6)">
+        <animate attributeName="width" values="0;260;0" dur="2s" repeatCount="indefinite"/>
+      </rect>
+      
+      <!-- GELU激活 -->
+      <rect x="470" y="660" width="260" height="35" rx="5" fill="rgba(255,255,255,0.4)" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <text x="600" y="680" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#004D40">
+        步骤 2: GELU 激活
+      </text>
+      <text x="600" y="695" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        非线性变换
+      </text>
+      <circle cx="600" cy="700" r="6" fill="rgba(0,77,64,0.6)">
+        <animate attributeName="r" values="4;10;4" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      
+      <!-- 压缩阶段 -->
+      <rect x="470" y="705" width="260" height="35" rx="5" fill="rgba(255,255,255,0.4)" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <text x="600" y="725" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#004D40">
+        步骤 3: 压缩维度
+      </text>
+      <text x="600" y="740" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        3072 → 768 (恢复原维度)
+      </text>
+      <rect x="470" y="745" width="0" height="8" rx="2" fill="rgba(0,77,64,0.6)">
+        <animate attributeName="width" values="0;260;0" dur="2s" begin="1s" repeatCount="indefinite"/>
+      </rect>
+      
+      <!-- 底部说明 -->
+      <text x="600" y="765" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" opacity="0.9">
+        增强特征表达能力
+      </text>
+    </g>
+    
+    <!-- 箭头：处理 → 输出 -->
+    <line x1="750" y1="670" x2="850" y2="670" stroke="#333" stroke-width="4" marker-end="url(#arrowhead)">
+      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- FFN输出（复杂特征） -->
+    <g id="complexFeatures">
+      <rect x="850" y="570" width="250" height="200" rx="10" fill="url(#outputGradient)" stroke="#00897B" stroke-width="2"/>
+      <text x="975" y="600" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#004D40">
+        前馈全连接层输出
+      </text>
+      <text x="975" y="620" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">
+        (增强特征表示)
+      </text>
+      
+      <!-- 复杂的特征向量可视化 -->
+      <g id="complexVectors">
+        <!-- 向量1 - 增强 -->
+        <rect x="870" y="640" width="120" height="15" rx="3" fill="#4DB6AC" opacity="0.8">
+          <animate attributeName="width" values="80;120;80" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+        </rect>
+        <text x="930" y="652" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">增强特征1</text>
+        
+        <!-- 向量2 - 增强 -->
+        <rect x="870" y="665" width="100" height="15" rx="3" fill="#4DB6AC" opacity="0.8">
+          <animate attributeName="width" values="60;100;60" dur="2s" begin="1.8s" repeatCount="indefinite"/>
+        </rect>
+        <text x="920" y="677" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">增强特征2</text>
+        
+        <!-- 向量3 - 增强 -->
+        <rect x="870" y="690" width="110" height="15" rx="3" fill="#4DB6AC" opacity="0.8">
+          <animate attributeName="width" values="70;110;70" dur="2s" begin="2.1s" repeatCount="indefinite"/>
+        </rect>
+        <text x="925" y="702" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">增强特征3</text>
+        
+        <!-- 向量4 - 增强 -->
+        <rect x="870" y="715" width="90" height="15" rx="3" fill="#4DB6AC" opacity="0.8">
+          <animate attributeName="width" values="50;90;50" dur="2s" begin="2.4s" repeatCount="indefinite"/>
+        </rect>
+        <text x="915" y="727" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#333">增强特征4</text>
+      </g>
+      
+      <text x="975" y="750" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666" font-style="italic">
+        特征维度: 768 (但更丰富)
+      </text>
+    </g>
+    
+    <!-- 说明 -->
+    <text x="800" y="840" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">
+      前馈全连接层通过"扩展-激活-压缩"的过程，将简单的线性特征转换为复杂的非线性特征表示
+    </text>
+  </g>
+  
+  <!-- 第三部分：对比：有FFN vs 无FFN -->
+  <g id="comparison">
+    <rect x="50" y="890" width="1500" height="380" rx="10" fill="white" stroke="#2C3E50" stroke-width="2" opacity="0.9"/>
+    <text x="800" y="920" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      对比：有前馈全连接层 vs 无前馈全连接层
+    </text>
+    
+    <!-- 无FFN的情况 -->
+    <g id="withoutFFN">
+      <rect x="100" y="950" width="650" height="300" rx="10" fill="#FFEBEE" stroke="#F44336" stroke-width="2"/>
+      <text x="425" y="980" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#C62828">
+        ❌ 无前馈全连接层的情况
+      </text>
+      
+      <!-- 流程 -->
+      <rect x="130" y="1000" width="120" height="50" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+      <text x="190" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#1976D2">输入</text>
+      
+      <line x1="250" y1="1025" x2="300" y2="1025" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <rect x="300" y="1000" width="150" height="50" rx="5" fill="url(#attentionGradient)" stroke="#C62828" stroke-width="2"/>
+      <text x="375" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">注意力</text>
+      
+      <line x1="450" y1="1025" x2="500" y2="1025" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <rect x="500" y="1000" width="120" height="50" rx="5" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+      <text x="560" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#E65100">输出</text>
+      
+      <!-- 问题说明 -->
+      <rect x="130" y="1070" width="590" height="160" rx="5" fill="#FCE4EC" stroke="#E91E63" stroke-width="2" opacity="0.8"/>
+      <text x="425" y="1100" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#880E4F">
+        存在的问题：
+      </text>
+      <text x="180" y="1125" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 只有线性变换，表达能力有限
+      </text>
+      <text x="180" y="1145" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 无法学习复杂的特征组合
+      </text>
+      <text x="180" y="1165" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 模型性能较差
+      </text>
+      <text x="180" y="1185" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 难以捕捉深层语义信息
+      </text>
+      <text x="180" y="1205" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 特征表示不够丰富
+      </text>
+    </g>
+    
+    <!-- 有FFN的情况 -->
+    <g id="withFFN">
+      <rect x="850" y="950" width="650" height="300" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+      <text x="1175" y="980" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#2E7D32">
+        ✅ 有前馈全连接层的情况
+      </text>
+      
+      <!-- 流程 -->
+      <rect x="880" y="1000" width="120" height="50" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+      <text x="940" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#1976D2">输入</text>
+      
+      <line x1="1000" y1="1025" x2="1050" y2="1025" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <rect x="1050" y="1000" width="150" height="50" rx="5" fill="url(#attentionGradient)" stroke="#C62828" stroke-width="2"/>
+      <text x="1125" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">注意力</text>
+      
+      <line x1="1200" y1="1025" x2="1250" y2="1025" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <rect x="1250" y="1000" width="120" height="50" rx="5" fill="url(#ffnGradient)" stroke="#00695C" stroke-width="3">
+        <animate attributeName="stroke-width" values="3;5;3" dur="2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="1310" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">前馈全连接层</text>
+      
+      <line x1="1370" y1="1025" x2="1420" y2="1025" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <rect x="1420" y="1000" width="120" height="50" rx="5" fill="url(#outputGradient)" stroke="#00897B" stroke-width="2"/>
+      <text x="1480" y="1025" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#004D40">输出</text>
+      
+      <!-- 优势说明 -->
+      <rect x="880" y="1070" width="590" height="160" rx="5" fill="#E0F2F1" stroke="#00897B" stroke-width="2" opacity="0.8"/>
+      <text x="1175" y="1100" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#004D40">
+        前馈全连接层带来的优势：
+      </text>
+      <text x="930" y="1125" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 非线性变换，增强表达能力
+      </text>
+      <text x="930" y="1145" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 学习复杂的特征组合模式
+      </text>
+      <text x="930" y="1165" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 显著提升模型性能
+      </text>
+      <text x="930" y="1185" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 更好地捕捉深层语义
+      </text>
+      <text x="930" y="1205" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">
+        • 特征表示更加丰富和有用
+      </text>
+    </g>
+  </g>
+  
+  <!-- 第四部分：形象比喻 -->
+  <g id="analogy">
+    <rect x="50" y="1300" width="1500" height="220" rx="10" fill="white" stroke="#2C3E50" stroke-width="2" opacity="0.9"/>
+    <text x="800" y="1330" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      形象比喻：前馈全连接层就像"特征加工厂"
+    </text>
+    
+    <!-- 比喻1 -->
+    <g id="analogy1">
+      <rect x="100" y="1350" width="400" height="150" rx="8" fill="#FFF9C4" stroke="#FBC02D" stroke-width="2"/>
+      <text x="300" y="1378" font-family="Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" fill="#F57F17">
+        🏭 比喻一：加工厂
+      </text>
+      <text x="300" y="1400" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#000000">
+        注意力机制 = 原材料收集
+      </text>
+      <text x="300" y="1420" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        注意力机制收集相关信息（原材料）
+      </text>
+      <text x="300" y="1440" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        但这些信息还是"原始状态"
+      </text>
+      <text x="300" y="1460" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        需要进一步加工才能使用
+      </text>
+      <text x="300" y="1480" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#F57F17">
+        前馈全连接层 = 加工厂，将原材料加工成有用产品
+      </text>
+    </g>
+    
+    <!-- 比喻2 -->
+    <g id="analogy2">
+      <rect x="550" y="1350" width="400" height="150" rx="8" fill="#E1BEE7" stroke="#9C27B0" stroke-width="2"/>
+      <text x="750" y="1378" font-family="Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" fill="#6A1B9A">
+        🎨 比喻二：绘画
+      </text>
+      <text x="750" y="1400" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#000000">
+        注意力机制 = 素描
+      </text>
+      <text x="750" y="1420" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        注意力机制画出基本轮廓（素描）
+      </text>
+      <text x="750" y="1440" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        但还需要上色、添加细节
+      </text>
+      <text x="750" y="1460" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        让画面更加丰富和生动
+      </text>
+      <text x="750" y="1480" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#6A1B9A">
+        前馈全连接层 = 上色和细节加工
+      </text>
+    </g>
+    
+    <!-- 比喻3 -->
+    <g id="analogy3">
+      <rect x="1000" y="1350" width="500" height="150" rx="8" fill="#BBDEFB" stroke="#2196F3" stroke-width="2"/>
+      <text x="1250" y="1378" font-family="Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" fill="#1565C0">
+        🔬 比喻三：科学研究
+      </text>
+      <text x="1250" y="1400" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#000000">
+        注意力机制 = 观察
+      </text>
+      <text x="1250" y="1420" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        注意力机制观察和关联信息
+      </text>
+      <text x="1250" y="1440" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        将观察到的信息进行深度处理
+      </text>
+      <text x="1250" y="1460" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        提取更深层的含义和模式
+      </text>
+      <text x="1250" y="1480" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#1565C0">
+        前馈全连接层 = 深度分析和理解
+      </text>
+    </g>
+  </g>
+  
+  <!-- 底部总结 -->
+  <text x="800" y="1540" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    总结：前馈全连接层是 Transformer 中不可或缺的组件，它通过非线性变换增强模型的表达能力
+  </text>
+  <text x="800" y="1565" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">
+    让模型能够学习更复杂的特征表示，从而提升整体性能
+  </text>
+</svg>
+

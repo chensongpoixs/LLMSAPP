@@ -156,7 +156,7 @@ pip install matplotlib
 
 [6、Transformer神秘架构](/06.Transformer架构神秘/README.md)
 
-[7. 交叉熵损失函数 torch.nn.funcational.cross_entropy(...)]()
+[7. 交叉熵损失函数 torch.nn.funcational.cross_entropy(...)](/06.Transformer架构神秘/交叉熵损失函数.md)
 
 
 

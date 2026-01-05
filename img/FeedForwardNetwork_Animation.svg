@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 渐变定义 -->
+    <linearGradient id="inputGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5BA3F5;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="layer1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#50C878;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#66D9A3;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="geluGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFB84D;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="layer2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9B59B6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B77BC4;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="outputGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#E74C3C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EC7063;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 箭头标记 -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+    
+    <!-- 数据流动粒子 -->
+    <circle id="dataParticle" r="4" fill="#FFD700">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite"/>
+    </circle>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="1400" height="1000" fill="#F8F9FA"/>
+  
+  <!-- 标题 -->
+  <text x="700" y="40" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    前馈网络 (Feed Forward Network) 动画流程图
+  </text>
+  
+  <!-- 输入层 -->
+  <g id="inputLayer">
+    <rect x="50" y="120" width="200" height="150" rx="10" fill="url(#inputGradient)" stroke="#2C3E50" stroke-width="2"/>
+    <text x="150" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+      输入层
+    </text>
+    <text x="150" y="190" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">
+      Input
+    </text>
+    <text x="150" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      (B, L, d)
+    </text>
+    <text x="150" y="240" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      (1, 1024, 768)
+    </text>
+    
+    <!-- 输入数据流动动画 -->
+    <circle cx="150" cy="200" r="8" fill="#FFD700" opacity="0.8">
+      <animate attributeName="cy" values="200;200;200" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- 箭头1: 输入 → 第一层 -->
+  <line x1="250" y1="195" x2="350" y2="195" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  
+  <!-- 数据粒子流动 -->
+  <circle cx="250" cy="195" r="5" fill="#FFD700">
+    <animate attributeName="cx" values="250;350;250" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 第一层线性变换 -->
+  <g id="layer1">
+    <rect x="350" y="120" width="250" height="150" rx="10" fill="url(#layer1Gradient)" stroke="#2C3E50" stroke-width="2"/>
+    <text x="475" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+      第一层线性变换
+    </text>
+    <text x="475" y="185" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">
+      Linear Layer 1
+    </text>
+    <text x="475" y="210" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      W₁: (768 × 3072)
+    </text>
+    <text x="475" y="235" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      y₁ = x × W₁ + b₁
+    </text>
+    
+    <!-- 矩阵乘法动画 -->
+    <rect x="360" y="245" width="230" height="15" rx="5" fill="rgba(255,255,255,0.3)">
+      <animate attributeName="width" values="0;230;0" dur="2s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- 箭头2: 第一层 → GELU -->
+  <line x1="600" y1="195" x2="700" y2="195" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+  </line>
+  
+  <circle cx="600" cy="195" r="5" fill="#FFD700">
+    <animate attributeName="cx" values="600;700;600" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 中间输出 -->
+  <g id="intermediate">
+    <rect x="650" y="80" width="150" height="60" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" opacity="0.8">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="725" y="105" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#2C3E50">
+      中间输出
+    </text>
+    <text x="725" y="125" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#2C3E50">
+      (1, 1024, 3072)
+    </text>
+  </g>
+  
+  <!-- GELU 激活函数 -->
+  <g id="gelu">
+    <rect x="700" y="120" width="200" height="150" rx="10" fill="url(#geluGradient)" stroke="#2C3E50" stroke-width="2"/>
+    <text x="800" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+      GELU 激活
+    </text>
+    <text x="800" y="185" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">
+      Activation
+    </text>
+    <text x="800" y="210" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+      GELU(x) = 0.5 × x ×
+    </text>
+    <text x="800" y="230" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">
+      (1 + tanh(...))
+    </text>
+    
+    <!-- GELU 计算动画 -->
+    <circle cx="800" cy="250" r="15" fill="rgba(255,255,255,0.5)">
+      <animate attributeName="r" values="5;20;5" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- 箭头3: GELU → 第二层 -->
+  <line x1="900" y1="195" x2="1000" y2="195" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" begin="1s" repeatCount="indefinite"/>
+  </line>
+  
+  <circle cx="900" cy="195" r="5" fill="#FFD700">
+    <animate attributeName="cx" values="900;1000;900" dur="2s" begin="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="2s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 第二层线性变换 -->
+  <g id="layer2">
+    <rect x="1000" y="120" width="250" height="150" rx="10" fill="url(#layer2Gradient)" stroke="#2C3E50" stroke-width="2"/>
+    <text x="1125" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+      第二层线性变换
+    </text>
+    <text x="1125" y="185" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">
+      Linear Layer 2
+    </text>
+    <text x="1125" y="210" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      W₂: (3072 × 768)
+    </text>
+    <text x="1125" y="235" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      y₂ = gelu × W₂ + b₂
+    </text>
+    
+    <!-- 矩阵乘法动画 -->
+    <rect x="1010" y="245" width="230" height="15" rx="5" fill="rgba(255,255,255,0.3)">
+      <animate attributeName="width" values="0;230;0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- 箭头4: 第二层 → 输出 -->
+  <line x1="1250" y1="195" x2="1350" y2="195" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" begin="1.5s" repeatCount="indefinite"/>
+  </line>
+  
+  <circle cx="1250" cy="195" r="5" fill="#FFD700">
+    <animate attributeName="cx" values="1250;1350;1250" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 输出层 -->
+  <g id="outputLayer">
+    <rect x="1350" y="120" width="200" height="150" rx="10" fill="url(#outputGradient)" stroke="#2C3E50" stroke-width="2"/>
+    <text x="1450" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">
+      输出层
+    </text>
+    <text x="1450" y="190" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">
+      Output
+    </text>
+    <text x="1450" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      (B, L, d)
+    </text>
+    <text x="1450" y="240" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">
+      (1, 1024, 768)
+    </text>
+    
+    <!-- 输出数据流动动画 -->
+    <circle cx="1450" cy="200" r="8" fill="#FFD700" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- 维度变化说明 -->
+  <g id="dimensionFlow">
+    <text x="150" y="320" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      维度变化流程
+    </text>
+    
+    <!-- 维度标签 -->
+    <rect x="50" y="340" width="200" height="40" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="150" y="365" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#1976D2">
+      768
+    </text>
+    
+    <text x="300" y="360" font-family="Arial, sans-serif" font-size="20" fill="#333">→</text>
+    
+    <rect x="350" y="340" width="250" height="40" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="475" y="365" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#2E7D32">
+      3072 (扩展4倍)
+    </text>
+    
+    <text x="620" y="360" font-family="Arial, sans-serif" font-size="20" fill="#333">→</text>
+    
+    <rect x="700" y="340" width="200" height="40" rx="5" fill="#FFF3E0" stroke="#FF9800" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="800" y="365" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#E65100">
+      GELU激活
+    </text>
+    
+    <text x="920" y="360" font-family="Arial, sans-serif" font-size="20" fill="#333">→</text>
+    
+    <rect x="1000" y="340" width="250" height="40" rx="5" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="1125" y="365" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6A1B9A">
+      768 (压缩回原维度)
+    </text>
+    
+    <text x="1270" y="360" font-family="Arial, sans-serif" font-size="20" fill="#333">→</text>
+    
+    <rect x="1350" y="340" width="200" height="40" rx="5" fill="#FFEBEE" stroke="#F44336" stroke-width="2">
+      <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" begin="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="1450" y="365" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#C62828">
+      768
+    </text>
+  </g>
+  
+  <!-- 详细计算步骤 -->
+  <g id="calculationSteps">
+    <rect x="50" y="420" width="1300" height="500" rx="10" fill="white" stroke="#2C3E50" stroke-width="2" opacity="0.95"/>
+    <text x="700" y="450" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      详细计算步骤动画
+    </text>
+    
+    <!-- 步骤1: 输入 -->
+    <g id="step1">
+      <rect x="80" y="480" width="280" height="120" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2">
+        <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="220" y="510" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#1976D2">
+        步骤 1: 输入数据
+      </text>
+      <text x="220" y="535" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        x ∈ ℝ^(B×L×d)
+      </text>
+      <text x="220" y="555" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        Shape: (1, 1024, 768)
+      </text>
+      <text x="220" y="575" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        总元素: 786,432
+      </text>
+      
+      <!-- 数据流动指示 -->
+      <circle cx="360" cy="540" r="6" fill="#FFD700">
+        <animate attributeName="cx" values="360;370;360" dur="1s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- 步骤2: 第一层计算 -->
+    <g id="step2">
+      <rect x="400" y="480" width="280" height="120" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2">
+        <animate attributeName="stroke-width" values="2;4;2" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+      </rect>
+      <text x="540" y="510" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2E7D32">
+        步骤 2: 第一层线性变换
+      </text>
+      <text x="540" y="535" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        y₁ = x × W₁ + b₁
+      </text>
+      <text x="540" y="555" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        W₁: (768 × 3072)
+      </text>
+      <text x="540" y="575" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        输出: (1, 1024, 3072)
+      </text>
+      
+      <!-- 矩阵乘法动画 -->
+      <rect x="410" y="545" width="260" height="8" rx="4" fill="#66BB6A" opacity="0.6">
+        <animate attributeName="width" values="0;260;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+    
+    <!-- 步骤3: GELU -->
+    <g id="step3">
+      <rect x="720" y="480" width="280" height="120" rx="8" fill="#FFF3E0" stroke="#FF9800" stroke-width="2">
+        <animate attributeName="stroke-width" values="2;4;2" dur="2s" begin="1s" repeatCount="indefinite"/>
+      </rect>
+      <text x="860" y="510" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#E65100">
+        步骤 3: GELU 激活
+      </text>
+      <text x="860" y="535" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        GELU(x) = 0.5 × x ×
+      </text>
+      <text x="860" y="550" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        (1 + tanh(√(2/π) ×
+      </text>
+      <text x="860" y="565" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">
+        (x + 0.044715 × x³)))
+      </text>
+      <text x="860" y="585" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        逐元素计算，维度不变
+      </text>
+      
+      <!-- GELU 波动动画 -->
+      <path d="M 740 570 Q 860 560, 980 570" stroke="#FF9800" stroke-width="3" fill="none" opacity="0.7">
+        <animate attributeName="d" values="M 740 570 Q 860 560, 980 570;M 740 575 Q 860 565, 980 575;M 740 570 Q 860 560, 980 570" dur="1.5s" repeatCount="indefinite"/>
+      </path>
+    </g>
+    
+    <!-- 步骤4: 第二层计算 -->
+    <g id="step4">
+      <rect x="1040" y="480" width="280" height="120" rx="8" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2">
+        <animate attributeName="stroke-width" values="2;4;2" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+      </rect>
+      <text x="1180" y="510" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#6A1B9A">
+        步骤 4: 第二层线性变换
+      </text>
+      <text x="1180" y="535" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        y₂ = gelu × W₂ + b₂
+      </text>
+      <text x="1180" y="555" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        W₂: (3072 × 768)
+      </text>
+      <text x="1180" y="575" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#333">
+        输出: (1, 1024, 768)
+      </text>
+      
+      <!-- 矩阵乘法动画 -->
+      <rect x="1050" y="545" width="260" height="8" rx="4" fill="#BA68C8" opacity="0.6">
+        <animate attributeName="width" values="0;260;0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+    
+    <!-- 参数统计 -->
+    <g id="parameters">
+      <rect x="80" y="640" width="600" height="250" rx="8" fill="#F5F5F5" stroke="#757575" stroke-width="2"/>
+      <text x="380" y="670" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#424242">
+        参数统计 (embedding_dim = 768)
+      </text>
+      
+      <!-- 第一层参数 -->
+      <rect x="100" y="690" width="280" height="80" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+      <text x="240" y="710" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#1B5E20">
+        第一层参数
+      </text>
+      <text x="240" y="730" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        权重 W₁: 768 × 3072
+      </text>
+      <text x="240" y="745" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        = 2,359,296
+      </text>
+      <text x="240" y="760" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        偏置 b₁: 3,072
+      </text>
+      <text x="240" y="775" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#1B5E20">
+        小计: 2,362,368
+      </text>
+      
+      <!-- 第二层参数 -->
+      <rect x="400" y="690" width="280" height="80" rx="5" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2"/>
+      <text x="540" y="710" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#4A148C">
+        第二层参数
+      </text>
+      <text x="540" y="730" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        权重 W₂: 3072 × 768
+      </text>
+      <text x="540" y="745" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        = 2,359,296
+      </text>
+      <text x="540" y="760" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+        偏置 b₂: 768
+      </text>
+      <text x="540" y="775" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#4A148C">
+        小计: 2,360,064
+      </text>
+      
+      <!-- 总计 -->
+      <rect x="100" y="790" width="580" height="80" rx="5" fill="#FFEBEE" stroke="#F44336" stroke-width="3"/>
+      <text x="390" y="815" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#C62828">
+        总参数数量: 4,722,432
+      </text>
+      <text x="390" y="835" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#000000">
+        (约 18 MB，假设 float32)
+      </text>
+      <text x="390" y="855" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#000000">
+        GELU 激活函数: 0 参数（仅计算）
+      </text>
+    </g>
+    
+    <!-- 位置独立处理说明 -->
+    <g id="positionIndependent">
+      <rect x="720" y="640" width="600" height="250" rx="8" fill="#E1F5FE" stroke="#0288D1" stroke-width="2"/>
+      <text x="1020" y="670" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#01579B">
+        位置独立处理特性
+      </text>
+      
+      <!-- 位置示例 -->
+      <text x="1020" y="700" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">
+        每个位置独立处理，可以并行计算
+      </text>
+      
+      <!-- 三个位置的处理 -->
+      <g id="positions">
+        <rect x="750" y="720" width="180" height="60" rx="5" fill="#B3E5FC" stroke="#0288D1" stroke-width="2">
+          <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        <text x="840" y="740" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#01579B">
+          位置 0
+        </text>
+        <text x="840" y="760" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+          FFN(x₀) → y₀
+        </text>
+        
+        <rect x="960" y="720" width="180" height="60" rx="5" fill="#B3E5FC" stroke="#0288D1" stroke-width="2">
+          <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+        </rect>
+        <text x="1050" y="740" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#01579B">
+          位置 1
+        </text>
+        <text x="1050" y="760" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+          FFN(x₁) → y₁
+        </text>
+        
+        <rect x="1170" y="720" width="180" height="60" rx="5" fill="#B3E5FC" stroke="#0288D1" stroke-width="2">
+          <animate attributeName="fill-opacity" values="0.5;1;0.5" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="1260" y="740" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#01579B">
+          位置 2
+        </text>
+        <text x="1260" y="760" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#000000">
+          FFN(x₂) → y₂
+        </text>
+      </g>
+      
+      <!-- 并行处理箭头 -->
+      <text x="1020" y="820" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">
+        ↓ 并行处理 ↓
+      </text>
+      
+      <rect x="750" y="840" width="540" height="30" rx="5" fill="#E0F2F1" stroke="#00897B" stroke-width="2"/>
+      <text x="1020" y="860" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" fill="#004D40">
+        所有位置同时通过相同的 FFN 层，互不干扰
+      </text>
+    </g>
+  </g>
+  
+  <!-- 底部说明 -->
+  <text x="700" y="980" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">
+    动画展示前馈网络的数据流动、维度变化和计算过程 | 所有动画循环播放
+  </text>
+</svg>
+
