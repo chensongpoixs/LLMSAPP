@@ -11,10 +11,53 @@
 				   Author: chensong
 				   date:  2026-01-01
 
- * GPT 模型 (完整的 Transformer 模型)
+ * GPT 模型 (Decoder-Only Transformer 模型)
  *
- * 这是完整的 GPT (Generative Pre-trained Transformer) 模型实现，
+ * 这是 GPT (Generative Pre-trained Transformer) 模型实现，
  * 采用 GPT 风格架构，即只使用解码器（Decoder）部分的自回归模型。
+ * 
+ * 注意：这是 Decoder-Only 架构，不是完整的 Encoder-Decoder Transformer。
+ * 
+ * 架构类型：
+ * - Decoder-Only: 只包含解码器层（当前实现）
+ * - Encoder-Decoder: 包含编码器和解码器（未实现）
+ * 
+ * 当前实现特点：
+ * - 使用 Masked Self-Attention（防止看到未来token）
+ * - 适合自回归生成任务（如语言模型）
+ * - 不包含 Encoder-Decoder Cross-Attention
+ * 
+ * 架构对比：
+ * ┌─────────────────────────────────────────────────────────┐
+ * │ Decoder-Only (当前实现)                                  │
+ * │ ┌─────────────────────────────────────────────────┐   │
+ * │ │ Input Embedding                                  │   │
+ * │ │ Position Embedding                               │   │
+ * │ │ ┌─────────────────────────────────────────────┐ │   │
+ * │ │ │ Decoder Block (N层)                          │ │   │
+ * │ │ │   - Masked Self-Attention                    │ │   │
+ * │ │ │   - Feed Forward Network                     │ │   │
+ * │ │ └─────────────────────────────────────────────┘ │   │
+ * │ │ Output Head                                       │   │
+ * │ └─────────────────────────────────────────────────┘   │
+ * └─────────────────────────────────────────────────────────┘
+ * 
+ * ┌─────────────────────────────────────────────────────────┐
+ * │ Encoder-Decoder (未实现)                                 │
+ * │ ┌──────────────┐         ┌──────────────┐              │
+ * │ │   Encoder    │         │   Decoder    │              │
+ * │ │ ┌──────────┐ │         │ ┌──────────┐ │              │
+ * │ │ │Encoder   │ │         │ │Decoder   │ │              │
+ * │ │ │Block (N) │ │         │ │Block (N) │ │              │
+ * │ │ │-Self-    │ │         │ │-Masked   │ │              │
+ * │ │ │ Attention│ │         │ │ Self-    │ │              │
+ * │ │ │-FFN      │ │         │ │ Attention│ │              │
+ * │ │ └──────────┘ │         │ │-Cross-   │ │              │
+ * │ └──────────────┘         │ │ Attention│ │              │
+ * │                          │ │-FFN      │ │              │
+ * │                          │ └──────────┘ │              │
+ * │                          └──────────────┘              │
+ * └─────────────────────────────────────────────────────────┘
  *
  * 架构流程：
  * 1. Token Embedding: 将 token IDs 转换为向量表示

@@ -31,62 +31,48 @@
 
  ******************************************************************************/
 /**
- * Transformer 训练实现（包含反向传播和 GPU 支持）
+ * Transformer Inference Program
  * 
- * 注意：当前实现是 Decoder-Only 架构（GPT风格），不是完整的 Encoder-Decoder Transformer
+ * Transformer模型推理程序（支持 CPU/GPU）
+ * 
+ * 使用 Generator 类进行文本生成和推理
  * 
  * 架构说明：
- * - Decoder-Only: 只包含解码器层，使用 Masked Self-Attention
- * - 适合任务: 语言模型、文本生成（自回归）
- * - 不包含: Encoder层、Encoder-Decoder Cross-Attention
- * 
- * 本文件实现了完整的训练流程，包括：
- * 1. 前向传播：模型计算预测结果
- * 2. 损失计算：计算预测与真实标签的差异
- * 3. 反向传播：计算梯度
- * 4. 梯度裁剪：防止梯度爆炸
- * 5. 参数更新：使用优化器更新模型参数
- * 6. GPU 支持：自动检测并使用 GPU（如果可用）
- * 
- * 训练流程：
- * ┌─────────────────────────────────────────────────────────┐
- * │  1. 准备数据 (input_ids, target_ids)                    │
- * │  2. 前向传播: logits = model(input_ids)                 │
- * │  3. 计算损失: loss = criterion(logits, target_ids)      │
- * │  4. 反向传播: loss.backward()                           │
- * │  5. 梯度裁剪: clip_grad_norm_(model.parameters(), ...)  │
- * │  6. 参数更新: optimizer.step()                           │
- * │  7. 梯度清零: optimizer.zero_grad()                      │
- * └─────────────────────────────────────────────────────────┘
+ * - 当前实现是 Decoder-Only 架构（GPT风格）
+ * - 只包含解码器层，使用 Masked Self-Attention
+ * - 不是完整的 Encoder-Decoder Transformer
  * 
  * GPU 使用：
  * - 自动检测：如果 CUDA 可用，自动使用 GPU
  * - 命令行参数：--device cuda 或 --device cpu
- * - 示例：./Transformer_train --device cuda
- * 
- * 关键概念：
- * - 损失函数：交叉熵损失（CrossEntropyLoss），用于多分类任务
- * - 优化器：Adam 优化器，自适应学习率
- * - 学习率调度：可选，用于动态调整学习率
- * - 梯度裁剪：防止梯度爆炸，提高训练稳定性
- * - GPU 加速：使用 CUDA 加速训练，大幅提升训练速度
+ * - 示例：./Transformer_inference --device cuda
  */
 
 #include "GPTModel.h"
 #include "ModelConfig.h"
 #include "Logger.h"
-#include "TextDataset.h"
+#include "Generator.h"
 #include "TrainingUtils.h"
-#include "Trainer.h"
 #include <torch/torch.h>
 #include <memory>
 #include <string>
+#include <iomanip>
 
-int main(int argc, char* argv[]) {
-    Logger::info("=== Transformer Training Example (with Backpropagation) ===");
+int main(int argc, char * argv[]) 
+{
+    // ========================================================================
+    // 0. Configure logger
+    // ========================================================================
+    Logger::getInstance().setLogLevel(LogLevel::DEBUG);
+    Logger::getInstance().setShowTimestamp(true);
+    Logger::getInstance().setShowLevel(true);
+    
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("Transformer C++ Inference Program");
+    Logger::info("═══════════════════════════════════════════════════════════════");
     
     // ========================================================================
-    // 0. Parse device parameters
+    // 1. Parse device parameters
     // ========================================================================
     torch::Device device = parse_device(argc, argv);
     
@@ -107,12 +93,12 @@ int main(int argc, char* argv[]) {
     Logger::info("  - Use CPU: {} --device cpu", argv[0]);
     
     // ========================================================================
-    // 1. Create model configuration
+    // 2. Create model configuration
     // ========================================================================
     ModelConfig cfg;
     cfg.vocab_size = 50257;        // Vocab size (GPT-2 standard)
     cfg.max_seq_length = 1024;     // Max sequence length
-    cfg.embedding_dim = 768;       // Embedding dimension
+    cfg.embedding_dim = 768;       // Embedding dimension (GPT-2 standard)
     cfg.n_heads = 12;              // Number of attention heads
     cfg.n_layers = 12;             // Number of Transformer layers
     cfg.drop_rate = 0.1;           // Dropout rate
@@ -127,69 +113,64 @@ int main(int argc, char* argv[]) {
     Logger::info("  - Dropout Rate: {}", cfg.drop_rate);
     
     // ========================================================================
-    // 2. Create model
+    // 3. Create model and generator
     // ========================================================================
-    Logger::info("Creating GPT model...");
+    std::string model_path = "transformer_model_full.pth";
     std::shared_ptr<GPTModel> model = std::make_shared<GPTModel>(cfg);
-    model->to(device);
-    model->train();
     
-    Logger::info("Model created successfully!");
+    Logger::info("Attempting to load saved model: {}", model_path);
     
-    // Count parameters
+    Generator generator(model, device, cfg);
+    
+    if (!generator.loadModel(model_path)) {
+        Logger::warning("Failed to load model, using untrained model");
+    }
+    
+    // ========================================================================
+    // 4. Generate text
+    // ========================================================================
+    Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Logger::info("Starting inference...");
+    Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    
+    std::string prompt = "hi are you ！！！";
+    int max_new_tokens = 100;
+    double temperature = 0.8;
+    
+    Logger::info("Prompt: \"{}\"", prompt);
+    Logger::info("Max Generation Length: {} tokens", max_new_tokens);
+    
+    // 使用Generator生成文本
+    GenerationResult result = generator.generate(prompt, max_new_tokens, temperature);
+    
+    // 打印结果
+    Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Logger::info("Inference Results:");
+    Logger::info("Original Prompt: \"{}\"", result.prompt);
+    Logger::info("Generated Text: \"{}\"", result.generated_text);
+    Logger::info("Number of Generated Tokens: {}", result.generated_tokens.size());
+    std::ostringstream avg_speed_str;
+    avg_speed_str << std::fixed << std::setprecision(2) << result.avg_tokens_per_second;
+    Logger::info("Total Inference Time: {:.2f} seconds ({} ms)", result.total_time_sec, result.total_time_ms);
+    Logger::info("Average Generation Speed: {} tokens/sec", avg_speed_str.str());
+    Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    
+    // ========================================================================
+    // 5. Model Parameter Statistics
+    // ========================================================================
+    Logger::info("=== Model Statistics ===");
+    
     size_t total_params = 0;
     for (const auto& param : model->parameters()) {
         total_params += param.numel();
     }
+    
     Logger::info("Total Parameters: {}", total_params);
-    Logger::info("Total Parameters (MB): {:.2f}", (total_params * sizeof(float) / (1024.0 * 1024.0)));
+    std::ostringstream params_mb;
+    params_mb << std::fixed << std::setprecision(2) << (total_params * sizeof(float) / (1024.0 * 1024.0));
+    Logger::info("Total Parameters (MB): {}", params_mb.str());
     
-    // ========================================================================
-    // 3. Load training data
-    // ========================================================================
-    std::string data_file = "the-verdict.txt";
-    Logger::info("Loading training data...");
-    Logger::info("Data file: {}", data_file);
-    
-    int seq_len = 128;             // Sequence length
-    TextDataset dataset(data_file, seq_len, cfg.vocab_size);
-    
-    if (!dataset.load()) {
-        Logger::error("Failed to load data, exiting program");
-        return -1;
-    }
-    
-    Logger::info("Dataset loaded successfully!");
-    Logger::info("Dataset size: {} samples", dataset.size());
-    
-    // ========================================================================
-    // 4. Training parameters
-    // ========================================================================
-    int num_epochs = 10;           // Number of epochs
-    int batch_size = 40;          // Batch size
-    double learning_rate = 3e-4;   // Learning rate
-    double weight_decay = 0.1;     // Weight decay
-    double clip_grad_norm = 1.0;   // Gradient clipping
-    
-    Logger::info("Training Parameters:");
-    Logger::info("  - Number of Epochs: {}", num_epochs);
-    Logger::info("  - Batch Size: {}", batch_size);
-    Logger::info("  - Sequence Length: {}", seq_len);
-    Logger::info("  - Learning Rate: {}", learning_rate);
-    Logger::info("  - Weight Decay: {}", weight_decay);
-    Logger::info("  - Gradient Clipping: {}", clip_grad_norm);
-    
-    // ========================================================================
-    // 5. Create trainer and start training
-    // ========================================================================
-    Trainer trainer(model, dataset, device, cfg);
-    
-    if (!trainer.train(num_epochs, batch_size, learning_rate, weight_decay, clip_grad_norm, data_file)) {
-        Logger::error("Training failed!");
-        return -1;
-    }
-    
-    Logger::info("Program execution completed!");
+    Logger::info("Inference program execution completed!");
     
     return 0;
 }

@@ -49,7 +49,7 @@ TextDataset::TextDataset(const std::string& filepath, int seq_len, int vocab_siz
 bool TextDataset::load() {
     std::ifstream file(filepath_);
     if (!file.is_open()) {
-        Logger::error("无法打开文件: {}", filepath_);
+        Logger::error("Failed to open file: {}", filepath_);
         return false;
     }
     
@@ -60,18 +60,18 @@ bool TextDataset::load() {
     file.close();
     
     if (text_.empty()) {
-        Logger::error("文件为空: {}", filepath_);
+        Logger::error("File is empty: {}", filepath_);
         return false;
     }
     
-    Logger::info("成功加载文件: {}", filepath_);
-    Logger::info("文件大小: {} 字符", text_.size());
+    Logger::info("Successfully loaded file: {}", filepath_);
+    Logger::info("File size: {} characters", text_.size());
     
-    // 转换为token序列
+    // Convert to token sequence
     tokenize();
     
-    Logger::info("Token序列长度: {}", tokens_.size());
-    Logger::info("数据集大小（样本数）: {}", size());
+    Logger::info("Token sequence length: {}", tokens_.size());
+    Logger::info("Dataset size (number of samples): {}", size());
     
     return true;
 }
@@ -109,7 +109,7 @@ char TextDataset::tokenToChar(int token_id) const {
 
 std::pair<torch::Tensor, torch::Tensor> TextDataset::getBatch(int batch_size, torch::Device device) {
     if (tokens_.size() < seq_len_ + 1) {
-        Logger::error("Token序列太短，无法生成批次");
+        Logger::error("Token sequence too short to generate batch");
         return std::make_pair(
             torch::zeros({batch_size, seq_len_}, torch::TensorOptions().dtype(torch::kLong).device(device)),
             torch::zeros({batch_size, seq_len_}, torch::TensorOptions().dtype(torch::kLong).device(device))

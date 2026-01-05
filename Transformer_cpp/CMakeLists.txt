@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
-project(Transformer_demo)
+project(Transformer)
 
 # 设置 C++ 标准
 set(CMAKE_CXX_STANDARD 17)
@@ -30,11 +30,19 @@ file(GLOB model_source
     Logger.cpp
     TextDataset.h
     TextDataset.cpp
+    TrainingUtils.h
+    TrainingUtils.cpp
+    Trainer.h
+    Trainer.cpp
+    Generator.h
+    Generator.cpp
+    ModelAnalyzer.h
+    ModelAnalyzer.cpp
 )
 
-# 示例程序（推理）
-add_executable(${PROJECT_NAME} 
-    example.cpp
+# 推理程序（文本生成）
+add_executable(Transformer_inference
+    inference.cpp
     ${model_source}
 )
 
@@ -44,14 +52,22 @@ add_executable(Transformer_train
     ${model_source}
 )
 
+# 模型信息工具（分析和显示模型参数）
+add_executable(Transformer_model_info
+    model_info.cpp
+    ${model_source}
+)
+
 # 链接 libtorch
-target_link_libraries(${PROJECT_NAME}  "${TORCH_LIBRARIES}")
-target_link_libraries(Transformer_train  "${TORCH_LIBRARIES}")
+target_link_libraries(Transformer_inference  "${TORCH_LIBRARIES}"  c10_cuda torch_cuda)
+target_link_libraries(Transformer_train  "${TORCH_LIBRARIES}" c10_cuda torch_cuda)
+target_link_libraries(Transformer_model_info  "${TORCH_LIBRARIES}" c10_cuda torch_cuda)
 
 
 set(AllFile 
-    example.cpp
+    inference.cpp
     train.cpp
+    model_info.cpp
     ${model_source}
 )
 foreach(fileItem ${AllFile})       
@@ -69,8 +85,9 @@ foreach(fileItem ${AllFile})
 endforeach()
 
 # 设置编译选项
-set_property(TARGET ${PROJECT_NAME}  PROPERTY CXX_STANDARD 17)
+set_property(TARGET Transformer_inference  PROPERTY CXX_STANDARD 17)
 set_property(TARGET Transformer_train  PROPERTY CXX_STANDARD 17)
+set_property(TARGET Transformer_model_info  PROPERTY CXX_STANDARD 17)
 
 # 在 Windows 上禁用某些警告
 if (WIN32)

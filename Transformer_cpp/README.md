@@ -1,8 +1,24 @@
 # Transformer C++ 实现
 
-本目录包含使用 C++ 和 libtorch (PyTorch C++ API) 实现的完整 Transformer 架构。
+本目录包含使用 C++ 和 libtorch (PyTorch C++ API) 实现的 Transformer 架构。
 
 ## 架构概述
+
+**重要说明：当前实现是 Decoder-Only 架构（GPT风格），不是完整的 Encoder-Decoder Transformer。**
+
+### 架构类型
+
+- **Decoder-Only（当前实现）**：只包含解码器层，使用 Masked Self-Attention
+  - 适合任务：语言模型、文本生成（自回归）
+  - 特点：使用掩码防止看到未来信息
+  - 示例：GPT、GPT-2、GPT-3、ChatGPT
+
+- **Encoder-Decoder（未实现）**：包含编码器和解码器
+  - 适合任务：机器翻译、摘要生成
+  - 特点：编码器处理输入，解码器生成输出，之间有 Cross-Attention
+  - 示例：原始 Transformer、BERT（只有Encoder）、T5
+
+### 当前实现
 
 本实现采用 GPT (Generative Pre-trained Transformer) 风格，即只使用解码器（Decoder）部分的自回归模型。
 
@@ -95,7 +111,7 @@
 
 5. 运行示例
    ```powershell
-   .\Release\example.exe
+   .\Release\Transformer_inference.exe
    ```
 
 ### Linux/macOS
@@ -125,16 +141,52 @@
 
 5. 运行示例
    ```bash
-   ./example
+   ./Transformer_inference
    ```
+
+## 可执行文件
+
+编译后会生成三个可执行文件：
+
+1. **`Transformer_inference`**: 推理程序，用于文本生成
+   - 加载训练好的模型
+   - 根据提示词生成文本
+   - 支持 CPU/GPU 选择
+
+2. **`Transformer_train`**: 训练程序，用于模型训练
+   - 从文本文件加载数据
+   - 执行训练循环（前向传播、反向传播、参数更新）
+   - 保存模型检查点
+   - 支持 CPU/GPU 选择
+
+3. **`Transformer_model_info`**: 模型信息工具，用于分析和显示模型参数
+   - 加载保存的模型文件
+   - 显示模型结构和所有参数信息
+   - 统计参数数量、内存占用等
+   - 可保存模型信息到文件
 
 ## 文件说明
 
 ### 核心文件
 
-- **`Transformer.h`**: 头文件，包含所有类的声明
-- **`Transformer.cpp`**: 实现文件，包含所有类的实现
-- **`example.cpp`**: 使用示例，演示如何创建模型并进行前向传播
+- **`GPTModel.h/cpp`**: GPT 模型实现
+- **`MultiHeadAttention.h/cpp`**: 多头注意力机制
+- **`TransformerBlock.h/cpp`**: Transformer 块
+- **`FeedForwardNetwork.h/cpp`**: 前馈神经网络
+- **`NewGELU.h/cpp`**: GELU 激活函数
+- **`ModelConfig.h`**: 模型配置结构体
+
+### 工具文件
+
+- **`inference.cpp`**: 推理程序，使用 Generator 类进行文本生成
+- **`train.cpp`**: 训练程序，使用 Trainer 类进行模型训练
+- **`model_info.cpp`**: 模型信息工具，使用 ModelAnalyzer 类分析模型
+- **`Generator.h/cpp`**: 文本生成器类
+- **`Trainer.h/cpp`**: 训练器类
+- **`ModelAnalyzer.h/cpp`**: 模型分析器类
+- **`TrainingUtils.h/cpp`**: 训练工具函数
+- **`TextDataset.h/cpp`**: 文本数据集加载器
+- **`Logger.h/cpp`**: 日志模块
 
 ### 构建文件
 
@@ -189,6 +241,28 @@ int main() {
 - `n_layers`: Transformer 层数（默认: 12）
 - `drop_rate`: Dropout 比率（默认: 0.1）
 - `qkv_bias`: Q、K、V 线性层是否使用偏置（默认: false）
+
+### 模型信息工具使用
+
+`Transformer_model_info` 工具用于分析和显示模型的所有参数信息：
+
+```bash
+# 基本使用（分析默认模型文件）
+./Transformer_model_info
+
+# 指定模型文件
+./Transformer_model_info --model runs/train/exp0/weights/best.pth
+
+# 保存模型信息到文件
+./Transformer_model_info --model transformer_model_full.pth --output model_info.txt
+```
+
+工具功能：
+- 显示模型结构（按模块分组）
+- 显示所有参数的详细信息（形状、元素数量、统计信息）
+- 显示参数摘要（总参数量、内存占用、可训练参数等）
+- 按模块统计参数分布
+- 可保存模型信息到文本文件
 
 ### GPU 支持
 

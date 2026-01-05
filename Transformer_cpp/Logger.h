@@ -43,11 +43,11 @@
  * - 文件输出：可选，支持输出到文件
  * - 日志级别过滤：只输出指定级别及以上的日志
  * 
- * 使用示例：
- *   Logger::info("模型创建完成，参数量: {}", total_params);
- *   Logger::warning("CUDA 不可用，使用 CPU");
- *   Logger::error("训练失败: {}", error_msg);
- *   Logger::debug("批次 {} 处理完成", batch_idx);
+ * Usage Example:
+ *   Logger::info("Model created successfully, parameter count: {}", total_params);
+ *   Logger::warning("CUDA not available, using CPU");
+ *   Logger::error("Training failed: {}", error_msg);
+ *   Logger::debug("Batch {} processing completed", batch_idx);
  */
 
 #ifndef LOGGER_H
