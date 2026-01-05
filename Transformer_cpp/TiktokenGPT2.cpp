@@ -37,6 +37,7 @@
  */
 
 #include "TiktokenGPT2.h"
+#include "Tiktoken.h"  // 包含 TiktokenException
 #include "json.hpp"
 #include <fstream>
 #include <sstream>
@@ -94,7 +95,7 @@ std::map<std::vector<uint8_t>, uint32_t> load_bpe_merges(const std::string& merg
     
     std::ifstream file(merges_file);
     if (!file.is_open()) {
-        return mergeable_ranks;  // 文件不存在，返回基础映射
+        throw TiktokenException("Failed to open merges file: " + merges_file);
     }
     
     std::string line;
@@ -106,6 +107,30 @@ std::map<std::vector<uint8_t>, uint32_t> load_bpe_merges(const std::string& merg
     // 1. 单字节字符（如 "a", "b"）
     // 2. 多字节字符（如 "Ġhello" 中的 "Ġ" 表示空格）
     // 3. 特殊字符（如 "\n", "\t"）
+    // 4. 转义字符（如 "\\n", "\\t"）
+    
+    // 辅助函数：处理转义字符
+    auto unescapeToken = [](const std::string& token) -> std::string {
+        std::string result;
+        result.reserve(token.size());
+        for (size_t i = 0; i < token.size(); ++i) {
+            if (token[i] == '\\' && i + 1 < token.size()) {
+                switch (token[i + 1]) {
+                    case 'n': result += '\n'; i++; break;
+                    case 't': result += '\t'; i++; break;
+                    case 'r': result += '\r'; i++; break;
+                    case '\\': result += '\\'; i++; break;
+                    case '\'': result += '\''; i++; break;
+                    case '"': result += '"'; i++; break;
+                    default: result += token[i]; break;
+                }
+            } else {
+                result += token[i];
+            }
+        }
+        return result;
+    };
+    
     while (std::getline(file, line)) {
         // 跳过空行和注释
         if (line.empty() || line[0] == '#') {
@@ -114,6 +139,9 @@ std::map<std::vector<uint8_t>, uint32_t> load_bpe_merges(const std::string& merg
         
         // 移除行尾的换行符和空白
         line.erase(line.find_last_not_of(" \t\r\n") + 1);
+        if (line.empty()) {
+            continue;
+        }
         
         // 查找第一个空格，分割两个 token
         size_t space_pos = line.find(' ');
@@ -121,21 +149,26 @@ std::map<std::vector<uint8_t>, uint32_t> load_bpe_merges(const std::string& merg
             continue;  // 无效行
         }
         
-        std::string token1 = line.substr(0, space_pos);
-        std::string token2 = line.substr(space_pos + 1);
+        std::string token1_str = line.substr(0, space_pos);
+        std::string token2_str = line.substr(space_pos + 1);
         
-        // 将 token 字符串转换为字节向量
-        // 注意：token 字符串可能包含多字节字符，需要按 UTF-8 编码处理
+        // 处理转义字符
+        token1_str = unescapeToken(token1_str);
+        token2_str = unescapeToken(token2_str);
+        
+        // 将 token 字符串转换为字节向量（UTF-8 编码）
+        // GPT-2 使用字节级 BPE，所以直接按字节处理
         std::vector<uint8_t> pair_bytes;
         
         // token1 的字节（UTF-8 编码）
-        for (size_t i = 0; i < token1.length(); ++i) {
-            pair_bytes.push_back(static_cast<uint8_t>(token1[i]));
+        for (size_t i = 0; i < token1_str.length(); ++i) {
+            // 对于多字节 UTF-8 字符，直接取字节值
+            pair_bytes.push_back(static_cast<uint8_t>(token1_str[i]));
         }
         
         // token2 的字节（UTF-8 编码）
-        for (size_t i = 0; i < token2.length(); ++i) {
-            pair_bytes.push_back(static_cast<uint8_t>(token2[i]));
+        for (size_t i = 0; i < token2_str.length(); ++i) {
+            pair_bytes.push_back(static_cast<uint8_t>(token2_str[i]));
         }
         
         // 添加到合并规则
@@ -190,14 +223,19 @@ GPT2Config load_gpt2_config_from_files(const std::string& vocab_file,
     
     // 加载 BPE merges
     if (!vocab_file.empty()) {
-        config.mergeable_ranks = load_bpe_merges(vocab_file);
+        auto loaded_merges = load_bpe_merges(vocab_file);
+        if (!loaded_merges.empty()) {
+            config.mergeable_ranks = loaded_merges;
+        }
     }
     
-    // 加载编码器（如果提供）
+    // 加载编码器 JSON（如果提供）
+    // encoder.json 包含 token -> id 的映射，可以用于验证
     if (!encoder_file.empty()) {
         auto encoder = load_encoder_json(encoder_file);
-        // 可以将 encoder 信息用于验证或补充配置
-        // 这里主要使用 mergeable_ranks
+        // encoder.json 主要用于验证，实际的编码使用 mergeable_ranks
+        // 但我们可以用它来补充特殊 token 信息
+        // 注意：GPT-2 的 encoder.json 中，<|endoftext|> 的 ID 是 50256
     }
     
     // 更新词汇表大小
@@ -210,6 +248,9 @@ GPT2Config load_gpt2_config_from_files(const std::string& vocab_file,
             max_id = std::max(max_id, static_cast<size_t>(pair.second));
         }
         config.vocab_size = max_id + 1;
+    } else {
+        // 如果没有加载 merges，使用默认大小
+        config.vocab_size = 50257;
     }
     
     return config;

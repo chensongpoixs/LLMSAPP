@@ -58,6 +58,47 @@
 #include <unordered_map>
 #include <memory>
 #include <cstdint>
+#include <stdexcept>
+#include <exception>
+
+// RE2 正则表达式库（用于完整的 Unicode 支持）
+#ifdef TIKTOKEN_USE_RE2
+#include <re2/re2.h>
+#include <re2/stringpiece.h>
+#else
+// 如果没有 RE2，回退到 std::regex
+#include <regex>
+#define TIKTOKEN_USE_STD_REGEX
+#endif
+
+// 为 std::pair<uint32_t, uint32_t> 提供哈希函数（用于 std::unordered_map）
+// 注意：标准库没有为 std::pair 提供默认哈希函数，需要自定义
+namespace std {
+    template<>
+    struct hash<std::pair<uint32_t, uint32_t>> {
+        size_t operator()(const std::pair<uint32_t, uint32_t>& p) const noexcept {
+            // 使用更好的哈希组合方法
+            // 将两个 uint32_t 组合成一个 size_t
+            // 使用位运算和乘法来减少哈希冲突
+            size_t h1 = static_cast<size_t>(p.first);
+            size_t h2 = static_cast<size_t>(p.second);
+            // 使用黄金比例相关的乘数来混合哈希值
+            return h1 ^ (h2 + 0x9e3779b9 + (h1 << 6) + (h1 >> 2));
+        }
+    };
+}
+
+/**
+ * Tiktoken 异常类
+ */
+class TiktokenException : public std::runtime_error {
+public:
+    explicit TiktokenException(const std::string& message) 
+        : std::runtime_error("Tiktoken Error: " + message) {}
+    
+    explicit TiktokenException(const char* message) 
+        : std::runtime_error(std::string("Tiktoken Error: ") + message) {}
+};
 
 /**
  * Tiktoken 编码器类
@@ -132,6 +173,17 @@ private:
     std::map<uint32_t, std::string> special_tokens_reverse_;  // 反向映射
     size_t vocab_size_;
     
+    // 性能优化：缓存结构
+    mutable std::unordered_map<std::pair<uint32_t, uint32_t>, uint32_t> rank_map_cache_;  // rank_map 缓存
+    mutable std::unordered_map<uint32_t, std::vector<uint8_t>> token_to_bytes_cache_;  // token 到字节的缓存
+    mutable bool rank_map_initialized_;  // rank_map 是否已初始化
+    
+#ifdef TIKTOKEN_USE_RE2
+    // RE2 正则表达式缓存（编译一次，多次使用）
+    mutable std::unique_ptr<RE2> regex_pattern_;
+    mutable bool regex_compiled_;
+#endif
+    
     /**
      * 将字符串转换为字节向量
      */
@@ -143,7 +195,8 @@ private:
     std::string bytesToString(const std::vector<uint8_t>& bytes) const;
     
     /**
-     * 使用正则表达式分割文本（简化版本，使用空格和标点分割）
+     * 使用正则表达式分割文本
+     * GPT-2 模式：'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+
      */
     std::vector<std::string> splitText(const std::string& text) const;
     
@@ -153,10 +206,25 @@ private:
     std::vector<uint32_t> applyBPE(const std::vector<uint8_t>& bytes) const;
     
     /**
-     * 查找可以合并的字节对
+     * 查找可以合并的字节对（支持多字节 token）
      */
     std::pair<size_t, uint32_t> findBestMerge(const std::vector<uint32_t>& tokens,
-                                             const std::map<std::pair<uint32_t, uint32_t>, uint32_t>& rank_map) const;
+                                             const std::unordered_map<std::pair<uint32_t, uint32_t>, uint32_t>& rank_map) const;
+    
+    /**
+     * 构建完整的 rank_map（包括多字节 token 对）
+     */
+    void buildRankMap(std::unordered_map<std::pair<uint32_t, uint32_t>, uint32_t>& rank_map) const;
+    
+    /**
+     * 检查字符是否为 Unicode 字母（改进的 Unicode 支持）
+     */
+    //bool isUnicodeLetter(uint8_t byte, const std::string& text, size_t pos) const;
+    
+    /**
+     * 检查字符是否为 Unicode 数字（改进的 Unicode 支持）
+     */
+   // bool isUnicodeDigit(uint8_t byte, const std::string& text, size_t pos) const;
 };
 
 /**
