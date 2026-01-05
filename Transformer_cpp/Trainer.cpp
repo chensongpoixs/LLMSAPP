@@ -40,6 +40,7 @@
 #include "Logger.h"
 #include "Generator.h"
 #include "TrainingUtils.h"
+#include "Tiktoken.h"
 #include <torch/torch.h>
 #include <filesystem>
 #include <sstream>
@@ -705,8 +706,14 @@ void Trainer::inferenceTest(const std::string& prompt, int max_new_tokens) {
     Logger::info("Starting inference test...");
     Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     
-    // 使用Generator进行推理
-    Generator generator(model_, device_, cfg_);
+    // 从 dataset 获取 encoder（如果可用）
+    std::shared_ptr<Tiktoken> encoder = nullptr;
+    if (dataset_) {
+        encoder = dataset_->getEncoder();
+    }
+    
+    // 使用Generator进行推理（使用与训练相同的 encoder）
+    Generator generator(model_, device_, cfg_, encoder);
     GenerationResult result = generator.generate(prompt, max_new_tokens);
     
     Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

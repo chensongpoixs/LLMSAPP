@@ -38,12 +38,25 @@
 #include "Logger.h"
 #include <algorithm>
 #include <cctype>
+#include <limits>
 
-TextDataset::TextDataset(const std::string& filepath, int seq_len, int vocab_size)
+TextDataset::TextDataset(const std::string& filepath, int seq_len, 
+                         std::shared_ptr<Tiktoken> encoder)
     : filepath_(filepath)
     , seq_len_(seq_len)
-    , vocab_size_(vocab_size)
-    , current_pos_(0) {
+    , current_pos_(0)
+    , encoder_(encoder) {
+    
+    // 如果没有提供编码器，使用简单编码器
+    if (!encoder_) {
+        encoder_ = tiktoken::create_simple_encoding();
+        Logger::info("Using simple encoding (character-level)");
+    } else {
+        Logger::info("Using tiktoken encoding: {}", encoder_->getName());
+    }
+    
+    vocab_size_ = static_cast<int>(encoder_->getVocabSize());
+    Logger::info("Vocab size: {}", vocab_size_);
 }
 
 bool TextDataset::load() {
@@ -78,16 +91,18 @@ bool TextDataset::load() {
 
 void TextDataset::tokenize() {
     tokens_.clear();
-    tokens_.reserve(text_.size());
     
-    // 字符级tokenization：将每个字符映射为0-255的ASCII值
-    // 对于超出ASCII范围的字符，使用模运算映射到0-255范围
-    for (char c : text_) {
-        // 将字符转换为unsigned char，然后取模确保在vocab_size范围内
-        unsigned char uc = static_cast<unsigned char>(c);
-        int token_id = static_cast<int>(uc) % vocab_size_;
-        tokens_.push_back(token_id);
+    // 使用 tiktoken 编码器进行 tokenization
+    std::vector<uint32_t> encoded_tokens = encoder_->encode(text_);
+    
+    // 转换为 int64_t 类型
+    tokens_.reserve(encoded_tokens.size());
+    for (uint32_t token : encoded_tokens) {
+        tokens_.push_back(static_cast<int64_t>(token));
     }
+    
+    Logger::info("Tokenized text: {} characters -> {} tokens", 
+                 text_.size(), tokens_.size());
 }
 
 size_t TextDataset::size() const {
@@ -98,13 +113,25 @@ size_t TextDataset::size() const {
     return tokens_.size() - seq_len_;
 }
 
-int TextDataset::charToToken(char c) const {
-    unsigned char uc = static_cast<unsigned char>(c);
-    return static_cast<int>(uc) % vocab_size_;
+std::vector<int64_t> TextDataset::textToTokens(const std::string& text) const {
+    std::vector<uint32_t> encoded = encoder_->encode(text);
+    std::vector<int64_t> tokens;
+    tokens.reserve(encoded.size());
+    for (uint32_t token : encoded) {
+        tokens.push_back(static_cast<int64_t>(token));
+    }
+    return tokens;
 }
 
-char TextDataset::tokenToChar(int token_id) const {
-    return static_cast<char>(token_id);
+std::string TextDataset::tokensToText(const std::vector<int64_t>& tokens) const {
+    std::vector<uint32_t> token_ids;
+    token_ids.reserve(tokens.size());
+    for (int64_t token : tokens) {
+        if (token >= 0 && token <= std::numeric_limits<uint32_t>::max()) {
+            token_ids.push_back(static_cast<uint32_t>(token));
+        }
+    }
+    return encoder_->decode(token_ids);
 }
 
 std::pair<torch::Tensor, torch::Tensor> TextDataset::getBatch(int batch_size, torch::Device device) {

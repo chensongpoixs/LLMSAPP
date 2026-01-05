@@ -146,7 +146,7 @@
 
 ## 可执行文件
 
-编译后会生成三个可执行文件：
+编译后会生成四个可执行文件：
 
 1. **`Transformer_inference`**: 推理程序，用于文本生成
    - 加载训练好的模型
@@ -165,32 +165,171 @@
    - 统计参数数量、内存占用等
    - 可保存模型信息到文件
 
-## 文件说明
+4. **`Transformer_tiktoken_example`**: Tiktoken 使用示例
+   - 演示 BPE tokenizer 的基本用法
+   - 展示编码和解码功能
+   - 验证往返转换的正确性
 
-### 核心文件
+## 项目结构
 
-- **`GPTModel.h/cpp`**: GPT 模型实现
+### 静态库模块
+
+项目采用模块化设计，将代码组织成三个静态库：
+
+#### 1. `tiktoken_cpp` - BPE Tokenizer 库
+独立的 BPE tokenizer 实现，参考 [OpenAI tiktoken](https://github.com/openai/tiktoken)：
+- **`Tiktoken.h/cpp`**: BPE tokenizer 核心实现
+- **功能**:
+  - 文本编码为 token IDs
+  - token IDs 解码为文本
+  - 支持自定义编码规则
+  - 高性能 BPE 算法实现
+- **特点**: 不依赖 libtorch，可独立使用
+- **示例**: `tiktoken_example.cpp` 演示基本用法
+
+#### 2. `transformer_core` - 核心模型库
+包含 Transformer 的核心实现：
+- **`ModelConfig.h`**: 模型配置结构体
+- **`NewGELU.h/cpp`**: GELU 激活函数
+- **`FeedForwardNetwork.h/cpp`**: 前馈神经网络
 - **`MultiHeadAttention.h/cpp`**: 多头注意力机制
 - **`TransformerBlock.h/cpp`**: Transformer 块
-- **`FeedForwardNetwork.h/cpp`**: 前馈神经网络
-- **`NewGELU.h/cpp`**: GELU 激活函数
-- **`ModelConfig.h`**: 模型配置结构体
+- **`GPTModel.h/cpp`**: GPT 模型实现
 
-### 工具文件
-
-- **`inference.cpp`**: 推理程序，使用 Generator 类进行文本生成
-- **`train.cpp`**: 训练程序，使用 Trainer 类进行模型训练
-- **`model_info.cpp`**: 模型信息工具，使用 ModelAnalyzer 类分析模型
-- **`Generator.h/cpp`**: 文本生成器类
-- **`Trainer.h/cpp`**: 训练器类
-- **`ModelAnalyzer.h/cpp`**: 模型分析器类
-- **`TrainingUtils.h/cpp`**: 训练工具函数
-- **`TextDataset.h/cpp`**: 文本数据集加载器
+#### 3. `transformer_utils` - 工具类库
+包含训练和推理相关的工具类：
 - **`Logger.h/cpp`**: 日志模块
+- **`TextDataset.h/cpp`**: 文本数据集加载器
+- **`TrainingUtils.h/cpp`**: 训练工具函数
+- **`Trainer.h/cpp`**: 训练器类
+- **`Generator.h/cpp`**: 文本生成器类
+- **`ModelAnalyzer.h/cpp`**: 模型分析器类
+
+### 可执行文件
+
+- **`Transformer_inference`**: 推理程序（文本生成）
+  - 源文件: `inference.cpp`
+  - 链接: `transformer_utils` + `transformer_core`
+
+- **`Transformer_train`**: 训练程序
+  - 源文件: `train.cpp`
+  - 链接: `transformer_utils` + `transformer_core`
+
+- **`Transformer_model_info`**: 模型信息工具
+  - 源文件: `model_info.cpp`
+  - 链接: `transformer_utils` + `transformer_core`
 
 ### 构建文件
 
 - **`CMakeLists.txt`**: CMake 构建配置文件
+  - 定义了两个静态库：`transformer_core` 和 `transformer_utils`
+  - 三个可执行文件都链接这些库
+
+### 库依赖关系
+
+```
+tiktoken_cpp (BPE Tokenizer, 独立库)
+    │
+    ├─► 可独立使用
+    │
+transformer_core (核心模型)
+    ↓ (依赖)
+transformer_utils (工具类)
+    ↓ (依赖)
+可执行文件 (inference/train/model_info/tiktoken_example)
+```
+
+### 可执行文件
+
+- **`Transformer_inference`**: 推理程序（文本生成）
+  - 源文件: `inference.cpp`
+  - 链接: `transformer_utils` + `transformer_core`
+
+- **`Transformer_train`**: 训练程序
+  - 源文件: `train.cpp`
+  - 链接: `transformer_utils` + `transformer_core`
+
+- **`Transformer_model_info`**: 模型信息工具
+  - 源文件: `model_info.cpp`
+  - 链接: `transformer_utils` + `transformer_core`
+
+- **`Transformer_tiktoken_example`**: Tiktoken 使用示例
+  - 源文件: `tiktoken_example.cpp`
+  - 链接: `tiktoken_cpp`（独立使用，不依赖其他库）
+
+## Tiktoken 库使用
+
+### 基本用法
+
+#### 简单编码器
+
+```cpp
+#include "Tiktoken.h"
+
+// 创建简单编码器
+auto enc = tiktoken::create_simple_encoding();
+
+// 编码文本
+std::string text = "hello world";
+std::vector<uint32_t> tokens = enc->encode(text);
+
+// 解码 tokens
+std::string decoded = enc->decode(tokens);
+assert(decoded == text);  // 往返测试
+```
+
+#### GPT-2 编码器
+
+```cpp
+#include "Tiktoken.h"
+
+// 创建 GPT-2 编码器
+auto gpt2_enc = tiktoken::get_encoding("gpt2");
+// 或
+auto gpt2_enc = tiktoken::encoding_for_model("gpt-2");
+
+// 编码文本
+std::string text = "Hello, world!";
+std::vector<uint32_t> tokens = gpt2_enc->encode(text);
+
+// 解码 tokens
+std::string decoded = gpt2_enc->decode(tokens);
+
+// 使用特殊 token
+uint32_t eot_id = gpt2_enc->getSpecialTokenId("<|endoftext|>");
+std::vector<uint32_t> tokens_with_eot = gpt2_enc->encode(text);
+tokens_with_eot.push_back(eot_id);
+```
+
+#### 从文件加载 GPT-2 配置
+
+```cpp
+#include "Tiktoken.h"
+
+// 从 merges.txt 文件加载 GPT-2 配置
+auto gpt2_enc = tiktoken::load_encoding_from_file("merges.txt", "gpt2");
+if (gpt2_enc) {
+    // 使用编码器
+    auto tokens = gpt2_enc->encode("Hello, world!");
+}
+```
+
+### 功能特性
+
+- **BPE 算法**: 实现 Byte Pair Encoding，支持子词级别的 tokenization
+- **可逆性**: 编码和解码是完全可逆的，保证无损转换
+- **高性能**: 优化的算法实现，适合大规模文本处理
+- **可扩展**: 支持自定义编码规则和特殊 token
+
+### 参考实现
+
+本实现参考了 [OpenAI tiktoken](https://github.com/openai/tiktoken) 的设计和 API，提供类似的接口和功能。
+
+这种模块化设计的优势：
+- **代码复用**: 核心模型可以在其他项目中复用
+- **编译优化**: 只需重新编译修改的模块
+- **清晰的组织**: 核心实现和工具类分离
+- **易于维护**: 模块职责明确
 
 ## 使用示例
 

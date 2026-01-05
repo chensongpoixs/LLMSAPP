@@ -31,96 +31,65 @@
 
  ******************************************************************************/
 /**
- * 文本数据集类 (TextDataset)
+ * GPT-2 Tokenizer Configuration
  * 
- * 用于读取文本文件并转换为可用于训练的token序列。
- * 
- * 功能：
- * - 读取文本文件
- * - 字符级tokenization（将字符映射为token IDs）
- * - 生成训练批次（输入序列和目标序列）
- * - 支持滑动窗口生成多个训练样本
+ * GPT-2 tokenizer 的配置和辅助函数
+ * 用于加载和初始化 GPT-2 的 BPE 合并规则
  */
 
-#ifndef TEXT_DATASET_H
-#define TEXT_DATASET_H
+#ifndef TIKTOKEN_GPT2_H
+#define TIKTOKEN_GPT2_H
 
-#include <string>
-#include <vector>
-#include <map>
-#include <fstream>
-#include <sstream>
-#include <torch/torch.h>
 #include "Tiktoken.h"
-#include <memory>
+#include <string>
+#include <map>
+#include <vector>
 
-/**
- * 文本数据集类
- */
-class TextDataset {
-public:
+namespace tiktoken_gpt2 {
     /**
-     * 构造函数
-     * @param filepath: 文本文件路径
-     * @param seq_len: 序列长度（每个样本的长度）
-     * @param encoder: tiktoken 编码器（如果为 nullptr，则使用简单编码器）
+     * GPT-2 编码器配置
      */
-    TextDataset(const std::string& filepath, int seq_len, 
-                std::shared_ptr<Tiktoken> encoder = nullptr);
+    struct GPT2Config {
+        std::string name;
+        std::string pat_str;  // 正则表达式模式
+        std::map<std::vector<uint8_t>, uint32_t> mergeable_ranks;
+        std::map<std::string, uint32_t> special_tokens;
+        size_t vocab_size;
+    };
     
     /**
-     * 加载文本文件
-     * @return 是否成功加载
+     * 获取 GPT-2 的默认配置
+     * 
+     * @return GPT-2 配置
      */
-    bool load();
+    GPT2Config get_gpt2_config();
     
     /**
-     * 获取数据集大小（样本数量）
+     * 从文件加载 GPT-2 配置
+     * 
+     * @param vocab_file: 词汇表文件路径（BPE merges 文件）
+     * @param encoder_file: 编码器文件路径（JSON 格式）
+     * @return GPT-2 配置，失败返回空配置
      */
-    size_t size() const;
+    GPT2Config load_gpt2_config_from_files(const std::string& vocab_file,
+                                           const std::string& encoder_file = "");
     
     /**
-     * 获取一个批次的数据
-     * @param batch_size: 批次大小
-     * @param device: 设备（CPU或GPU）
-     * @return pair<input_ids, target_ids>
+     * 加载 BPE merges 文件
+     * 
+     * @param merges_file: merges 文件路径
+     * @return mergeable_ranks 映射
      */
-    std::pair<torch::Tensor, torch::Tensor> getBatch(int batch_size, torch::Device device);
+    std::map<std::vector<uint8_t>, uint32_t> load_bpe_merges(const std::string& merges_file);
     
     /**
-     * 获取词汇表大小
+     * 加载编码器 JSON 文件
+     * 
+     * @param encoder_file: 编码器文件路径
+     * @return 编码器映射（token -> id）
      */
-    int getVocabSize() const { return vocab_size_; }
-    
-    /**
-     * 将文本转换为token IDs（使用 tiktoken）
-     */
-    std::vector<int64_t> textToTokens(const std::string& text) const;
-    
-    /**
-     * 将token IDs转换为文本（使用 tiktoken）
-     */
-    std::string tokensToText(const std::vector<int64_t>& tokens) const;
-    
-    /**
-     * 获取编码器
-     */
-    std::shared_ptr<Tiktoken> getEncoder() const { return encoder_; }
+    std::map<std::string, uint32_t> load_encoder_json(const std::string& encoder_file);
+}
 
-private:
-    std::string filepath_;           // 文件路径
-    int seq_len_;                    // 序列长度
-    int vocab_size_;                 // 词汇表大小
-    std::string text_;                // 加载的文本内容
-    std::vector<int64_t> tokens_;    // token序列
-    size_t current_pos_;              // 当前读取位置
-    std::shared_ptr<Tiktoken> encoder_;  // tiktoken 编码器
-    
-    /**
-     * 将文本转换为token序列（使用 tiktoken）
-     */
-    void tokenize();
-};
-
-#endif // TEXT_DATASET_H
+#endif // TIKTOKEN_GPT2_H
 

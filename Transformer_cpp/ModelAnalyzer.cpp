@@ -298,41 +298,67 @@ void ModelAnalyzer::initializeParameterDescriptions() {
     // Token Embedding
     param_descriptions_["token_embedding.weight"] = 
         "Token Embedding Weight: Maps token IDs to dense vectors. Shape: [vocab_size, embedding_dim]. "
-        "Each row represents the embedding vector for a specific token in the vocabulary.";
+        "Each row represents the embedding vector for a specific token in the vocabulary. "
+        "Formula: E_token = Embedding[token_id], where E_token is a vector of size embedding_dim. "
+        "This is a lookup table that converts discrete token IDs into continuous vector representations. "
+        "The embedding vectors are learned during training and capture semantic information about tokens.";
     
     // Position Embedding
     param_descriptions_["position_embedding.weight"] = 
         "Position Embedding Weight: Encodes position information for each sequence position. "
-        "Shape: [max_seq_length, embedding_dim]. Each row represents the embedding for a specific position.";
+        "Shape: [max_seq_length, embedding_dim]. Each row represents the embedding for a specific position. "
+        "Formula: E_pos = PositionEmbedding[pos], where pos is the position index (0 to seq_len-1). "
+        "These embeddings are added to token embeddings to provide positional information to the model. "
+        "Since Transformers have no inherent notion of sequence order, position embeddings are crucial.";
     
     // Transformer Blocks - Multi-Head Attention
     param_descriptions_["transformer_blocks.*.mha.q_proj.weight"] = 
         "Query Projection Weight: Linear transformation for Query vectors in Multi-Head Attention. "
-        "Shape: [embedding_dim, embedding_dim]. Projects input to query space.";
+        "Shape: [embedding_dim, embedding_dim]. Projects input to query space. "
+        "Formula: Q = X * W_q, where X is input [batch, seq_len, embedding_dim] and W_q is this weight matrix. "
+        "For each attention head h, Q_h = X * W_q_h, where W_q_h is a slice of this matrix. "
+        "The Query vectors are used to compute attention scores: Attention(Q, K, V) = softmax(QK^T / sqrt(d_k))V.";
     
     param_descriptions_["transformer_blocks.*.mha.q_proj.bias"] = 
-        "Query Projection Bias: Bias term for Query projection (if enabled).";
+        "Query Projection Bias: Bias term for Query projection (if enabled). "
+        "Formula: Q = X * W_q + b_q, where b_q is this bias vector. "
+        "Shape: [embedding_dim]. Added element-wise to the output of the linear transformation.";
     
     param_descriptions_["transformer_blocks.*.mha.k_proj.weight"] = 
         "Key Projection Weight: Linear transformation for Key vectors in Multi-Head Attention. "
-        "Shape: [embedding_dim, embedding_dim]. Projects input to key space.";
+        "Shape: [embedding_dim, embedding_dim]. Projects input to key space. "
+        "Formula: K = X * W_k, where X is input and W_k is this weight matrix. "
+        "Key vectors are used to compute attention scores with Query vectors. "
+        "The dot product QK^T measures the similarity between queries and keys.";
     
     param_descriptions_["transformer_blocks.*.mha.k_proj.bias"] = 
-        "Key Projection Bias: Bias term for Key projection (if enabled).";
+        "Key Projection Bias: Bias term for Key projection (if enabled). "
+        "Formula: K = X * W_k + b_k, where b_k is this bias vector. "
+        "Shape: [embedding_dim]. Added element-wise to the output of the linear transformation.";
     
     param_descriptions_["transformer_blocks.*.mha.v_proj.weight"] = 
         "Value Projection Weight: Linear transformation for Value vectors in Multi-Head Attention. "
-        "Shape: [embedding_dim, embedding_dim]. Projects input to value space.";
+        "Shape: [embedding_dim, embedding_dim]. Projects input to value space. "
+        "Formula: V = X * W_v, where X is input and W_v is this weight matrix. "
+        "Value vectors contain the actual information to be aggregated based on attention scores. "
+        "The weighted sum of values gives the attention output: Output = Attention(Q, K, V).";
     
     param_descriptions_["transformer_blocks.*.mha.v_proj.bias"] = 
-        "Value Projection Bias: Bias term for Value projection (if enabled).";
+        "Value Projection Bias: Bias term for Value projection (if enabled). "
+        "Formula: V = X * W_v + b_v, where b_v is this bias vector. "
+        "Shape: [embedding_dim]. Added element-wise to the output of the linear transformation.";
     
     param_descriptions_["transformer_blocks.*.mha.out_proj.weight"] = 
         "Output Projection Weight: Linear transformation that combines multi-head attention outputs. "
-        "Shape: [embedding_dim, embedding_dim]. Concatenates and projects attention heads back to embedding_dim.";
+        "Shape: [embedding_dim, embedding_dim]. Concatenates and projects attention heads back to embedding_dim. "
+        "Formula: Output = Concat(head_1, ..., head_h) * W_o, where head_i is the output of attention head i. "
+        "After computing attention for each head independently, the outputs are concatenated and projected. "
+        "This allows the model to attend to information from different representation subspaces.";
     
     param_descriptions_["transformer_blocks.*.mha.out_proj.bias"] = 
-        "Output Projection Bias: Bias term for output projection.";
+        "Output Projection Bias: Bias term for output projection. "
+        "Formula: Output = Concat(head_1, ..., head_h) * W_o + b_o, where b_o is this bias vector. "
+        "Shape: [embedding_dim]. Added element-wise to the output of the linear transformation.";
     
     // Transformer Blocks - Feed Forward Network
     param_descriptions_["transformer_blocks.*.ffn.fc1.weight"] = 
@@ -677,6 +703,190 @@ void ModelAnalyzer::printParameterRelationshipDiagram() const {
     Logger::info("  • FFN expands: embedding_dim → ffn_dim → embedding_dim");
     Logger::info("  • Residual connections require matching dimensions");
     Logger::info("  • Output head maps: embedding_dim → vocab_size");
+    Logger::info("");
+}
+
+void ModelAnalyzer::printParameterDetailedAnnotations() const {
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("Parameter Detailed Annotations with Formulas");
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("");
+    
+    // 按模块分组显示详细注释
+    std::map<std::string, std::vector<const ParameterStats*>> module_groups;
+    
+    for (const auto& stats : param_stats_) {
+        size_t dot_pos = stats.name.find('.');
+        std::string module_name = (dot_pos != std::string::npos) ? 
+            stats.name.substr(0, dot_pos) : "root";
+        module_groups[module_name].push_back(&stats);
+    }
+    
+    for (const auto& group : module_groups) {
+        Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        Logger::info("Module: {}", group.first);
+        Logger::info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        
+        for (const auto* stats : group.second) {
+            Logger::info("");
+            Logger::info("┌─────────────────────────────────────────────────────────────┐");
+            Logger::info("│ Parameter: {}", stats->name);
+            Logger::info("├─────────────────────────────────────────────────────────────┤");
+            Logger::info("│ Shape: {}", formatShape(stats->shape));
+            Logger::info("│ Elements: {} | Memory: {}", stats->numel, formatMemorySize(stats->memory_bytes));
+            Logger::info("│ Statistics: Mean={:.6f}, Std={:.6f}, Min={:.6f}, Max={:.6f}", 
+                stats->mean, stats->std, stats->min, stats->max);
+            Logger::info("├─────────────────────────────────────────────────────────────┤");
+            
+            std::string desc = getParameterDescription(stats->name);
+            Logger::info("│ Description:                                              │");
+            
+            // 将描述分行显示
+            size_t pos = 0;
+            size_t line_width = 75;
+            while (pos < desc.length()) {
+                size_t end_pos = pos + line_width;
+                if (end_pos >= desc.length()) {
+                    Logger::info("│   {}", desc.substr(pos));
+                    break;
+                }
+                
+                size_t break_pos = desc.rfind(' ', end_pos);
+                if (break_pos == std::string::npos || break_pos < pos) {
+                    break_pos = end_pos;
+                }
+                
+                Logger::info("│   {}", desc.substr(pos, break_pos - pos));
+                pos = break_pos + 1;
+            }
+            Logger::info("└─────────────────────────────────────────────────────────────┘");
+        }
+        Logger::info("");
+    }
+}
+
+void ModelAnalyzer::printParameterDimensionDiagram() const {
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("Parameter Dimension Flow Diagram");
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("");
+    
+    Logger::info("Dimension Flow Through Model:");
+    Logger::info("");
+    Logger::info("Input: [batch_size, seq_len] (Token IDs)");
+    Logger::info("  │");
+    Logger::info("  ├─► Token Embedding");
+    Logger::info("  │   token_embedding.weight: [vocab_size, embedding_dim]");
+    Logger::info("  │   Output: [batch_size, seq_len, embedding_dim]");
+    Logger::info("  │");
+    Logger::info("  ├─► Position Embedding");
+    Logger::info("  │   position_embedding.weight: [max_seq_len, embedding_dim]");
+    Logger::info("  │   Output: [batch_size, seq_len, embedding_dim]");
+    Logger::info("  │");
+    Logger::info("  └─► Combined: [batch_size, seq_len, embedding_dim]");
+    Logger::info("      │");
+    Logger::info("      ▼");
+    Logger::info("  ┌───────────────────────────────────────────────────────────┐");
+    Logger::info("  │ Transformer Block (Repeated N times)                     │");
+    Logger::info("  ├───────────────────────────────────────────────────────────┤");
+    Logger::info("  │ Input: [batch_size, seq_len, embedding_dim]              │");
+    Logger::info("  │   │                                                       │");
+    Logger::info("  │   ├─► Layer Norm 1                                       │");
+    Logger::info("  │   │   ln1.weight: [embedding_dim]                        │");
+    Logger::info("  │   │   Output: [batch_size, seq_len, embedding_dim]      │");
+    Logger::info("  │   │                                                       │");
+    Logger::info("  │   ├─► Multi-Head Attention                                │");
+    Logger::info("  │   │   ├─ q_proj.weight: [embedding_dim, embedding_dim]  │");
+    Logger::info("  │   │   ├─ k_proj.weight: [embedding_dim, embedding_dim]  │");
+    Logger::info("  │   │   ├─ v_proj.weight: [embedding_dim, embedding_dim]   │");
+    Logger::info("  │   │   └─ out_proj.weight: [embedding_dim, embedding_dim] │");
+    Logger::info("  │   │   Output: [batch_size, seq_len, embedding_dim]      │");
+    Logger::info("  │   │   + Residual: [batch_size, seq_len, embedding_dim]  │");
+    Logger::info("  │   │                                                       │");
+    Logger::info("  │   ├─► Layer Norm 2                                       │");
+    Logger::info("  │   │   ln2.weight: [embedding_dim]                        │");
+    Logger::info("  │   │   Output: [batch_size, seq_len, embedding_dim]      │");
+    Logger::info("  │   │                                                       │");
+    Logger::info("  │   └─► Feed Forward Network                               │");
+    Logger::info("  │       ├─ fc1.weight: [ffn_dim, embedding_dim]            │");
+    Logger::info("  │       │   Output: [batch_size, seq_len, ffn_dim]        │");
+    Logger::info("  │       ├─ GELU Activation                                  │");
+    Logger::info("  │       ├─ fc2.weight: [embedding_dim, ffn_dim]            │");
+    Logger::info("  │       └─ Output: [batch_size, seq_len, embedding_dim]   │");
+    Logger::info("  │           + Residual: [batch_size, seq_len, embedding_dim]│");
+    Logger::info("  │                                                           │");
+    Logger::info("  └─► Output: [batch_size, seq_len, embedding_dim]          │");
+    Logger::info("      │");
+    Logger::info("      ▼");
+    Logger::info("  Final Layer Norm");
+    Logger::info("  layer_norm.weight: [embedding_dim]");
+    Logger::info("  Output: [batch_size, seq_len, embedding_dim]");
+    Logger::info("  │");
+    Logger::info("  ▼");
+    Logger::info("  Output Head");
+    Logger::info("  out_head.weight: [vocab_size, embedding_dim]");
+    Logger::info("  Output: [batch_size, seq_len, vocab_size] (Logits)");
+    Logger::info("");
+}
+
+void ModelAnalyzer::printParameterComputationFlow() const {
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("Parameter Computation Flow Diagram");
+    Logger::info("═══════════════════════════════════════════════════════════════");
+    Logger::info("");
+    
+    Logger::info("Forward Pass Computation Flow:");
+    Logger::info("");
+    Logger::info("Step 1: Token Embedding");
+    Logger::info("  Input: token_ids [batch, seq_len]");
+    Logger::info("  Operation: E_token = token_embedding.weight[token_ids]");
+    Logger::info("  Output: E_token [batch, seq_len, embedding_dim]");
+    Logger::info("");
+    Logger::info("Step 2: Position Embedding");
+    Logger::info("  Input: position indices [0, 1, ..., seq_len-1]");
+    Logger::info("  Operation: E_pos = position_embedding.weight[positions]");
+    Logger::info("  Output: E_pos [seq_len, embedding_dim]");
+    Logger::info("");
+    Logger::info("Step 3: Embedding Fusion");
+    Logger::info("  Operation: X = E_token + E_pos");
+    Logger::info("  Output: X [batch, seq_len, embedding_dim]");
+    Logger::info("");
+    Logger::info("Step 4: Transformer Block (for each block):");
+    Logger::info("  ┌─────────────────────────────────────────────────────────┐");
+    Logger::info("  │ 4.1: Layer Normalization 1                              │");
+    Logger::info("  │   X_norm = LayerNorm(X, ln1.weight, ln1.bias)          │");
+    Logger::info("  │                                                         │");
+    Logger::info("  │ 4.2: Multi-Head Attention                              │");
+    Logger::info("  │   Q = X_norm * q_proj.weight + q_proj.bias             │");
+    Logger::info("  │   K = X_norm * k_proj.weight + k_proj.bias             │");
+    Logger::info("  │   V = X_norm * v_proj.weight + v_proj.bias             │");
+    Logger::info("  │   Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) * V   │");
+    Logger::info("  │   MHA_out = Attention(Q, K, V) * out_proj.weight      │");
+    Logger::info("  │   X = X + MHA_out  (Residual Connection)               │");
+    Logger::info("  │                                                         │");
+    Logger::info("  │ 4.3: Layer Normalization 2                              │");
+    Logger::info("  │   X_norm2 = LayerNorm(X, ln2.weight, ln2.bias)         │");
+    Logger::info("  │                                                         │");
+    Logger::info("  │ 4.4: Feed Forward Network                               │");
+    Logger::info("  │   FFN_hidden = GELU(X_norm2 * fc1.weight + fc1.bias)   │");
+    Logger::info("  │   FFN_out = FFN_hidden * fc2.weight + fc2.bias         │");
+    Logger::info("  │   X = X + FFN_out  (Residual Connection)                │");
+    Logger::info("  └─────────────────────────────────────────────────────────┘");
+    Logger::info("");
+    Logger::info("Step 5: Final Layer Normalization");
+    Logger::info("  Operation: X_final = LayerNorm(X, layer_norm.weight, layer_norm.bias)");
+    Logger::info("  Output: X_final [batch, seq_len, embedding_dim]");
+    Logger::info("");
+    Logger::info("Step 6: Output Head");
+    Logger::info("  Operation: logits = X_final * out_head.weight^T + out_head.bias");
+    Logger::info("  Output: logits [batch, seq_len, vocab_size]");
+    Logger::info("");
+    Logger::info("Key Formulas:");
+    Logger::info("  • LayerNorm(x, γ, β) = γ * (x - μ) / (σ + ε) + β");
+    Logger::info("    where μ = mean(x), σ = std(x), ε = 1e-5");
+    Logger::info("  • Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) * V");
+    Logger::info("    where d_k is the dimension of keys (embedding_dim / n_heads)");
+    Logger::info("  • GELU(x) = x * Φ(x), where Φ is the CDF of standard normal");
     Logger::info("");
 }
 

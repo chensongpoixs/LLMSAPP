@@ -76,6 +76,7 @@
 #include "ModelConfig.h"
 #include "Logger.h"
 #include "TextDataset.h"
+#include "Tiktoken.h"
 #include "TrainingUtils.h"
 #include "Trainer.h"
 #include <torch/torch.h>
@@ -152,7 +153,25 @@ int main(int argc, char* argv[]) {
     Logger::info("Data file: {}", data_file);
     
     int seq_len = 128;             // Sequence length
-    TextDataset dataset(data_file, seq_len, cfg.vocab_size);
+    
+    // 创建 tiktoken 编码器（可以选择使用 GPT-2 或其他编码器）
+    std::shared_ptr<Tiktoken> encoder = nullptr;
+    
+    // 选项1: 使用简单编码器（字符级，向后兼容）
+    // encoder = tiktoken::create_simple_encoding();
+    
+    // 选项2: 使用 GPT-2 编码器（推荐，更好的 tokenization）
+    encoder = tiktoken::create_gpt2_encoding();
+    
+    // 选项3: 从文件加载编码器
+    // encoder = tiktoken::load_encoding_from_file("merges.txt", "gpt2");
+    
+    // 使用 tiktoken 编码器创建数据集
+    TextDataset dataset(data_file, seq_len, encoder);
+    
+    // 更新词汇表大小以匹配编码器
+    cfg.vocab_size = dataset.getVocabSize();
+    Logger::info("Using vocab size from encoder: {}", cfg.vocab_size);
     
     if (!dataset.load()) {
         Logger::error("Failed to load data, exiting program");

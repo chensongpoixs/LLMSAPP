@@ -53,6 +53,7 @@
 #include "Logger.h"
 #include "Generator.h"
 #include "TrainingUtils.h"
+#include "Tiktoken.h"
 #include <torch/torch.h>
 #include <memory>
 #include <string>
@@ -113,14 +114,32 @@ int main(int argc, char * argv[])
     Logger::info("  - Dropout Rate: {}", cfg.drop_rate);
     
     // ========================================================================
-    // 3. Create model and generator
+    // 3. Create tiktoken encoder
+    // ========================================================================
+    std::shared_ptr<Tiktoken> encoder = nullptr;
+    
+    // 选项1: 使用简单编码器（字符级，向后兼容）
+    // encoder = tiktoken::create_simple_encoding();
+    
+    // 选项2: 使用 GPT-2 编码器（推荐，更好的 tokenization）
+    encoder = tiktoken::create_gpt2_encoding();
+    
+    // 选项3: 从文件加载编码器
+    // encoder = tiktoken::load_encoding_from_file("merges.txt", "gpt2");
+    
+    // 更新词汇表大小以匹配编码器
+    cfg.vocab_size = static_cast<int>(encoder->getVocabSize());
+    Logger::info("Using vocab size from encoder: {}", cfg.vocab_size);
+    
+    // ========================================================================
+    // 4. Create model and generator
     // ========================================================================
     std::string model_path = "transformer_model_full.pth";
     std::shared_ptr<GPTModel> model = std::make_shared<GPTModel>(cfg);
     
     Logger::info("Attempting to load saved model: {}", model_path);
     
-    Generator generator(model, device, cfg);
+    Generator generator(model, device, cfg, encoder);
     
     if (!generator.loadModel(model_path)) {
         Logger::warning("Failed to load model, using untrained model");

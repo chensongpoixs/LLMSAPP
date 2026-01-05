@@ -42,6 +42,7 @@
 
 #include "GPTModel.h"
 #include "ModelConfig.h"
+#include "Tiktoken.h"
 #include <torch/torch.h>
 #include <memory>
 #include <string>
@@ -70,10 +71,12 @@ public:
      * @param model: GPT模型
      * @param device: 推理设备（CPU或GPU）
      * @param cfg: 模型配置
+     * @param encoder: tiktoken 编码器（如果为 nullptr，则使用简单编码器）
      */
     Generator(std::shared_ptr<GPTModel> model,
               torch::Device device,
-              const ModelConfig& cfg);
+              const ModelConfig& cfg,
+              std::shared_ptr<Tiktoken> encoder = nullptr);
     
     /**
      * 析构函数
@@ -106,14 +109,22 @@ public:
      * @return 模型指针
      */
     std::shared_ptr<GPTModel> getModel() const { return model_; }
+    
+    /**
+     * 获取编码器
+     * 
+     * @return 编码器指针
+     */
+    std::shared_ptr<Tiktoken> getEncoder() const { return encoder_; }
 
 private:
     std::shared_ptr<GPTModel> model_;
     torch::Device device_;
     ModelConfig cfg_;
+    std::shared_ptr<Tiktoken> encoder_;  // tiktoken 编码器
     
     /**
-     * 将文本转换为token IDs
+     * 将文本转换为token IDs（使用 tiktoken）
      * 
      * @param text: 输入文本
      * @return token ID序列
@@ -121,7 +132,7 @@ private:
     std::vector<int64_t> textToTokens(const std::string& text);
     
     /**
-     * 将token IDs转换为文本
+     * 将token IDs转换为文本（使用 tiktoken）
      * 
      * @param tokens: token ID序列
      * @return 文本字符串

@@ -45,8 +45,18 @@
 
 Generator::Generator(std::shared_ptr<GPTModel> model,
                      torch::Device device,
-                     const ModelConfig& cfg)
-    : model_(model), device_(device), cfg_(cfg) {
+                     const ModelConfig& cfg,
+                     std::shared_ptr<Tiktoken> encoder)
+    : model_(model), device_(device), cfg_(cfg), encoder_(encoder) {
+    
+    // 如果没有提供编码器，使用简单编码器
+    if (!encoder_) {
+        encoder_ = tiktoken::create_simple_encoding();
+        Logger::info("Using simple encoding (character-level)");
+    } else {
+        Logger::info("Using tiktoken encoding: {}", encoder_->getName());
+    }
+    
     if (model_) {
         model_->to(device_);
         model_->eval();
@@ -66,22 +76,26 @@ bool Generator::loadModel(const std::string& model_path) {
 }
 
 std::vector<int64_t> Generator::textToTokens(const std::string& text) {
+    // 使用 tiktoken 编码器
+    std::vector<uint32_t> encoded = encoder_->encode(text);
     std::vector<int64_t> tokens;
-    for (char c : text) {
-        unsigned char uc = static_cast<unsigned char>(c);
-        int token_id = static_cast<int>(uc) % cfg_.vocab_size;
-        tokens.push_back(token_id);
+    tokens.reserve(encoded.size());
+    for (uint32_t token : encoded) {
+        tokens.push_back(static_cast<int64_t>(token));
     }
     return tokens;
 }
 
 std::string Generator::tokensToText(const std::vector<int64_t>& tokens) {
-    std::string text;
-    for (int64_t token_id : tokens) {
-        char c = static_cast<char>(token_id);
-        text += c;
+    // 使用 tiktoken 编码器
+    std::vector<uint32_t> token_ids;
+    token_ids.reserve(tokens.size());
+    for (int64_t token : tokens) {
+        if (token >= 0 && token <= std::numeric_limits<uint32_t>::max()) {
+            token_ids.push_back(static_cast<uint32_t>(token));
+        }
     }
-    return text;
+    return encoder_->decode(token_ids);
 }
 
 GenerationResult Generator::generate(const std::string& prompt,

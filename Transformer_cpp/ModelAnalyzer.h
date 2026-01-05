@@ -121,6 +121,21 @@ public:
     void printParameterRelationshipDiagram() const;
     
     /**
+     * 打印参数详细注释和可视化图表
+     */
+    void printParameterDetailedAnnotations() const;
+    
+    /**
+     * 打印参数维度关系图
+     */
+    void printParameterDimensionDiagram() const;
+    
+    /**
+     * 打印参数计算流程图
+     */
+    void printParameterComputationFlow() const;
+    
+    /**
      * 保存模型信息到文件
      * 
      * @param output_file: 输出文件路径

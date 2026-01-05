@@ -154,8 +154,17 @@ int main(int argc, char* argv[]) {
     // 打印参数关系图
     analyzer.printParameterRelationshipDiagram();
     
+    // 打印参数维度关系图
+    analyzer.printParameterDimensionDiagram();
+    
+    // 打印参数计算流程图
+    analyzer.printParameterComputationFlow();
+    
     // 打印模型结构
     analyzer.printModelStructure();
+    
+    // 打印参数详细注释（包含公式）
+    analyzer.printParameterDetailedAnnotations();
     
     // 打印参数说明
     analyzer.printParameterDescriptions();
