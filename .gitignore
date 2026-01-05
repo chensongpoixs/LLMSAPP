@@ -45,3 +45,5 @@ TestResults.xml
 /08.知识蒸馏/local_distill_data.jsonl
 /08.知识蒸馏/math_problems_100.json
 /08.知识蒸馏/math_problems_1000.json
+/06.Transformer架构神秘/cpp/build
+/Transformer_cpp/build

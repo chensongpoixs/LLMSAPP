@@ -1,0 +1,164 @@
+/******************************************************************************
+ *  Copyright (c) 2026 The Transformer project authors . All Rights Reserved.
+ *
+ *  Please visit https://chensongpoixs.github.io for detail
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree. An additional intellectual property rights grant can be found
+ *  in the file PATENTS.  All contributing project authors may
+ *  be found in the AUTHORS file in the root of the source tree.
+ ******************************************************************************/
+/*****************************************************************************
+				   Author: chensong
+				   date:  2026-01-01
+
+ 输赢不重要，答案对你们有什么意义才重要。
+
+ 光阴者，百代之过客也，唯有奋力奔跑，方能生风起时，是时代造英雄，英雄存在于时代。或许世人道你轻狂，可你本就年少啊。 看护好，自己的理想和激情。
+
+
+ 我可能会遇到很多的人，听他们讲好2多的故事，我来写成故事或编成歌，用我学来的各种乐器演奏它。
+ 然后还可能在一个国家遇到一个心仪我的姑娘，她可能会被我帅气的外表捕获，又会被我深邃的内涵吸引，在某个下雨的夜晚，她会全身淋透然后要在我狭小的住处换身上的湿衣服。
+ 3小时候后她告诉我她其实是这个国家的公主，她愿意向父皇求婚。我不得已告诉她我是穿越而来的男主角，我始终要回到自己的世界。
+ 然后我的身影慢慢消失，我看到她眼里的泪水，心里却没有任何痛苦，我才知道，原来我的心被丢掉了，我游历全世界的原因，就是要找回自己的本心。
+ 于是我开始有意寻找各种各样失去心的人，我变成一块砖头，一颗树，一滴水，一朵白云，去听大家为什么会失去自己的本心。
+ 我发现，刚出生的宝宝，本心还在，慢慢的，他们的本心就会消失，收到了各种黑暗之光的侵蚀。
+ 从一次争论，到嫉妒和悲愤，还有委屈和痛苦，我看到一只只无形的手，把他们的本心扯碎，蒙蔽，偷走，再也回不到主人都身边。
+ 我叫他本心猎手。他可能是和宇宙同在的级别 但是我并不害怕，我仔细回忆自己平淡的一生 寻找本心猎手的痕迹。
+ 沿着自己的回忆，一个个的场景忽闪而过，最后发现，我的本心，在我写代码的时候，会回来。
+ 安静，淡然，代码就是我的一切，写代码就是我本心回归的最好方式，我还没找到本心猎手，但我相信，顺着这个线索，我一定能顺藤摸瓜，把他揪出来。
+
+ ******************************************************************************/
+/**
+ * 文本数据集实现
+ */
+
+#include "TextDataset.h"
+#include "Logger.h"
+#include <algorithm>
+#include <cctype>
+
+TextDataset::TextDataset(const std::string& filepath, int seq_len, int vocab_size)
+    : filepath_(filepath)
+    , seq_len_(seq_len)
+    , vocab_size_(vocab_size)
+    , current_pos_(0) {
+}
+
+bool TextDataset::load() {
+    std::ifstream file(filepath_);
+    if (!file.is_open()) {
+        Logger::error("无法打开文件: {}", filepath_);
+        return false;
+    }
+    
+    // 读取整个文件
+    std::ostringstream buffer;
+    buffer << file.rdbuf();
+    text_ = buffer.str();
+    file.close();
+    
+    if (text_.empty()) {
+        Logger::error("文件为空: {}", filepath_);
+        return false;
+    }
+    
+    Logger::info("成功加载文件: {}", filepath_);
+    Logger::info("文件大小: {} 字符", text_.size());
+    
+    // 转换为token序列
+    tokenize();
+    
+    Logger::info("Token序列长度: {}", tokens_.size());
+    Logger::info("数据集大小（样本数）: {}", size());
+    
+    return true;
+}
+
+void TextDataset::tokenize() {
+    tokens_.clear();
+    tokens_.reserve(text_.size());
+    
+    // 字符级tokenization：将每个字符映射为0-255的ASCII值
+    // 对于超出ASCII范围的字符，使用模运算映射到0-255范围
+    for (char c : text_) {
+        // 将字符转换为unsigned char，然后取模确保在vocab_size范围内
+        unsigned char uc = static_cast<unsigned char>(c);
+        int token_id = static_cast<int>(uc) % vocab_size_;
+        tokens_.push_back(token_id);
+    }
+}
+
+size_t TextDataset::size() const {
+    if (tokens_.size() < seq_len_ + 1) {
+        return 0;
+    }
+    // 每个位置都可以作为一个样本的起点
+    return tokens_.size() - seq_len_;
+}
+
+int TextDataset::charToToken(char c) const {
+    unsigned char uc = static_cast<unsigned char>(c);
+    return static_cast<int>(uc) % vocab_size_;
+}
+
+char TextDataset::tokenToChar(int token_id) const {
+    return static_cast<char>(token_id);
+}
+
+std::pair<torch::Tensor, torch::Tensor> TextDataset::getBatch(int batch_size, torch::Device device) {
+    if (tokens_.size() < seq_len_ + 1) {
+        Logger::error("Token序列太短，无法生成批次");
+        return std::make_pair(
+            torch::zeros({batch_size, seq_len_}, torch::TensorOptions().dtype(torch::kLong).device(device)),
+            torch::zeros({batch_size, seq_len_}, torch::TensorOptions().dtype(torch::kLong).device(device))
+        );
+    }
+    
+    // 准备批次数据
+    std::vector<int64_t> input_data;
+    std::vector<int64_t> target_data;
+    input_data.reserve(batch_size * seq_len_);
+    target_data.reserve(batch_size * seq_len_);
+    
+    // 生成batch_size个样本
+    for (int i = 0; i < batch_size; ++i) {
+        // 随机选择起始位置（避免总是从开头开始）
+        size_t start_pos = current_pos_;
+        
+        // 如果当前位置超出范围，从头开始
+        if (start_pos + seq_len_ >= tokens_.size()) {
+            start_pos = 0;
+        }
+        
+        // 提取输入序列（从start_pos到start_pos+seq_len-1）
+        for (int j = 0; j < seq_len_; ++j) {
+            input_data.push_back(tokens_[start_pos + j]);
+        }
+        
+        // 提取目标序列（从start_pos+1到start_pos+seq_len），用于预测下一个token
+        for (int j = 0; j < seq_len_; ++j) {
+            target_data.push_back(tokens_[start_pos + j + 1]);
+        }
+        
+        // 更新当前位置（滑动窗口，每次移动seq_len）
+        current_pos_ = (start_pos + seq_len_) % (tokens_.size() - seq_len_);
+    }
+    
+    // 创建tensor（使用clone确保数据被复制）
+    auto input_tensor = torch::from_blob(
+        input_data.data(),
+        {batch_size, seq_len_},
+        torch::TensorOptions().dtype(torch::kLong)
+    ).clone().to(device);
+    
+    auto target_tensor = torch::from_blob(
+        target_data.data(),
+        {batch_size, seq_len_},
+        torch::TensorOptions().dtype(torch::kLong)
+    ).clone().to(device);
+    
+    return std::make_pair(input_tensor, target_tensor);
+}
+
