@@ -1,4 +1,24 @@
 
+```
+
+第一层：面试必备（2周内搞定）
+├── Transformer推理全流程：prefill / decode / KV cache / 显存估算
+├── 主流推理框架概念：vLLM / TensorRT-LLM / SGLang 各解决了什么问题
+├── 量化基础：INT8/INT4/FP8，对称 vs 非对称量化，PER-CHANNEL vs PER-TOKEN
+└── GPU显存组成：模型参数 / KV Cache / 激活值各占多少，如何估算
+
+第二层：与面试官过招的核心（1个月）
+├── CUDA编程实践：至少写一个简单的GEMM kernel
+├── TensorRT部署一个开源模型（Qwen/LLaMA），记录性能数据
+├── FlashAttention原理：为什么比分块计算快？（IO感知）
+└── Continuous Batching / PagedAttention 原理
+
+第三层：成为抢手货（持续）
+├── 分布式推理：Tensor Parallelism / Pipeline Parallelism
+├── GPU拓扑与通信：NVLink / NVSwitch / RDMA
+├── 国产卡适配经验（华为昇腾等）
+└── Speculative Decoding / Lookahead Decoding 等前沿加速技术
+```
 
 ### AI推理部署工程师 · 核心能力栈
 
@@ -71,23 +91,3 @@
     *   **性能调优**：通过分析GPU带宽利用率与SM占用率，优化Tensor Parallelism配置，实现双卡NVLink通信下近线性的加速比。
 
 
-```
-
-第一层：面试必备（2周内搞定）
-├── Transformer推理全流程：prefill / decode / KV cache / 显存估算
-├── 主流推理框架概念：vLLM / TensorRT-LLM / SGLang 各解决了什么问题
-├── 量化基础：INT8/INT4/FP8，对称 vs 非对称量化，PER-CHANNEL vs PER-TOKEN
-└── GPU显存组成：模型参数 / KV Cache / 激活值各占多少，如何估算
-
-第二层：与面试官过招的核心（1个月）
-├── CUDA编程实践：至少写一个简单的GEMM kernel
-├── TensorRT部署一个开源模型（Qwen/LLaMA），记录性能数据
-├── FlashAttention原理：为什么比分块计算快？（IO感知）
-└── Continuous Batching / PagedAttention 原理
-
-第三层：成为抢手货（持续）
-├── 分布式推理：Tensor Parallelism / Pipeline Parallelism
-├── GPU拓扑与通信：NVLink / NVSwitch / RDMA
-├── 国产卡适配经验（华为昇腾等）
-└── Speculative Decoding / Lookahead Decoding 等前沿加速技术
-```
